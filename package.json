@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "devDependencies": {
+  },
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "underscore": "^1.8.3"
+  },
+  "scripts": {
+    "start": "node server/server"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  }
+}
