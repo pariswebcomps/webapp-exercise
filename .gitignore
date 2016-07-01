@@ -117,7 +117,7 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml
 # *.ipr
-
+.idea
 
 ### Node ###
 # Logs
@@ -162,3 +162,4 @@ jspm_packages
 ### Polymer ###
 #Installed components via bower
 bower_components/
+static/vendors

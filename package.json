@@ -1,6 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "Materialize": "materialize#^0.97.6"
   },
   "dependencies": {
     "body-parser": "^1.14.2",
