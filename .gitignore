@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/windows,osx,linux,webstorm,node,polymer
 
 ### Windows ###
@@ -160,6 +159,11 @@ jspm_packages
 
 
 ### Polymer ###
-#Installed components via bower
+# Installed components via bower
 bower_components/
 static/vendors
+
+
+### Project ###
+dist/
+typings/

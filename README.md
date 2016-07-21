@@ -1,20 +1,28 @@
 # Meetup Paris WebComponents - WebApp Exercise
 
-Specs and scaffold of a webapp to develop to compare frameworks implementation.
+This is the Cycle.js implementation of the [webapp exercise](https://github.com/pariswebcomps/webapp-exercise).
 
-## Expected result
+The selected stack for this implementation:
 
-The static directory contains the expected visuals of the webapp.
+- [Cycle.js](https://github.com/cyclejs/cyclejs) running with [xstream](http://staltz.com/xstream/).
+- [Lodash FP](https://github.com/lodash/lodash/wiki/FP-Guide) as a utils library
+- [Tape](https://github.com/substack/tape) for unit testing
+- [TSLint](http://palantir.github.io/tslint/) for code linting
+- [Webpack](https://webpack.github.io/docs/) as a runner
 
-    // TODO - Explain the exercise.
+The application is developed in [TypeScript](https://www.typescriptlang.org/) as Cycle.js strongly encourages it.
+
+## Setup
+
+Install dependencies with:
+
+   npm i
 
 ## Start the server
 
 This command serves the REST data at `http://localhost:3001`:
 
     npm start
-
-You will need to npm install and bower install before launching.
 
 This provides you following routes:
 

@@ -1,8 +1,0 @@
-{
-  "name": "webapp-exercise",
-  "dependencies": {},
-  "devDependencies": {
-    "Materialize": "materialize#^0.97.6",
-    "jquery": "^3.0.0"
-  }
-}
