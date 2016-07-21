@@ -18,6 +18,7 @@
     "express": "^4.13.3",
     "jquery": "3.1.0",
     "materialize-css": "0.97.6",
+    "ramda": "0.21.0",
     "underscore": "^1.8.3",
     "xstream": "5.2.4"
   },
