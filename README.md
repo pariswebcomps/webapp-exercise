@@ -5,7 +5,7 @@ This is the Cycle.js implementation of the [webapp exercise](https://github.com/
 The selected stack for this implementation:
 
 - [Cycle.js](https://github.com/cyclejs/cyclejs) running with [xstream](http://staltz.com/xstream/).
-- [Lodash FP](https://github.com/lodash/lodash/wiki/FP-Guide) as a utils library
+- [Ramda](http://ramdajs.com/) as a utils library
 - [Tape](https://github.com/substack/tape) for unit testing
 - [TSLint](http://palantir.github.io/tslint/) for code linting
 - [Webpack](https://webpack.github.io/docs/) as a runner
