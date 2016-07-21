@@ -1,11 +1,10 @@
 {
   "private": true,
-  "devDependencies": {
-    "Materialize": "materialize#^0.97.6"
-  },
   "dependencies": {
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
+    "jquery": "3.1.0",
+    "materialize-css": "0.97.6",
     "underscore": "^1.8.3"
   },
   "scripts": {

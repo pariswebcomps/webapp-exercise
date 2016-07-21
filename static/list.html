@@ -9,63 +9,65 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+
+        .logo {
+            margin-left: 10px;
+            height: 100%;
+        }
+
+        nav {
+            background-color: #0168AB;
+        }
+
+        .header {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        .card-panel {
+            padding: 10px;
+            margin: 10px !important;
+        }
+
+        .username {
+            color: #337ab7;
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        .lastname {
+            text-transform: uppercase;
+        }
+
+        .people-data {
+            padding-top: 30px;
+        }
+
+        .people-data a {
+            padding-left: 10px;
+
+        }
+
+        .picture {
+            border: 10px solid #F1F1F1;
+        }
+
+        .icon {
+            color: black;
+            width: 24px;
+            height: 24px;
+            margin-left: 10px;
+        }
+
+        .item {
+            font-weight: bold;
+        }
+
+    </style>
 </head>
-<style>
 
-    .logo {
-        margin-left: 10px;
-        height: 100%;
-    }
-
-    nav {
-        background-color: #0168AB;
-    }
-
-    .header {
-        margin-top: 20px;
-        font-size: 24px;
-    }
-
-    .card-panel {
-        padding: 10px;
-        margin: 10px !important;
-    }
-
-    .username {
-        color: #337ab7;
-        font-size: 24px;
-        font-weight: 400;
-    }
-
-    .lastname {
-        text-transform: uppercase;
-    }
-
-    .people-data {
-        padding-top: 30px;
-    }
-
-    .people-data a {
-        padding-left: 10px;
-
-    }
-
-    .picture {
-        border: 10px solid #F1F1F1;
-    }
-
-    .icon {
-        color: black;
-        width: 24px;
-        height: 24px;
-        margin-left: 10px;
-    }
-
-    .item {
-        font-weight: bold;
-    }
-
-</style>
 <body>
 <nav>
     <div class="nav-wrapper">
@@ -75,8 +77,8 @@
         </ul>
     </div>
 </nav>
-<div class="container">
 
+<div class="container">
     <div class="header row">
         <span class="col s6">You have 2 contacts</span>
     </div>
@@ -175,13 +177,13 @@
         </div>
     </div>
 </div>
+
 <div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
     <a class="btn-floating btn-large red" href="edit.html">
         <i class="large material-icons">mode_edit</i>
     </a>
 </div>
-</div>
-</div>
+
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript" src="vendors/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="vendors/Materialize/dist/js/materialize.min.js"></script>
