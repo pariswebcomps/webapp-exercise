@@ -1,11 +1,11 @@
 import Person from "./Person";
 import Collection from "@cycle/collection";
-import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
+import { VNode, a, div, img, li, makeDOMDriver, nav, span, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { makeHTTPDriver } from "@cycle/http";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { run } from "@cycle/xstream-run";
-import { map, pipe, prop } from "ramda";
+import { length, map, pipe, prop } from "ramda";
 import { Stream } from "xstream";
 
 interface ISources {
@@ -19,7 +19,7 @@ interface ISinks {
 }
 
 // A stream containing the hyperscript representation of the navigation.
-const navDom$ = Stream.of(
+const navVTree$ = Stream.of(
   nav(".bg-color-primary", [
     div(".nav-wrapper", [
       a({ "attrs": { "href": "list.html" } }, [
@@ -42,6 +42,10 @@ const navDom$ = Stream.of(
   ])
 );
 
+// A simple function that will output VTree of the # of persons block
+const renderNumberOfPersons = (n) =>
+  span(".col.s6", `You have ${n} contacts`);
+
 // Our main application logic.
 // Takes observables input sources from drivers.
 // Does some pure dataflow operations = the app logic.
@@ -61,11 +65,14 @@ function main({HTTP}: ISources): ISinks {
     personsResponse$.map(parseResponseToPersons)
   );
 
-  const personsVTree$ = Collection.pluck(persons$, prop("DOM"));
+  const personsVTrees$ = Collection.pluck(persons$, prop("DOM"));
 
-  const containerDom$ = personsVTree$.map((personsVTree) =>
+  const containerVTree$ = personsVTrees$.map((personsVTrees) =>
     div(".container", [
-      div(".row", personsVTree),
+      div(".header.row", [
+        renderNumberOfPersons(length(personsVTrees)),
+      ]),
+      div(".row", personsVTrees),
     ])
   );
 
@@ -79,8 +86,8 @@ function main({HTTP}: ISources): ISinks {
   return {
     // Combine all views into a single container to render within #app.
     DOM: Stream.combine(
-      navDom$,
-      containerDom$
+      navVTree$,
+      containerVTree$
     ).map(div),
     // Trigger HTTP requests.
     HTTP: personsRequest$,

@@ -41,6 +41,11 @@ body {
   border: 10px solid #F1F1F1;
 }
 
+.header {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
 /* Molecules */
 .skills {
   padding: 10px;
@@ -70,4 +75,4 @@ body {
   font-weight: 400;
 }
 
-/* Organism */
+/* Organisms */
