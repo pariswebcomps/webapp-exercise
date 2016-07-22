@@ -31,7 +31,7 @@ const renderUsername = ({firstname, lastname}) =>
     [
       span(`${firstname} `),
       span(".uppercase", lastname),
-    ],
+    ]
   );
 
 const renderContact = ({email, phone}) =>
@@ -55,7 +55,7 @@ const renderManager = (manager) =>
 const renderPicture = (photo) =>
   img(
     ".picture",
-    { "attrs": { "src": photo } },
+    { "attrs": { "src": photo } }
   );
 
 const renderAdminIcons = () =>
@@ -63,11 +63,11 @@ const renderAdminIcons = () =>
     img(".icon", { "attrs": { "src": "src/images/md-map.svg" } }),
     a(
       { "attrs": { "href": "edit.html" } },
-      [i(".icon.material-icons", "mode_edit")],
+      [i(".icon.material-icons", "mode_edit")]
     ),
     a(
       { "attrs": { "href": "list.html" } },
-      [i(".icon.material-icons", "delete")],
+      [i(".icon.material-icons", "delete")]
     ),
   ]);
 
@@ -89,7 +89,7 @@ const renderLinks = pipe(
           ".pad-horizontal",
           { "attrs": { "src": `src/images/md-${type}.svg` } }
         ),
-      ],
+      ]
     )
   ),
   values
@@ -106,7 +106,7 @@ function renderPerson(
     ]) => {
       const renderDetailsWhen = when(
         identity,
-        always(renderDetails({ skills, links })),
+        always(renderDetails({ skills, links }))
       );
 
       return div(".card-panel", [
