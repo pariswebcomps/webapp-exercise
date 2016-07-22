@@ -1,7 +1,9 @@
 import Person from "./Person";
+import Collection from "@cycle/collection";
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { run } from "@cycle/xstream-run";
+import { prop } from "ramda";
 import { Stream } from "xstream";
 
 interface ISources {
@@ -41,7 +43,7 @@ const navDom$ = Stream.of(
 // Does some pure dataflow operations = the app logic.
 // Returns observables output sinks to the drivers.
 function main(sources: ISources): ISinks {
-  const profile$ = Stream.of({
+  const leanne = {
     "id": "5763cd4d9d2a4f259b53c901",
     "photo": "https://randomuser.me/portraits/women/59.jpg",
     "firstname": "Leanne",
@@ -65,18 +67,51 @@ function main(sources: ISources): ISinks {
     "isManager": false,
     "manager": "Erika",
     "managerId": "5763cd4d3b57c672861bfa1f",
-  });
+  };
 
-  const person = Person({
-    profile: profile$,
-    props: Stream.of({ isDetailed: true }),
-  });
+  const phyllis = {
+    "id": "5763cd4dba6362a3f92c954e",
+    "photo": "https://randomuser.me/portraits/women/74.jpg",
+    "firstname": "Phyllis",
+    "lastname": "Donovan",
+    "entity": "PEARLESSA",
+    "email": "Phyllis.Donovan@PEARLESSA.com",
+    "skills": [
+      "fugiat",
+      "deserunt",
+      "culpa",
+      "adipisicing",
+      "Lorem",
+    ],
+    "phone": "0685230125",
+    "links": {
+      "twitter": "https://twitter.com/non",
+      "slack": "https://slack.com/enim",
+      "github": "https://github.com/laborum",
+      "linkedin": "https://www.linkedin.com/in/et",
+    },
+    "isManager": false,
+    "manager": "Erika",
+    "managerId": "5763cd4d3b57c672861bfa1f",
+  };
 
-  const containerDom$ = person.DOM.map((personVTree) =>
+  // className for detailedView = ".col.s6.offset-s3"
+
+  const persons$ = Collection(
+    Person,
+    { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
+    Stream.of([
+      { profile: Stream.of(leanne) },
+      { profile: Stream.of(phyllis) },
+      { profile: Stream.of(leanne) },
+    ])
+  );
+
+  const personsVTree$ = Collection.pluck(persons$, prop("DOM"));
+
+  const containerDom$ = personsVTree$.map((personsVTree) =>
     div(".container", [
-      div(".row", [
-        div(".col.s6.offset-s3", [personVTree]),
-      ]),
+      div(".row", personsVTree),
     ])
   );
 
@@ -90,7 +125,7 @@ function main(sources: ISources): ISinks {
 }
 
 // Declare drivers that will perform the side-effects.
-const drivers: {[name: string]: Function} = {
+const drivers: { [name: string]: Function } = {
   DOM: makeDOMDriver("#app"),
 };
 

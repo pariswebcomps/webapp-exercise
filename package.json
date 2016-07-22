@@ -12,6 +12,7 @@
     "node": ">=0.12.0"
   },
   "dependencies": {
+    "@cycle/collection": "0.3.0",
     "@cycle/dom": "10.1.0",
     "@cycle/xstream-run": "3.0.3",
     "body-parser": "^1.14.2",
