@@ -2,16 +2,20 @@ import Person from "./Person";
 import Collection from "@cycle/collection";
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
+import { makeHTTPDriver } from "@cycle/http";
+import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { run } from "@cycle/xstream-run";
-import { prop } from "ramda";
+import { map, pipe, prop } from "ramda";
 import { Stream } from "xstream";
 
 interface ISources {
   DOM: DOMSource;
+  HTTP: HTTPSource;
 }
 
 interface ISinks {
   DOM: Stream<VNode>;
+  HTTP: Stream<RequestInput>;
 }
 
 // A stream containing the hyperscript representation of the navigation.
@@ -42,69 +46,19 @@ const navDom$ = Stream.of(
 // Takes observables input sources from drivers.
 // Does some pure dataflow operations = the app logic.
 // Returns observables output sinks to the drivers.
-function main(sources: ISources): ISinks {
-  const leanne = {
-    "id": "5763cd4d9d2a4f259b53c901",
-    "photo": "https://randomuser.me/portraits/women/59.jpg",
-    "firstname": "Leanne",
-    "lastname": "Woodard",
-    "entity": "BIOSPAN",
-    "email": "Leanne.Woodard@BIOSPAN.com",
-    "skills": [
-      "pariatur",
-      "ipsum",
-      "laboris",
-      "nostrud",
-      "elit",
-    ],
-    "phone": "0784112248",
-    "links": {
-      "twitter": "https://twitter.com/laboris",
-      "slack": "https://slack.com/fugiat",
-      "github": "https://github.com/velit",
-      "linkedin": "https://www.linkedin.com/in/voluptate",
-    },
-    "isManager": false,
-    "manager": "Erika",
-    "managerId": "5763cd4d3b57c672861bfa1f",
-  };
+function main({HTTP}: ISources): ISinks {
+  const personsResponse$ = HTTP.select("persons").flatten();
 
-  const phyllis = {
-    "id": "5763cd4dba6362a3f92c954e",
-    "photo": "https://randomuser.me/portraits/women/74.jpg",
-    "firstname": "Phyllis",
-    "lastname": "Donovan",
-    "entity": "PEARLESSA",
-    "email": "Phyllis.Donovan@PEARLESSA.com",
-    "skills": [
-      "fugiat",
-      "deserunt",
-      "culpa",
-      "adipisicing",
-      "Lorem",
-    ],
-    "phone": "0685230125",
-    "links": {
-      "twitter": "https://twitter.com/non",
-      "slack": "https://slack.com/enim",
-      "github": "https://github.com/laborum",
-      "linkedin": "https://www.linkedin.com/in/et",
-    },
-    "isManager": false,
-    "manager": "Erika",
-    "managerId": "5763cd4d3b57c672861bfa1f",
-  };
-
-  // className for detailedView = ".col.s6.offset-s3"
+  const parseResponseToPersons = pipe(
+    prop("body"),
+    map((profile) => ({ profile: Stream.of(profile) }))
+  );
 
   const persons$ = Collection(
     Person,
+    // className for detailedView = ".col.s6.offset-s3"
     { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
-    Stream.of([
-      { profile: Stream.of(leanne) },
-      { profile: Stream.of(phyllis) },
-      { profile: Stream.of(leanne) },
-    ])
+    personsResponse$.map(parseResponseToPersons)
   );
 
   const personsVTree$ = Collection.pluck(persons$, prop("DOM"));
@@ -115,18 +69,28 @@ function main(sources: ISources): ISinks {
     ])
   );
 
+  // Fetch the API for all persons.
+  // For now we are firing a single request on app launch.
+  const personsRequest$ = Stream.of({
+    category: "persons",
+    url: "http://localhost:3001/api/peoples",
+  });
+
   return {
     // Combine all views into a single container to render within #app.
     DOM: Stream.combine(
       navDom$,
       containerDom$
     ).map(div),
+    // Trigger HTTP requests.
+    HTTP: personsRequest$,
   };
 }
 
 // Declare drivers that will perform the side-effects.
 const drivers: { [name: string]: Function } = {
   DOM: makeDOMDriver("#app"),
+  HTTP: makeHTTPDriver(),
 };
 
 // Kick-off the application!
