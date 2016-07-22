@@ -67,7 +67,10 @@ function main(sources: ISources): ISinks {
     "managerId": "5763cd4d3b57c672861bfa1f",
   });
 
-  const person = Person({ profile: profile$ });
+  const person = Person({
+    profile: profile$,
+    props: Stream.of({ isDetailed: true }),
+  });
 
   const containerDom$ = person.DOM.map((personVTree) =>
     div(".container", [
