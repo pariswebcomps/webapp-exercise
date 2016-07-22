@@ -69,11 +69,19 @@ function main(sources: ISources): ISinks {
 
   const person = Person({ profile: profile$ });
 
+  const containerDom$ = person.DOM.map((personVTree) =>
+    div(".container", [
+      div(".row", [
+        div(".col.s6.offset-s3", [personVTree]),
+      ]),
+    ]),
+  );
+
   return {
     // Combine all views into a single container to render within #app.
     DOM: Stream.combine(
       navDom$,
-      person.DOM
+      containerDom$,
     ).map(div),
   };
 }
