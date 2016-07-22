@@ -12,33 +12,29 @@ interface ISinks {
   DOM: Stream<VNode>;
 }
 
-// A function that returns the hyperscript representation of the navigation.
-// Anytime the input stream emits an event, it will emit a new representation
-// in the output stream.
-function renderNav(input$: Stream<any>): Stream<VNode> {
-  return input$.map(() =>
-    nav(".bg-color-primary", [
-      div(".nav-wrapper", [
-        a({ "attrs": { "href": "list.html" } }, [
-          img(
-            ".logo",
-            {
-              "attrs": {
-                "src": "src/images/logo-people.svg",
-                "className": "logo",
-              },
-            }
-          ),
-        ]),
-        ul(".right.hide-on-med-and-down", [
-          li([
-            a({ "attrs": { "href": "list.html" } }, [`Peoples`]),
-          ]),
+// A stream containing the hyperscript representation of the navigation.
+const navDom$ = Stream.of(
+  nav(".bg-color-primary", [
+    div(".nav-wrapper", [
+      a({ "attrs": { "href": "list.html" } }, [
+        img(
+          ".logo",
+          {
+            "attrs": {
+              "src": "src/images/logo-people.svg",
+              "className": "logo",
+            },
+          }
+        ),
+      ]),
+      ul(".right.hide-on-med-and-down", [
+        li([
+          a({ "attrs": { "href": "list.html" } }, [`Peoples`]),
         ]),
       ]),
-    ])
-  );
-}
+    ]),
+  ])
+);
 
 // Our main application logic.
 // Takes observables input sources from drivers.
@@ -76,7 +72,7 @@ function main(sources: ISources): ISinks {
   return {
     // Combine all views into a single container to render within #app.
     DOM: Stream.combine(
-      renderNav(Stream.of("")),
+      navDom$,
       person.DOM
     ).map(div),
   };
