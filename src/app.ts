@@ -1,4 +1,4 @@
-import Person from "./components/Person/Person";
+import Person from "./Person";
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { run } from "@cycle/xstream-run";
@@ -67,7 +67,7 @@ function main(sources: ISources): ISinks {
     "managerId": "5763cd4d3b57c672861bfa1f",
   });
 
-  const person = Person({profile: profile$});
+  const person = Person({ profile: profile$ });
 
   return {
     // Combine all views into a single container to render within #app.
