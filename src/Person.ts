@@ -13,9 +13,14 @@ interface IProfile {
   skills: String[];
 }
 
+interface IProps {
+  isDetailed: boolean;
+  className: string;
+}
+
 interface ISources {
   profile: Stream<IProfile>;
-  props: Stream<{ isDetailed: boolean }>;
+  props: Stream<IProps>;
 }
 
 interface ISinks {
@@ -97,42 +102,42 @@ const renderLinks = pipe(
 
 function renderPerson(
   profile$: Stream<IProfile>,
-  isDetailed$: Stream<boolean>
+  props$: Stream<IProps>
 ): Stream<VNode> {
-  return Stream.combine(profile$, isDetailed$).map(
+  return Stream.combine(profile$, props$).map(
     ([
       {email, firstname, lastname, links, manager, phone, photo, skills},
-      isDetailed,
+      {isDetailed, className = ""},
     ]) => {
       const renderDetailsWhen = when(
         identity,
         always(renderDetails({ skills, links }))
       );
 
-      return div(".card-panel", [
-        div(".row", [
-          div(".col.s7", [
-            div(".layout.vertical.flex", [
-              renderUsername({ firstname, lastname }),
+      return div(className, [
+        div(".card-panel", [
+          div(".row", [
+            div(".col.s7", [
+              div(".layout.vertical.flex", [
+                renderUsername({ firstname, lastname }),
+              ]),
+              renderContact({ email, phone }),
+              renderManager(manager),
             ]),
-            renderContact({ email, phone }),
-            renderManager(manager),
+            div(".col.s5", [
+              renderPicture(photo),
+              renderAdminIcons(),
+            ]),
           ]),
-          div(".col.s5", [
-            renderPicture(photo),
-            renderAdminIcons(),
-          ]),
+          renderDetailsWhen(isDetailed),
         ]),
-        renderDetailsWhen(isDetailed),
       ]);
     }
   );
 }
 
 export default function Person(sources: ISources): ISinks {
-  const isDetailed$ = sources.props.map(({isDetailed}) => isDetailed);
-
   return {
-    DOM: renderPerson(sources.profile, isDetailed$),
+    DOM: renderPerson(sources.profile, sources.props),
   };
 };
