@@ -90,7 +90,7 @@ function main(sources: ISources): ISinks {
 }
 
 // Declare drivers that will perform the side-effects.
-const drivers = {
+const drivers: {[name: string]: Function} = {
   DOM: makeDOMDriver("#app"),
 };
 
