@@ -2,8 +2,19 @@ import { VNode, a, div, h3, i, img, span } from "@cycle/dom";
 import { map, mapObjIndexed, pipe, values } from "ramda";
 import { Stream } from "xstream";
 
+interface IProfile {
+  email: String;
+  firstname: String;
+  lastname: String;
+  links: Object;
+  manager: String;
+  phone: String;
+  photo: String;
+  skills: String[];
+}
+
 interface ISources {
-  profile: Stream<any>;
+  profile: Stream<IProfile>;
 }
 
 interface ISinks {
@@ -27,8 +38,8 @@ const renderLinks = pipe(
 
 const renderLargeBtns = map((text) => a(".btn-large", text));
 
-function renderPerson(input$: Stream<any>): Stream<VNode> {
-  return input$.map(
+function renderPerson(profile$: Stream<IProfile>): Stream<VNode> {
+  return profile$.map(
     ({email, firstname, lastname, links, manager, phone, photo, skills}) =>
       div(".card-panel", [
         div(".row", [
