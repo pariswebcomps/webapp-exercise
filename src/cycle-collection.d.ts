@@ -25,7 +25,7 @@ declare module "@cycle/collection" {
     function pluck(
       collection$: Stream<any>,
       selector: (ItemSinks: ISinks) => VNode
-    ): Stream<VNode>;
+    ): Stream<VNode[]>;
   }
   /* tslint:enable:no-namespace no-unused-variable */
 
