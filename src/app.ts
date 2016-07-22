@@ -77,14 +77,14 @@ function main(sources: ISources): ISinks {
       div(".row", [
         div(".col.s6.offset-s3", [personVTree]),
       ]),
-    ]),
+    ])
   );
 
   return {
     // Combine all views into a single container to render within #app.
     DOM: Stream.combine(
       navDom$,
-      containerDom$,
+      containerDom$
     ).map(div),
   };
 }
