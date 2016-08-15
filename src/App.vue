@@ -20,4 +20,12 @@ export default {
 </script>
 
 <style>
+.logo {
+  margin-left: 10px;
+  height: 100%;
+}
+
+nav {
+  background-color: #0168AB;
+}
 </style>
