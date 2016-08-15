@@ -8,11 +8,20 @@ export const routes = [
     component: List
   },
   {
-    path: '/profile',
+    path: '/profile/:id',
     component: Profile
+  },
+  {
+    path: '/search',
+    redirect: '/'
+  },
+  {
+    path: '/list',
+    redirect: '/'
   }
 ]
 
 export default new VueRouter({
+  mode: 'history',
   routes
 })

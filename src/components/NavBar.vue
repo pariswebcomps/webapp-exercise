@@ -1,9 +1,13 @@
 <template>
   <nav>
     <div class="nav-wrapper">
-      <a href="list.html"><img class="logo" src="../assets/images/logo-people.svg"></a>
+      <router-link to="/">
+        <img class="logo" src="~images/logo-people.svg">
+      </router-link>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="list.html">Peoples</a></li>
+        <li>
+          <router-link to="/">Peoples</router-link>
+        </li>
       </ul>
     </div>
   </nav>
@@ -11,10 +15,6 @@
 
 <script>
 export default {
-  data () {
-    return {
-    }
-  }
 }
 </script>
 
