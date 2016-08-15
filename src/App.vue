@@ -1,7 +1,12 @@
 <template>
-  <div id="app">
-    <h1>{{ msg }}</h1>
-  </div>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="list.html"><img class="logo" src="../static/images/logo-people.svg"></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="list.html">Peoples</a></li>
+      </ul>
+    </div>
+  </nav>
 </template>
 
 <script>
