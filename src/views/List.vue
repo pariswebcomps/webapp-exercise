@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="header row">
-        <span class="col s6">You have 2 contacts</span>
+        <span class="col s6">You have {{peoples.length}} contacts</span>
       </div>
 
       <div class="row">
@@ -11,7 +11,7 @@
 
         <div class="col s12">
 
-          <div class="col s6">
+          <div class="col s6" v-for="people in peoples">
             <CardPanel></CardPanel>
           </div>
 
@@ -33,13 +33,26 @@
 import CardPanel from 'components/CardPanel.vue'
 import Search from 'components/Search.vue'
 
+import { peoples } from '../resources'
+
 export default {
   data () {
     return {
-      query: ''
+      ready: false,
+      query: '',
+      peoples: []
     }
   },
-  components: { CardPanel, Search }
+  components: { CardPanel, Search },
+  beforeMount () {
+    peoples
+      .get()
+      .then((list) => {
+        this.ready = true
+        this.peoples = list
+      })
+      .catch(console.log.bind(console))
+  }
 }
 </script>
 
