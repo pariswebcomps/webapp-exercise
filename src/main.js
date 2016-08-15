@@ -1,9 +1,10 @@
 import Vue from 'vue'
+// TODO is jquery imported by materialize ?
+// import 'jquery'
+import 'materialize-css'
 import App from './App.vue'
 
-// import '../static/vendors/Materialize/dist/css/materialize.css'
-// import '../static/vendors/jquery/dist/jquery.js'
-// import '../static/vendors/Materialize/dist/js/materialize.js'
+import '../original/vendors/Materialize/dist/css/materialize.css'
 
 /* eslint-disable no-new */
 new Vue({

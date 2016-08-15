@@ -1,7 +1,7 @@
 <template>
   <nav>
     <div class="nav-wrapper">
-      <a href="list.html"><img class="logo" src="../static/images/logo-people.svg"></a>
+      <a href="list.html"><img class="logo" src="../original/images/logo-people.svg"></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><a href="list.html">Peoples</a></li>
       </ul>
@@ -20,7 +20,4 @@ export default {
 </script>
 
 <style>
-body {
-  font-family: Helvetica, sans-serif;
-}
 </style>
