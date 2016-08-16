@@ -167,3 +167,4 @@ static/vendors
 ### Project ###
 dist/
 typings/
+.vscode/
