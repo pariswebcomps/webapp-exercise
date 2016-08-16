@@ -3,6 +3,6 @@
   "dependencies": {},
   "devDependencies": {
     "jquery": "3.1.0",
-    "materialize-css": "0.97.6"
+    "materialize": "0.97.6"
   }
 }
