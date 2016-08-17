@@ -1,96 +1,46 @@
 import Person from "./Person";
-import Collection from "@cycle/collection";
-import { VNode, a, div, img, li, makeDOMDriver, nav, span, ul } from "@cycle/dom";
+import PersonList from "./PersonList";
+import { VNode, makeDOMDriver } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { makeHTTPDriver } from "@cycle/http";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { run } from "@cycle/xstream-run";
-import { length, map, pipe, prop } from "ramda";
+import { makeRouterDriver } from "cyclic-router";
+import { createHistory } from "history";
+import { lensProp, prop, set } from "ramda";
 import { Stream } from "xstream";
 
 interface ISources {
   DOM: DOMSource;
   HTTP: HTTPSource;
+  router: any;
 }
 
 interface ISinks {
   DOM: Stream<VNode>;
   HTTP: Stream<RequestInput>;
+  router: Stream<string>;
 }
-
-// A stream containing the hyperscript representation of the navigation.
-const navVTree$ = Stream.of(
-  nav(".bg-color-primary", [
-    div(".nav-wrapper", [
-      a({ "attrs": { "href": "list.html" } }, [
-        img(
-          ".logo",
-          {
-            "attrs": {
-              "src": "src/images/logo-people.svg",
-              "className": "logo",
-            },
-          }
-        ),
-      ]),
-      ul(".right.hide-on-med-and-down", [
-        li([
-          a({ "attrs": { "href": "list.html" } }, [`Peoples`]),
-        ]),
-      ]),
-    ]),
-  ])
-);
-
-// A simple function that will output VTree of the # of persons block
-const renderNumberOfPersons = (n) =>
-  span(".col.s6", `You have ${n} contacts`);
 
 // Our main application logic.
 // Takes observables input sources from drivers.
 // Does some pure dataflow operations = the app logic.
 // Returns observables output sinks to the drivers.
-function main({HTTP}: ISources): ISinks {
-  const personsResponse$ = HTTP.select("persons").flatten();
+function main(sources: ISources): ISinks {
+  const match$ = sources.router.define({
+    "/": PersonList,
+    // TODO: refactor Person to be able to display a detailed one
+    "/detail": Person,
+  });
 
-  const parseResponseToPersons = pipe(
-    prop("body"),
-    map((profile) => ({ profile: Stream.of(profile) }))
-  );
-
-  const persons$ = Collection(
-    Person,
-    // className for detailedView = ".col.s6.offset-s3"
-    { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
-    personsResponse$.map(parseResponseToPersons)
-  );
-
-  const personsVTrees$ = Collection.pluck(persons$, prop("DOM"));
-
-  const containerVTree$ = personsVTrees$.map((personsVTrees) =>
-    div(".container", [
-      div(".header.row", [
-        renderNumberOfPersons(length(personsVTrees)),
-      ]),
-      div(".row", personsVTrees),
-    ])
-  );
-
-  // Fetch the API for all persons.
-  // For now we are firing a single request on app launch.
-  const personsRequest$ = Stream.of({
-    category: "persons",
-    url: "http://localhost:3001/api/peoples",
+  const page$ = match$.map(({path, value}) => {
+    return value(set(lensProp("router"), sources.router.path(path), sources));
   });
 
   return {
-    // Combine all views into a single container to render within #app.
-    DOM: Stream.combine(
-      navVTree$,
-      containerVTree$
-    ).map(div),
-    // Trigger HTTP requests.
-    HTTP: personsRequest$,
+    DOM: page$.map(prop("DOM")).flatten(),
+    HTTP: page$.map(prop("HTTP")).flatten(),
+    router: Stream.of("/"),
   };
 }
 
@@ -98,6 +48,7 @@ function main({HTTP}: ISources): ISinks {
 const drivers: { [name: string]: Function } = {
   DOM: makeDOMDriver("#app"),
   HTTP: makeHTTPDriver(),
+  router: makeRouterDriver(createHistory()),
 };
 
 // Kick-off the application!
