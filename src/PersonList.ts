@@ -1,6 +1,6 @@
 import Person from "./Person";
 import Collection from "@cycle/collection";
-import { VNode, a, div, img, li, nav, span, ul } from "@cycle/dom";
+import { VNode, div, span } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { length, map, pipe, prop } from "ramda";
@@ -15,30 +15,6 @@ interface ISinks {
   DOM: Stream<VNode>;
   HTTP: Stream<RequestInput>;
 }
-
-// A stream containing the hyperscript representation of the navigation.
-const navVTree$ = Stream.of(
-  nav(".bg-color-primary", [
-    div(".nav-wrapper", [
-      a({ "attrs": { "href": "/" } }, [
-        img(
-          ".logo",
-          {
-            "attrs": {
-              "src": "/src/images/logo-people.svg",
-              "className": "logo",
-            },
-          }
-        ),
-      ]),
-      ul(".right.hide-on-med-and-down", [
-        li([
-          a({ "attrs": { "href": "/" } }, [`Peoples`]),
-        ]),
-      ]),
-    ]),
-  ])
-);
 
 // A simple function that will output VTree of the # of persons block
 const renderNumberOfPersons = (n) =>
@@ -77,12 +53,7 @@ export default function PersonList({HTTP}: ISources): ISinks {
   });
 
   return {
-    // Combine all views into a single container to render within #app.
-    DOM: Stream.combine(
-      navVTree$,
-      containerVTree$
-    ).map(div),
-    // Trigger HTTP requests.
+    DOM: containerVTree$,
     HTTP: personsRequest$,
   };
 }
