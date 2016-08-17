@@ -5,9 +5,15 @@ import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { prop } from "ramda";
 import { Stream } from "xstream";
 
+interface IProps {
+  id: String;
+}
+
 interface ISources {
   DOM: DOMSource;
   HTTP: HTTPSource;
+  props: Stream<IProps>;
+  router: any;
 }
 
 interface ISinks {
@@ -19,12 +25,12 @@ interface ISinks {
 const navVTree$ = Stream.of(
   nav(".bg-color-primary", [
     div(".nav-wrapper", [
-      a({ "attrs": { "href": "list" } }, [
+      a({ "attrs": { "href": "/" } }, [
         img(
           ".logo",
           {
             "attrs": {
-              "src": "src/images/logo-people.svg",
+              "src": "/src/images/logo-people.svg",
               "className": "logo",
             },
           }
@@ -32,14 +38,14 @@ const navVTree$ = Stream.of(
       ]),
       ul(".right.hide-on-med-and-down", [
         li([
-          a({ "attrs": { "href": "list" } }, [`Peoples`]),
+          a({ "attrs": { "href": "/" } }, [`Peoples`]),
         ]),
       ]),
     ]),
   ])
 );
 
-export default function PersonDetail({HTTP}: ISources): ISinks {
+export default function PersonDetail({HTTP, props}: ISources): ISinks {
   const personResponse$ = HTTP.select("person").flatten();
 
   const person$ = Person({
@@ -54,8 +60,8 @@ export default function PersonDetail({HTTP}: ISources): ISinks {
   );
 
   // Fetch the API for person detail.
-  const personsRequest$ = Stream.of("5763cd4d9d2a4f259b53c901")
-    .map((id) => ({
+  const personsRequest$ = props
+    .map(({id}) => ({
       category: "person",
       url: `http://localhost:3001/api/peoples/${id}`,
     }));

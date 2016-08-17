@@ -25,7 +25,7 @@ const navVTree$ = Stream.of(
           ".logo",
           {
             "attrs": {
-              "src": "src/images/logo-people.svg",
+              "src": "/src/images/logo-people.svg",
               "className": "logo",
             },
           }

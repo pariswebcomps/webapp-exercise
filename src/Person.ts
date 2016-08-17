@@ -3,6 +3,7 @@ import { always, identity, map, mapObjIndexed, pipe, values, when } from "ramda"
 import { Stream } from "xstream";
 
 interface IProfile {
+  id: String;
   email: String;
   firstname: String;
   lastname: String;
@@ -29,10 +30,10 @@ interface ISinks {
 
 const renderLargeBtns = map((text) => a(".btn-large", text));
 
-const renderUsername = ({firstname, lastname}) =>
+const renderUsername = ({id, firstname, lastname}) =>
   a(
     ".username",
-    { "attrs": { "src": "detail.html" } },
+    { "attrs": { "href": `/detail/${id}` } },
     [
       span(`${firstname} `),
       span(".uppercase", lastname),
@@ -42,11 +43,11 @@ const renderUsername = ({firstname, lastname}) =>
 const renderContact = ({email, phone}) =>
   div(".pad-top", [
     div([
-      img({ "attrs": { "src": "src/images/md-email.svg" } }),
+      img({ "attrs": { "src": "/src/images/md-email.svg" } }),
       span(` ${email}`),
     ]),
     div([
-      img({ "attrs": { "src": "src/images/md-phone.svg" } }),
+      img({ "attrs": { "src": "/src/images/md-phone.svg" } }),
       span(` ${phone}`),
     ]),
   ]);
@@ -65,13 +66,13 @@ const renderPicture = (photo) =>
 
 const renderAdminIcons = () =>
   div([
-    img(".icon", { "attrs": { "src": "src/images/md-map.svg" } }),
+    img(".icon", { "attrs": { "src": "/src/images/md-map.svg" } }),
     a(
-      { "attrs": { "href": "edit.html" } },
+      { "attrs": { "href": "edit" } },
       [i(".icon.material-icons", "mode_edit")]
     ),
     a(
-      { "attrs": { "href": "list.html" } },
+      { "attrs": { "href": "/" } },
       [i(".icon.material-icons", "delete")]
     ),
   ]);
@@ -92,7 +93,7 @@ const renderLinks = pipe(
       [
         img(
           ".pad-horizontal",
-          { "attrs": { "src": `src/images/md-${type}.svg` } }
+          { "attrs": { "src": `/src/images/md-${type}.svg` } }
         ),
       ]
     )
@@ -106,7 +107,7 @@ function renderPerson(
 ): Stream<VNode> {
   return Stream.combine(profile$, props$).map(
     ([
-      {email, firstname, lastname, links, manager, phone, photo, skills},
+      {id, email, firstname, lastname, links, manager, phone, photo, skills},
       {isDetailed, className = ""},
     ]) => {
       const renderDetailsWhen = when(
@@ -119,7 +120,7 @@ function renderPerson(
           div(".row", [
             div(".col.s7", [
               div(".layout.vertical.flex", [
-                renderUsername({ firstname, lastname }),
+                renderUsername({ id, firstname, lastname }),
               ]),
               renderContact({ email, phone }),
               renderManager(manager),
