@@ -28,11 +28,20 @@ interface ISinks {
 function main(sources: ISources): ISinks {
   const match$ = sources.router.define({
     "/": PersonList,
-    "/detail": PersonDetail,
+    "/detail/:id": id => parsedSources => PersonDetail({
+      // TypeScript currently prevent us from using ...parsedSources
+      // See: https://github.com/Microsoft/TypeScript/issues/2103
+      DOM: parsedSources.DOM,
+      HTTP: parsedSources.HTTP,
+      props: Stream.of({ id }),
+      router: parsedSources.router,
+    }),
   });
 
+  // For each route, init bound component (= value) with sources.
   const page$ = match$.map(({path, value}) => {
     return value(
+      // Router source is resolved from the path to enable history.
       set(lensProp("router"), sources.router.path(path), sources)
     );
   });
