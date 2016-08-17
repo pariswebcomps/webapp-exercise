@@ -20,7 +20,7 @@ interface ISinks {
 const navVTree$ = Stream.of(
   nav(".bg-color-primary", [
     div(".nav-wrapper", [
-      a({ "attrs": { "href": "list.html" } }, [
+      a({ "attrs": { "href": "/" } }, [
         img(
           ".logo",
           {
@@ -33,7 +33,7 @@ const navVTree$ = Stream.of(
       ]),
       ul(".right.hide-on-med-and-down", [
         li([
-          a({ "attrs": { "href": "list.html" } }, [`Peoples`]),
+          a({ "attrs": { "href": "/" } }, [`Peoples`]),
         ]),
       ]),
     ]),
@@ -44,7 +44,7 @@ const navVTree$ = Stream.of(
 const renderNumberOfPersons = (n) =>
   span(".col.s6", `You have ${n} contacts`);
 
-export default function PersonLists({HTTP}: ISources): ISinks {
+export default function PersonList({HTTP}: ISources): ISinks {
   const personsResponse$ = HTTP.select("persons").flatten();
 
   const parseResponseToPersons = pipe(
@@ -54,7 +54,6 @@ export default function PersonLists({HTTP}: ISources): ISinks {
 
   const persons$ = Collection(
     Person,
-    // className for detailedView = ".col.s6.offset-s3"
     { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
     personsResponse$.map(parseResponseToPersons)
   );

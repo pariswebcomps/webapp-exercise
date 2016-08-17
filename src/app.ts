@@ -1,4 +1,4 @@
-import Person from "./Person";
+import PersonDetail from "./PersonDetail";
 import PersonList from "./PersonList";
 import { VNode, makeDOMDriver } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
@@ -19,7 +19,6 @@ interface ISources {
 interface ISinks {
   DOM: Stream<VNode>;
   HTTP: Stream<RequestInput>;
-  router: Stream<string>;
 }
 
 // Our main application logic.
@@ -29,18 +28,18 @@ interface ISinks {
 function main(sources: ISources): ISinks {
   const match$ = sources.router.define({
     "/": PersonList,
-    // TODO: refactor Person to be able to display a detailed one
-    "/detail": Person,
+    "/detail": PersonDetail,
   });
 
   const page$ = match$.map(({path, value}) => {
-    return value(set(lensProp("router"), sources.router.path(path), sources));
+    return value(
+      set(lensProp("router"), sources.router.path(path), sources)
+    );
   });
 
   return {
     DOM: page$.map(prop("DOM")).flatten(),
     HTTP: page$.map(prop("HTTP")).flatten(),
-    router: Stream.of("/"),
   };
 }
 
