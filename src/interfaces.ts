@@ -1,11 +1,11 @@
 export interface IProfile {
-  id: String;
-  email: String;
-  firstname: String;
-  lastname: String;
+  id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
   links: Object;
-  manager: String;
-  phone: String;
-  photo: String;
-  skills: String[];
+  manager: string;
+  phone: string;
+  photo: string;
+  skills: string[];
 }
