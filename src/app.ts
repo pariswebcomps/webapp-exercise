@@ -1,6 +1,7 @@
 import PersonDetail from "./PersonDetail";
 import PersonEdit from "./PersonEdit";
 import PersonList from "./PersonList";
+
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { makeHTTPDriver } from "@cycle/http";
@@ -51,6 +52,7 @@ const navVTree$ = Stream.of(
 // Does some pure dataflow operations = the app logic.
 // Returns observables output sinks to the drivers.
 function main(sources: ISources): ISinks {
+  // Define routes here.
   const match$ = sources.router.define({
     "/": PersonList,
     "/detail/:id": id => parsedSources => PersonDetail({
@@ -85,7 +87,7 @@ function main(sources: ISources): ISinks {
 const drivers: { [name: string]: Function } = {
   DOM: makeDOMDriver("#app"),
   HTTP: makeHTTPDriver(),
-  router: makeRouterDriver(createHistory(), {capture: true}),
+  router: makeRouterDriver(createHistory(), { capture: true }),
 };
 
 // Kick-off the application!

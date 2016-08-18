@@ -1,4 +1,5 @@
 import Person from "./Person";
+
 import Collection from "@cycle/collection";
 import { VNode, div, span } from "@cycle/dom";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
@@ -21,17 +22,23 @@ const renderNumberOfPersons = (n) =>
 export default function PersonList({HTTP}: ISources): ISinks {
   const personsResponse$ = HTTP.select("person-list").flatten();
 
+  // Create a parser function that will turn HTTP response into appropriate
+  // params to instantiate Persons.  
   const parseResponseToPersons = pipe(
     prop("body"),
     map((profile) => ({ profile: Stream.of(profile) }))
   );
 
+  // Create a stream representing a Collection of Persons.
+  // It is bound to the HTTP response stream.
+  // Additional params for Person instantiate are configured here (= props).
   const persons$ = Collection(
     Person,
     { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
     personsResponse$.map(parseResponseToPersons)
   );
 
+  // Pluck DOM outputs from every Person of the Collection into a single stream.  
   const personsVTrees$ = Collection.pluck(persons$, prop("DOM"));
 
   const containerVTree$ = personsVTrees$.map((personsVTrees) =>

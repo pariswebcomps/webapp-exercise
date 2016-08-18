@@ -1,4 +1,5 @@
 import { IProfile } from "./interfaces";
+
 import { VNode, a, div, h3, i, img, span } from "@cycle/dom";
 import { always, identity, map, mapObjIndexed, pipe, values, when } from "ramda";
 import { Stream } from "xstream";
@@ -48,10 +49,7 @@ const renderManager = (manager) =>
   ]);
 
 const renderPicture = (photo) =>
-  img(
-    ".picture",
-    { "attrs": { "src": photo } }
-  );
+  img(".picture", { "attrs": { "src": photo } });
 
 const renderAdminIcons = () =>
   div([

@@ -1,4 +1,5 @@
 import Person from "./Person";
+
 import { VNode, a, div, i } from "@cycle/dom";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { prop } from "ramda";
@@ -21,6 +22,7 @@ interface ISinks {
 export default function PersonDetail({HTTP, props}: ISources): ISinks {
   const personResponse$ = HTTP.select("person-detail").flatten();
 
+  // Instantiate a new Person bound to HTTP response stream and appropriate props.
   const person$ = Person({
     profile: personResponse$.map(prop("body")),
     props: Stream.of({ className: ".col.s6.offset-s3", isDetailed: true }),
