@@ -1,4 +1,5 @@
 import PersonDetail from "./PersonDetail";
+import PersonEdit from "./PersonEdit";
 import PersonList from "./PersonList";
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
@@ -53,6 +54,10 @@ function main(sources: ISources): ISinks {
   const match$ = sources.router.define({
     "/": PersonList,
     "/detail/:id": id => parsedSources => PersonDetail({
+      HTTP: parsedSources.HTTP,
+      props: Stream.of({ id }),
+    }),
+    "/edit/:id": id => parsedSources => PersonEdit({
       HTTP: parsedSources.HTTP,
       props: Stream.of({ id }),
     }),
