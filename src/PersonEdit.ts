@@ -79,7 +79,7 @@ export default function PersonEdit({HTTP, props}: ISources): ISinks {
 
   // Fetch the API for person profile.
   const personsRequest$ = props.map(({apiUrl, id}) =>
-    ({ category: "person-edit", url: [apiUrl, id].join("/") }));
+    ({ category: "person-edit", url: `${apiUrl}/${id}` }));
 
   return {
     DOM: renderForm(profile$),
