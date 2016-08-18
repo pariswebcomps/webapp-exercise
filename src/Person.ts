@@ -51,11 +51,11 @@ const renderManager = (manager) =>
 const renderPicture = (photo) =>
   img(".picture", { "attrs": { "src": photo } });
 
-const renderAdminIcons = () =>
+const renderAdminIcons = (id) =>
   div([
     img(".icon", { "attrs": { "src": "/src/images/md-map.svg" } }),
     a(
-      { "attrs": { "href": "edit" } },
+      { "attrs": { "href": `edit/${id}` } },
       [i(".icon.material-icons", "mode_edit")]
     ),
     a(
@@ -114,7 +114,7 @@ function renderPerson(
             ]),
             div(".col.s5", [
               renderPicture(photo),
-              renderAdminIcons(),
+              renderAdminIcons(id),
             ]),
           ]),
           renderDetailsWhen(isDetailed),
