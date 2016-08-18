@@ -1,18 +1,7 @@
+import { IProfile } from "./interfaces";
 import { VNode, a, div, h3, i, img, span } from "@cycle/dom";
 import { always, identity, map, mapObjIndexed, pipe, values, when } from "ramda";
 import { Stream } from "xstream";
-
-interface IProfile {
-  id: String;
-  email: String;
-  firstname: String;
-  lastname: String;
-  links: Object;
-  manager: String;
-  phone: String;
-  photo: String;
-  skills: String[];
-}
 
 interface IProps {
   isDetailed: boolean;
