@@ -23,6 +23,8 @@ interface ISinks {
   HTTP: Stream<RequestInput>;
 }
 
+const apiUrl = "http://localhost:3001/api/peoples";
+
 // A stream containing the hyperscript representation of the navigation.
 const navVTree$ = Stream.of(
   nav(".bg-color-primary", [
@@ -54,14 +56,17 @@ const navVTree$ = Stream.of(
 function main(sources: ISources): ISinks {
   // Define routes here.
   const match$ = sources.router.define({
-    "/": PersonList,
+    "/": parsedSources => PersonList({
+      HTTP: parsedSources.HTTP,
+      props: Stream.of({ apiUrl }),
+    }),
     "/detail/:id": id => parsedSources => PersonDetail({
       HTTP: parsedSources.HTTP,
-      props: Stream.of({ id }),
+      props: Stream.of({ id, apiUrl }),
     }),
     "/edit/:id": id => parsedSources => PersonEdit({
       HTTP: parsedSources.HTTP,
-      props: Stream.of({ id }),
+      props: Stream.of({ id, apiUrl }),
     }),
   });
 

@@ -6,7 +6,8 @@ import { prop } from "ramda";
 import { Stream } from "xstream";
 
 interface IProps {
-  id: String;
+  id: string;
+  apiUrl: string;
 }
 
 interface ISources {
@@ -77,11 +78,8 @@ export default function PersonEdit({HTTP, props}: ISources): ISinks {
   const profile$ = HTTP.select("person-edit").flatten().map(prop("body"));
 
   // Fetch the API for person profile.
-  const personsRequest$ = props
-    .map(({id}) => ({
-      category: "person-edit",
-      url: `http://localhost:3001/api/peoples/${id}`,
-    }));
+  const personsRequest$ = props.map(({apiUrl, id}) =>
+    ({ category: "person-edit", url: [apiUrl, id].join("/") }));
 
   return {
     DOM: renderForm(profile$),

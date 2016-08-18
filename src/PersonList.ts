@@ -6,8 +6,13 @@ import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { length, map, pipe, prop } from "ramda";
 import { Stream } from "xstream";
 
+interface IProps {
+  apiUrl: string;
+}
+
 interface ISources {
   HTTP: HTTPSource;
+  props: Stream<IProps>;
 }
 
 interface ISinks {
@@ -19,7 +24,7 @@ interface ISinks {
 const renderNumberOfPersons = (n) =>
   span(".col.s6", `You have ${n} contacts`);
 
-export default function PersonList({HTTP}: ISources): ISinks {
+export default function PersonList({HTTP, props}: ISources): ISinks {
   const personsResponse$ = HTTP.select("person-list").flatten();
 
   // Create a parser function that will turn HTTP response into appropriate
@@ -51,11 +56,8 @@ export default function PersonList({HTTP}: ISources): ISinks {
   );
 
   // Fetch the API for all persons.
-  // For now we are firing a single request on app launch.
-  const personsRequest$ = Stream.of({
-    category: "person-list",
-    url: "http://localhost:3001/api/peoples",
-  });
+  const personsRequest$ = props.map(({ apiUrl }) =>
+    ({ category: "person-list", url: apiUrl }));
 
   return {
     DOM: containerVTree$,
