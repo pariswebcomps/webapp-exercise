@@ -19,7 +19,7 @@ const renderNumberOfPersons = (n) =>
   span(".col.s6", `You have ${n} contacts`);
 
 export default function PersonList({HTTP}: ISources): ISinks {
-  const personsResponse$ = HTTP.select("persons").flatten();
+  const personsResponse$ = HTTP.select("person-list").flatten();
 
   const parseResponseToPersons = pipe(
     prop("body"),
@@ -46,7 +46,7 @@ export default function PersonList({HTTP}: ISources): ISinks {
   // Fetch the API for all persons.
   // For now we are firing a single request on app launch.
   const personsRequest$ = Stream.of({
-    category: "persons",
+    category: "person-list",
     url: "http://localhost:3001/api/peoples",
   });
 
