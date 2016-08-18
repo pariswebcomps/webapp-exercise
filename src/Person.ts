@@ -137,8 +137,8 @@ function renderPerson(
   );
 }
 
-export default function Person(sources: ISources): ISinks {
+export default function Person({profile, props}: ISources): ISinks {
   return {
-    DOM: renderPerson(sources.profile, sources.props),
+    DOM: renderPerson(profile, props),
   };
 };

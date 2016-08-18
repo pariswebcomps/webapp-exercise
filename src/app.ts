@@ -53,12 +53,8 @@ function main(sources: ISources): ISinks {
   const match$ = sources.router.define({
     "/": PersonList,
     "/detail/:id": id => parsedSources => PersonDetail({
-      // TypeScript currently prevent us from using ...parsedSources
-      // See: https://github.com/Microsoft/TypeScript/issues/2103
-      DOM: parsedSources.DOM,
       HTTP: parsedSources.HTTP,
       props: Stream.of({ id }),
-      router: parsedSources.router,
     }),
   });
 
