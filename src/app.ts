@@ -84,7 +84,7 @@ function main(sources: ISources): ISinks {
 const drivers: { [name: string]: Function } = {
   DOM: makeDOMDriver("#app"),
   HTTP: makeHTTPDriver(),
-  router: makeRouterDriver(createHistory()),
+  router: makeRouterDriver(createHistory(), {capture: true}),
 };
 
 // Kick-off the application!
