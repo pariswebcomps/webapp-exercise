@@ -43,7 +43,7 @@ export default function PersonDetail({HTTP, props}: ISources): ISinks {
 
   // Fetch the API for person profile.
   const personsRequest$ = props.map(({apiUrl, id}) =>
-    ({ category: "person-detail", url: [apiUrl, id].join("/") }));
+    ({ category: "person-detail", url: `${apiUrl}/${id}` }));
 
   return {
     DOM: containerVTree$,
