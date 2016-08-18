@@ -19,7 +19,7 @@ interface ISinks {
 }
 
 export default function PersonDetail({HTTP, props}: ISources): ISinks {
-  const personResponse$ = HTTP.select("person").flatten();
+  const personResponse$ = HTTP.select("person-detail").flatten();
 
   const person$ = Person({
     profile: personResponse$.map(prop("body")),
@@ -32,10 +32,10 @@ export default function PersonDetail({HTTP, props}: ISources): ISinks {
     ])
   );
 
-  // Fetch the API for person detail.
+  // Fetch the API for person profile.
   const personsRequest$ = props
     .map(({id}) => ({
-      category: "person",
+      category: "person-detail",
       url: `http://localhost:3001/api/peoples/${id}`,
     }));
 
