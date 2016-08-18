@@ -1,5 +1,5 @@
 import Person from "./Person";
-import { VNode, div } from "@cycle/dom";
+import { VNode, a, div, i } from "@cycle/dom";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { prop } from "ramda";
 import { Stream } from "xstream";
@@ -26,11 +26,17 @@ export default function PersonDetail({HTTP, props}: ISources): ISinks {
     props: Stream.of({ className: ".col.s6.offset-s3", isDetailed: true }),
   });
 
-  const containerVTree$ = person$.DOM.map((personVTree) =>
-    div(".container", [
-      div(".row", [personVTree]),
-    ])
-  );
+  const containerVTree$ = Stream.combine(props, person$.DOM)
+    .map(([{id}, personVTree]) =>
+      div(".container", [
+        div(".row", [personVTree]),
+        div(".fixed-action-btn.horizontal.edit-btn", [
+          a(".btn-floating.btn-large.red", { "attrs": { "href": `/edit/${id}` } }, [
+            i(".large.material-icons", "mode_edit"),
+          ]),
+        ]),
+      ])
+    );
 
   // Fetch the API for person profile.
   const personsRequest$ = props
