@@ -1,15 +1,8 @@
+import { IProfile } from "./interfaces";
 import { VNode, a, div, form, input, label, span } from "@cycle/dom";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { prop } from "ramda";
 import { Stream } from "xstream";
-
-interface IProfile {
-  id: String;
-  email: String;
-  firstname: String;
-  lastname: String;
-  phone: String;
-}
 
 interface IProps {
   id: String;
