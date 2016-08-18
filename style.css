@@ -46,6 +46,11 @@ body {
   font-size: 24px;
 }
 
+.edit-btn {
+  bottom: 45px; 
+  right: 24px;
+}
+
 /* Molecules */
 .skills {
   padding: 10px;
