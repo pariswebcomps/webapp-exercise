@@ -1,13 +1,11 @@
 import Person from "./Person";
 import Collection from "@cycle/collection";
 import { VNode, div, span } from "@cycle/dom";
-import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { length, map, pipe, prop } from "ramda";
 import { Stream } from "xstream";
 
 interface ISources {
-  DOM: DOMSource;
   HTTP: HTTPSource;
 }
 

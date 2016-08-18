@@ -1,6 +1,5 @@
 import Person from "./Person";
 import { VNode, div } from "@cycle/dom";
-import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { prop } from "ramda";
 import { Stream } from "xstream";
@@ -10,10 +9,8 @@ interface IProps {
 }
 
 interface ISources {
-  DOM: DOMSource;
   HTTP: HTTPSource;
   props: Stream<IProps>;
-  router: any;
 }
 
 interface ISinks {
