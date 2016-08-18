@@ -6,7 +6,7 @@ import { prop } from "ramda";
 import { Stream } from "xstream";
 
 interface IProps {
-  id: String;
+  id: string;
   apiUrl: string;
 }
 
