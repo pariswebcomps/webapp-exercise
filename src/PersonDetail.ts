@@ -7,6 +7,7 @@ import { Stream } from "xstream";
 
 interface IProps {
   id: String;
+  apiUrl: string;
 }
 
 interface ISources {
@@ -41,11 +42,8 @@ export default function PersonDetail({HTTP, props}: ISources): ISinks {
     );
 
   // Fetch the API for person profile.
-  const personsRequest$ = props
-    .map(({id}) => ({
-      category: "person-detail",
-      url: `http://localhost:3001/api/peoples/${id}`,
-    }));
+  const personsRequest$ = props.map(({apiUrl, id}) =>
+    ({ category: "person-detail", url: [apiUrl, id].join("/") }));
 
   return {
     DOM: containerVTree$,
