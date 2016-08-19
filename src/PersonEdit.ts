@@ -1,6 +1,7 @@
 import { IProfile } from "./interfaces";
 
 import { VNode, a, div, form, input, label, span } from "@cycle/dom";
+import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { prop } from "ramda";
 import { Stream } from "xstream";
@@ -11,6 +12,7 @@ interface IProps {
 }
 
 interface ISources {
+  DOM: DOMSource;
   HTTP: HTTPSource;
   props: Stream<IProps>;
 }
@@ -18,12 +20,13 @@ interface ISources {
 interface ISinks {
   DOM: Stream<VNode>;
   HTTP: Stream<RequestInput>;
+  router: any;
 }
 
 const renderCardAction = () =>
   div(".card-action", [
-    // TODO: implement cancel (back to history)
-    a({ "attrs": { "href": "/" } }, "Cancel"),
+    // Handle navigation with router driver to go back to previous page.
+    a(".cancel", { "attrs": { "href": "#" } }, "Cancel"),
     // TODO: implement submit
     a({ "attrs": { "href": "/" } }, "Submit"),
   ]);
@@ -74,8 +77,9 @@ function renderForm(
   );
 }
 
-export default function PersonEdit({HTTP, props}: ISources): ISinks {
+export default function PersonEdit({DOM, HTTP, props}: ISources): ISinks {
   const profile$ = HTTP.select("person-edit").flatten().map(prop("body"));
+  const cancelClick$ = DOM.select(".cancel").events("click");
 
   // Fetch the API for person profile.
   const personsRequest$ = props.map(({apiUrl, id}) =>
@@ -84,5 +88,7 @@ export default function PersonEdit({HTTP, props}: ISources): ISinks {
   return {
     DOM: renderForm(profile$),
     HTTP: personsRequest$,
+    // Every time we click on cancel, go back in history.
+    router: cancelClick$.mapTo(({type: "goBack"})),
   };
 }
