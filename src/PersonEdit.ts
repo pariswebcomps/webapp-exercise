@@ -37,26 +37,26 @@ const renderCardContent = ({firstname, lastname, email, phone}) =>
     form([
       div(".row", [
         div(".input-field.col.s12", [
-          input("#title", { "attrs": { "type": "text", "value": firstname } }),
-          label({ "attrs": { "for": "title" } }, "First name"),
+          input("#title.validate", { "attrs": { "type": "text", "value": firstname } }),
+          label(".active", { "attrs": { "for": "title" } }, "First name"),
         ]),
       ]),
       div(".row", [
         div(".input-field.col.s12", [
-          input("#last-name", { "attrs": { "type": "text", "value": lastname } }),
-          label({ "attrs": { "for": "last-name", "data-error": "wrong", "data-success": "right" } }, "Last name"),
+          input("#last-name.validate", { "attrs": { "type": "text", "value": lastname } }),
+          label(".active", { "attrs": { "for": "last-name" } }, "Last name"),
         ]),
       ]),
       div(".row", [
         div(".input-field.col.s12", [
-          input("#email", { "attrs": { "type": "text", "value": email } }),
-          label({ "attrs": { "for": "email" } }, "Email"),
+          input("#email.validate", { "attrs": { "type": "text", "value": email } }),
+          label(".active", { "attrs": { "for": "email" } }, "Email"),
         ]),
       ]),
       div(".row", [
         div(".input-field.col.s12", [
-          input("#phone", { "attrs": { "type": "text", "value": phone } }),
-          label({ "attrs": { "for": "phone" } }, "Phone number"),
+          input("#phone.validate", { "attrs": { "type": "text", "value": phone } }),
+          label(".active", { "attrs": { "for": "phone" } }, "Phone number"),
         ]),
       ]),
     ]),
