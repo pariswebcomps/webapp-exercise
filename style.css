@@ -12,6 +12,10 @@ body {
   background-color: #0168AB;
 }
 
+.m-right {
+  margin-right: 5px;
+}
+
 .pad-top {
   padding-top: 30px;
 }
@@ -47,7 +51,7 @@ body {
 }
 
 .edit-btn {
-  bottom: 45px; 
+  bottom: 45px;
   right: 24px;
 }
 

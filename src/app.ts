@@ -2,6 +2,8 @@ import PersonDetail from "./PersonDetail";
 import PersonEdit from "./PersonEdit";
 import PersonList from "./PersonList";
 
+import { makePreventDefaultDriver } from "./drivers/PreventDefault";
+
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { makeHTTPDriver } from "@cycle/http";
@@ -22,6 +24,7 @@ interface ISources {
 interface ISinks {
   DOM: Stream<VNode>;
   HTTP: Stream<RequestInput>;
+  preventDefault: Stream<any>;
   router: any;
 }
 
@@ -98,6 +101,7 @@ function main(sources: ISources): ISinks {
       mergePageSinks("DOM")
     ).map(div),
     HTTP: mergePageSinks("HTTP"),
+    preventDefault: mergePageSinks("preventDefault"),
     router: mergePageSinks("router"),
   };
 }
@@ -106,6 +110,7 @@ function main(sources: ISources): ISinks {
 const drivers: { [name: string]: Function } = {
   DOM: makeDOMDriver("#app"),
   HTTP: makeHTTPDriver(),
+  preventDefault: makePreventDefaultDriver(),
   router: makeRouterDriver(createHistory(), { capture: true }),
 };
 
