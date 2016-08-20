@@ -10,7 +10,7 @@ import { run } from "@cycle/xstream-run";
 import { makeRouterDriver } from "cyclic-router";
 import { RouterSource } from "cyclic-router/lib/RouterSource";
 import { createHistory } from "history";
-import { complement, isNil, lensProp, prop, set } from "ramda";
+import { complement, curry, isNil, lensProp, prop, set } from "ramda";
 import { Stream } from "xstream";
 
 interface ISources {
@@ -51,6 +51,13 @@ const navVTree$ = Stream.of(
   ])
 );
 
+const mergeSinks = curry((stream$: Stream<{}>, sinkName: string): any =>
+  stream$.map(prop(sinkName))
+    // Reject undefined values = streams that don't return given sinkName
+    .filter(complement(isNil))
+    .flatten()
+);
+
 // Our main application logic.
 // Takes observables input sources from drivers.
 // Does some pure dataflow operations = the app logic.
@@ -81,17 +88,17 @@ function main(sources: ISources): ISinks {
     );
   });
 
+  // Build a higher-order function that will merge sinks of given name, from all pages.
+  const mergePageSinks = mergeSinks(page$);
+
   return {
     // Combine all views into a single container to render within #app.
     DOM: Stream.combine(
       navVTree$,
-      page$.map(prop("DOM")).flatten()
+      mergePageSinks("DOM")
     ).map(div),
-    HTTP: page$.map(prop("HTTP")).flatten(),
-    router: page$.map(prop("router"))
-      // Reject undefined values = pages that don't return a router sink
-      .filter(complement(isNil))
-      .flatten(),
+    HTTP: mergePageSinks("HTTP"),
+    router: mergePageSinks("router"),
   };
 }
 
