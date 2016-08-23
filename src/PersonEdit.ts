@@ -1,3 +1,4 @@
+import { SerializedForm } from "./drivers/FormSubmit";
 import { IProfile } from "./interfaces";
 
 import { VNode, a, button, div, form, input, label, span } from "@cycle/dom";
@@ -14,13 +15,14 @@ interface IProps {
 interface ISources {
   DOM: DOMSource;
   HTTP: HTTPSource;
+  formSubmit: Stream<SerializedForm>;
   props: Stream<IProps>;
 }
 
 interface ISinks {
   DOM: Stream<VNode>;
   HTTP: Stream<RequestInput>;
-  preventDefault: Stream<any>;
+  formSubmit: Stream<Event>;
   router: any;
 }
 
@@ -109,7 +111,7 @@ export default function PersonEdit({DOM, HTTP, props}: ISources): ISinks {
   return {
     DOM: renderForm(profile$),
     HTTP: personsRequest$,
-    preventDefault: formSubmit$,
+    formSubmit: formSubmit$,
     // Every time we click on cancel, go back in history.
     router: cancelClick$.mapTo(({ type: "goBack" })),
   };
