@@ -101,6 +101,7 @@ function renderForm(
 
 export default function PersonEdit({DOM, HTTP, props, formSubmit}: ISources): ISinks {
   const profile$ = HTTP.select("person-edit").flatten().map(prop("body"));
+  const update$ = HTTP.select("person-edit-update").flatten().map(prop("body"));
   const cancelClick$ = DOM.select(".cancel").events("click");
   const formSubmit$ = DOM.select(".form").events("submit");
 
@@ -112,6 +113,7 @@ export default function PersonEdit({DOM, HTTP, props, formSubmit}: ISources): IS
   const submitFormRequest$ = Stream.combine(props, formSubmit)
     .map(([{apiUrl, id}, data]) =>
       ({
+        category: "person-edit-update",
         method: "PUT",
         send: data,
         type: "application/json",
@@ -119,11 +121,16 @@ export default function PersonEdit({DOM, HTTP, props, formSubmit}: ISources): IS
       })
     );
 
+  // Go to detail view after person update.
+  const goToDetailView$ = update$.map(({id}) => `/detail/${id}`);
+
+  // Go back to previous page when we click on cancel.
+  const goBack$ = cancelClick$.mapTo(({ type: "goBack" }));
+
   return {
     DOM: renderForm(profile$),
     HTTP: Stream.merge(personsRequest$, submitFormRequest$),
     formSubmit: formSubmit$,
-    // Every time we click on cancel, go back in history.
-    router: cancelClick$.mapTo(({ type: "goBack" })),
+    router: Stream.merge(goToDetailView$, goBack$),
   };
 }
