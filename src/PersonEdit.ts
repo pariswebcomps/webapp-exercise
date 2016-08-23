@@ -46,18 +46,18 @@ const renderCardContent = ({firstname, lastname, email, phone}) =>
       div(".input-field.col.s12", [
         input(
           "#title.validate",
-          { "attrs": { "name": "first-name", "type": "text", "value": firstname } }
+          { "attrs": { "name": "firstname", "type": "text", "value": firstname } }
         ),
-        label(".active", { "attrs": { "for": "first-name" } }, "First name"),
+        label(".active", { "attrs": { "for": "firstname" } }, "First name"),
       ]),
     ]),
     div(".row", [
       div(".input-field.col.s12", [
         input(
           "#last-name.validate",
-          { "attrs": { "name": "last-name", "type": "text", "value": lastname } }
+          { "attrs": { "name": "lastname", "type": "text", "value": lastname } }
         ),
-        label(".active", { "attrs": { "for": "last-name" } }, "Last name"),
+        label(".active", { "attrs": { "for": "lastname" } }, "Last name"),
       ]),
     ]),
     div(".row", [
