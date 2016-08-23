@@ -3,6 +3,7 @@
     "ramda": "registry:npm/ramda#0.21.0+20160531162943"
   },
   "globalDependencies": {
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504"
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
+    "jquery": "registry:dt/jquery#1.10.0+20160704162008"
   }
 }

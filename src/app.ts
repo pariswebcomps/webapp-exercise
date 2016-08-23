@@ -2,7 +2,7 @@ import PersonDetail from "./PersonDetail";
 import PersonEdit from "./PersonEdit";
 import PersonList from "./PersonList";
 
-import { makePreventDefaultDriver } from "./drivers/PreventDefault";
+import { SerializedForm, makeFormSubmitDriver } from "./drivers/FormSubmit";
 
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
@@ -18,13 +18,14 @@ import { Stream } from "xstream";
 interface ISources {
   DOM: DOMSource;
   HTTP: HTTPSource;
+  formSubmit: Stream<SerializedForm>;
   router: RouterSource;
 }
 
 interface ISinks {
   DOM: Stream<VNode>;
   HTTP: Stream<RequestInput>;
-  preventDefault: Stream<any>;
+  formSubmit: Stream<Event>;
   router: any;
 }
 
@@ -79,6 +80,7 @@ function main(sources: ISources): ISinks {
     "/edit/:id": id => parsedSources => PersonEdit({
       DOM: parsedSources.DOM,
       HTTP: parsedSources.HTTP,
+      formSubmit: parsedSources.formSubmit,
       props: Stream.of({ id, apiUrl }),
     }),
   });
@@ -101,7 +103,7 @@ function main(sources: ISources): ISinks {
       mergePageSinks("DOM")
     ).map(div),
     HTTP: mergePageSinks("HTTP"),
-    preventDefault: mergePageSinks("preventDefault"),
+    formSubmit: mergePageSinks("formSubmit"),
     router: mergePageSinks("router"),
   };
 }
@@ -110,7 +112,7 @@ function main(sources: ISources): ISinks {
 const drivers: { [name: string]: Function } = {
   DOM: makeDOMDriver("#app"),
   HTTP: makeHTTPDriver(),
-  preventDefault: makePreventDefaultDriver(),
+  formSubmit: makeFormSubmitDriver(),
   router: makeRouterDriver(createHistory(), { capture: true }),
 };
 
