@@ -28,7 +28,7 @@ export default function PersonList({HTTP, props}: ISources): ISinks {
   const personsResponse$ = HTTP.select("person-list").flatten();
 
   // Create a parser function that will turn HTTP response into appropriate
-  // params to instantiate Persons.  
+  // params to instantiate Persons.
   const parseResponseToPersons = pipe(
     prop("body"),
     map((profile) => ({ profile: Stream.of(profile) }))
@@ -43,7 +43,7 @@ export default function PersonList({HTTP, props}: ISources): ISinks {
     personsResponse$.map(parseResponseToPersons)
   );
 
-  // Pluck DOM outputs from every Person of the Collection into a single stream.  
+  // Pluck DOM outputs from every Person of the Collection into a single stream.
   const personsVTrees$ = Collection.pluck(persons$, prop("DOM"));
 
   const containerVTree$ = personsVTrees$.map((personsVTrees) =>
