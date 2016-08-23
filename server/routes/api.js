@@ -38,7 +38,7 @@ exports.update = function (req, res) {
     return res.status(404).json({error: 'La personne avec l\'id "' + id + '" n\'existe pas.'});
   }
 
-  PEOPLES[index]=person;
+  _.assign(PEOPLES[index], person);
 
   return res.status(200).json(person);
 };
