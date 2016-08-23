@@ -43,6 +43,7 @@ body {
 
 .picture {
   border: 10px solid #F1F1F1;
+  max-width: 100%;
 }
 
 .header {
