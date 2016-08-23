@@ -40,7 +40,7 @@ exports.update = function (req, res) {
 
   _.assign(PEOPLES[index], person);
 
-  return res.status(200).json(person);
+  return res.status(200).json(PEOPLES[index]);
 };
 
 
