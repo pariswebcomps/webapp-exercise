@@ -55,7 +55,7 @@ const renderAdminIcons = (id) =>
   div([
     img(".icon", { "attrs": { "src": "/src/images/md-map.svg" } }),
     a(
-      { "attrs": { "href": `edit/${id}` } },
+      { "attrs": { "href": `/edit/${id}` } },
       [i(".icon.material-icons", "mode_edit")]
     ),
     a(
