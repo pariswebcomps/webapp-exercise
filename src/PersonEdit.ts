@@ -99,7 +99,7 @@ function renderForm(
   );
 }
 
-export default function PersonEdit({DOM, HTTP, props}: ISources): ISinks {
+export default function PersonEdit({DOM, HTTP, props, formSubmit}: ISources): ISinks {
   const profile$ = HTTP.select("person-edit").flatten().map(prop("body"));
   const cancelClick$ = DOM.select(".cancel").events("click");
   const formSubmit$ = DOM.select(".form").events("submit");
@@ -108,9 +108,20 @@ export default function PersonEdit({DOM, HTTP, props}: ISources): ISinks {
   const personsRequest$ = props.map(({apiUrl, id}) =>
     ({ category: "person-edit", url: `${apiUrl}/${id}` }));
 
+  // Update person data on form submission.
+  const submitFormRequest$ = Stream.combine(props, formSubmit)
+    .map(([{apiUrl, id}, data]) =>
+      ({
+        method: "PUT",
+        send: data,
+        type: "application/json",
+        url: `${apiUrl}/${id}`,
+      })
+    );
+
   return {
     DOM: renderForm(profile$),
-    HTTP: personsRequest$,
+    HTTP: Stream.merge(personsRequest$, submitFormRequest$),
     formSubmit: formSubmit$,
     // Every time we click on cancel, go back in history.
     router: cancelClick$.mapTo(({ type: "goBack" })),
