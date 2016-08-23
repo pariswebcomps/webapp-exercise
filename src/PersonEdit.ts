@@ -46,36 +46,49 @@ const renderCardContent = ({firstname, lastname, email, phone}) =>
       div(".input-field.col.s12", [
         input(
           "#title.validate",
-          { "attrs": { "name": "firstname", "type": "text", "value": firstname } }
+          { "attrs": { "name": "firstname", "type": "text", "value": firstname, "required": true } }
         ),
-        label(".active", { "attrs": { "for": "firstname" } }, "First name"),
+        label(".active", { "attrs": { "for": "firstname" } }, "First name*"),
       ]),
     ]),
     div(".row", [
       div(".input-field.col.s12", [
         input(
           "#last-name.validate",
-          { "attrs": { "name": "lastname", "type": "text", "value": lastname } }
+          { "attrs": { "name": "lastname", "type": "text", "value": lastname, "required": true } }
         ),
-        label(".active", { "attrs": { "for": "lastname" } }, "Last name"),
+        label(".active", { "attrs": { "for": "lastname" } }, "Last name*"),
       ]),
     ]),
     div(".row", [
       div(".input-field.col.s12", [
         input(
           "#email.validate",
-          { "attrs": { "name": "email", "type": "text", "value": email } }
+          { "attrs": { "name": "email", "type": "email", "value": email } }
         ),
-        label(".active", { "attrs": { "for": "email" } }, "Email"),
+        label(
+          ".active",
+          { "attrs": { "for": "email", "data-error": "This email address is not valid" } },
+          "Email"
+        ),
       ]),
     ]),
     div(".row", [
       div(".input-field.col.s12", [
         input(
           "#phone.validate",
-          { "attrs": { "name": "phone", "type": "text", "value": phone } }
+          { "attrs": { "name": "phone", "type": "text", "value": phone, "pattern": "[0-9]{10}" } }
         ),
-        label(".active", { "attrs": { "for": "phone" } }, "Phone number"),
+        label(
+          ".active",
+          {
+            "attrs": {
+              "for": "phone",
+              "data-error": "This phone number is not valid. Expected format: 10 digits",
+            },
+          },
+          "Phone number"
+        ),
       ]),
     ]),
   ]);
