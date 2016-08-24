@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@cycle/collection": "0.3.0",
-    "@cycle/dom": "10.1.0",
-    "@cycle/http": "9.0.3",
-    "@cycle/xstream-run": "3.0.3",
+    "@cycle/dom": "12.2.1",
+    "@cycle/http": "10.2.1",
+    "@cycle/xstream-run": "3.1.0",
     "body-parser": "^1.14.2",
     "cyclic-router": "2.1.2",
     "express": "^4.13.3",
@@ -24,7 +24,7 @@
     "materialize-css": "0.97.6",
     "ramda": "0.21.0",
     "underscore": "^1.8.3",
-    "xstream": "5.2.4"
+    "xstream": "6.1.0"
   },
   "devDependencies": {
     "concurrently": "2.2.0",
