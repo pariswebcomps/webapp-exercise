@@ -1,7 +1,9 @@
 import Person from "./Person";
+import SearchInput from "./SearchInput";
 
 import Collection from "@cycle/collection";
 import { VNode, div, span } from "@cycle/dom";
+import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { length, map, pipe, prop } from "ramda";
 import { Stream } from "xstream";
@@ -11,6 +13,7 @@ interface IProps {
 }
 
 interface ISources {
+  DOM: DOMSource;
   HTTP: HTTPSource;
   props: Stream<IProps>;
 }
@@ -24,7 +27,10 @@ interface ISinks {
 const renderNumberOfPersons = (n) =>
   span(".col.s6", `You have ${n} contacts`);
 
-export default function PersonList({HTTP, props}: ISources): ISinks {
+export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
+  // Instantiate a search input element to filter list.
+  const searchInput = SearchInput({ DOM });
+
   const personsResponse$ = HTTP.select("person-list").flatten();
 
   // Create a parser function that will turn HTTP response into appropriate
@@ -46,14 +52,17 @@ export default function PersonList({HTTP, props}: ISources): ISinks {
   // Pluck DOM outputs from every Person of the Collection into a single stream.
   const personsVTrees$ = Collection.pluck(persons$, prop("DOM"));
 
-  const containerVTree$ = personsVTrees$.map((personsVTrees) =>
-    div(".container", [
-      div(".header.row", [
-        renderNumberOfPersons(length(personsVTrees)),
-      ]),
-      div(".row", personsVTrees),
-    ])
-  );
+  // Build the whole VTree to render the list.
+  const containerVTree$ = Stream.combine(searchInput.DOM, personsVTrees$)
+    .map(([searchInputVTree, personsVTrees]) =>
+      div(".container", [
+        div(".header.row", [
+          renderNumberOfPersons(length(personsVTrees)),
+        ]),
+        div(".row", [searchInputVTree]),
+        div(".row", personsVTrees),
+      ])
+    );
 
   // Fetch the API for all persons.
   const personsRequest$ = props.map(({ apiUrl }) =>

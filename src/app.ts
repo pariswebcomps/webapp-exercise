@@ -70,6 +70,7 @@ function main(sources: ISources): ISinks {
   // Define routes here.
   const match$ = sources.router.define({
     "/": parsedSources => PersonList({
+      DOM: parsedSources.DOM,
       HTTP: parsedSources.HTTP,
       props: Stream.of({ apiUrl }),
     }),
