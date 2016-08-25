@@ -15,17 +15,25 @@ declare module "@cycle/collection" {
   function Collection(
     Item: Component,
     sources?: ISources,
-    add$?: Stream<ISources | [ISources]>
+    add$?: Stream<ISources | [ISources]>,
+    removeSelector?: (item: ISources) => Stream<any>
   ): Stream<any>;
 
   // Disable no-namespace -> following the documentation.
   // Disable no-unused-variable -> we are declaring the interface here.
   /* tslint:disable:no-namespace no-unused-variable */
   namespace Collection {
-    function pluck(
+    function gather(
+      Item: Component,
+      sources: ISources,
+      itemState$: Stream<ISources>,
+      idAttribute?: string
+    ): Stream<any>;
+
+    function pluck<T>(
       collection$: Stream<any>,
-      selector: (ItemSinks: ISinks) => VNode
-    ): Stream<VNode[]>;
+      selector: (ItemSinks: ISinks) => T
+    ): Stream<T[]>;
   }
   /* tslint:enable:no-namespace no-unused-variable */
 
