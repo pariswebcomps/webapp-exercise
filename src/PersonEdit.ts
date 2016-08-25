@@ -77,7 +77,7 @@ const renderCardContent = ({firstname, lastname, email, phone}) =>
       div(".input-field.col.s12", [
         input(
           "#phone.validate",
-          { "attrs": { "name": "phone", "type": "text", "value": phone, "pattern": "[0-9]{10}" } }
+          { "attrs": { "name": "phone", "type": "tel", "value": phone, "pattern": "[0-9]{10}" } }
         ),
         label(
           ".active",
