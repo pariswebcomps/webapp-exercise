@@ -18,10 +18,24 @@ interface ISinks {
   DOM: Stream<VNode>;
 }
 
+export default function Person({profile, props}: ISources): ISinks {
+  return {
+    DOM: Stream.combine(profile, props).map(renderPerson),
+  };
+};
+
 const renderLargeBtns = map((text) => a(".btn-large", text));
 
-const renderUsername = ({id, firstname, lastname}) =>
-  a(
+const renderLinks = pipe(
+  mapObjIndexed((link, type) => a(
+    { "attrs": { "href": link } },
+    [img(".pad-horizontal", { "attrs": { "src": `/src/images/md-${type}.svg` } })]
+  )),
+  values
+);
+
+function renderUsername({id, firstname, lastname}: IProfile): VNode {
+  return a(
     ".username",
     { "attrs": { "href": `/detail/${id}` } },
     [
@@ -29,9 +43,10 @@ const renderUsername = ({id, firstname, lastname}) =>
       span(".uppercase", lastname),
     ]
   );
+}
 
-const renderContact = ({email, phone}) =>
-  div(".pad-top", [
+function renderContact({email, phone}: IProfile): VNode {
+  return div(".pad-top", [
     div([
       img({ "attrs": { "src": "/src/images/md-email.svg" } }),
       span(` ${email}`),
@@ -41,18 +56,21 @@ const renderContact = ({email, phone}) =>
       span(` ${phone}`),
     ]),
   ]);
+}
 
-const renderManager = (manager) =>
-  div([
+function renderManager(manager: string): VNode {
+  return div([
     span(".label", "Manager: "),
     span(manager),
   ]);
+}
 
-const renderPicture = (photo) =>
-  img(".picture", { "attrs": { "src": photo } });
+function renderPicture(photo: string): VNode {
+  return img(".picture", { "attrs": { "src": photo } });
+}
 
-const renderAdminIcons = (id) =>
-  div([
+function renderAdminIcons(id: string): VNode {
+  return div([
     img(".icon", { "attrs": { "src": "/src/images/md-map.svg" } }),
     a(
       { "attrs": { "href": `/edit/${id}` } },
@@ -63,69 +81,40 @@ const renderAdminIcons = (id) =>
       [i(".icon.material-icons", "delete")]
     ),
   ]);
+}
 
-const renderDetails = ({skills, links}) =>
-  div([
+function renderDetails({skills, links}: IProfile): VNode {
+  return div([
     div(".skills", [
       h3("Skills"),
       ...renderLargeBtns(skills),
     ]),
     div(".row.center-align", renderLinks(links)),
   ]);
-
-const renderLinks = pipe(
-  mapObjIndexed((link, type) =>
-    a(
-      { "attrs": { "href": link } },
-      [
-        img(
-          ".pad-horizontal",
-          { "attrs": { "src": `/src/images/md-${type}.svg` } }
-        ),
-      ]
-    )
-  ),
-  values
-);
-
-function renderPerson(
-  profile$: Stream<IProfile>,
-  props$: Stream<IProps>
-): Stream<VNode> {
-  return Stream.combine(profile$, props$).map(
-    ([
-      {id, email, firstname, lastname, links, manager, phone, photo, skills},
-      {isDetailed, className = ""},
-    ]) => {
-      const renderDetailsWhen = when(
-        identity,
-        always(renderDetails({ skills, links }))
-      );
-
-      return div(className, [
-        div(".card-panel", [
-          div(".row", [
-            div(".col.s7", [
-              div(".layout.vertical.flex", [
-                renderUsername({ id, firstname, lastname }),
-              ]),
-              renderContact({ email, phone }),
-              renderManager(manager),
-            ]),
-            div(".col.s5", [
-              renderPicture(photo),
-              renderAdminIcons(id),
-            ]),
-          ]),
-          renderDetailsWhen(isDetailed),
-        ]),
-      ]);
-    }
-  );
 }
 
-export default function Person({profile, props}: ISources): ISinks {
-  return {
-    DOM: renderPerson(profile, props),
-  };
-};
+function renderPerson([profile, {isDetailed, className = ""}]: [IProfile, IProps]): VNode {
+  const renderDetailsWhen = when(
+    identity,
+    always(renderDetails(profile))
+  );
+
+  return div(className, [
+    div(".card-panel", [
+      div(".row", [
+        div(".col.s7", [
+          div(".layout.vertical.flex", [
+            renderUsername(profile),
+          ]),
+          renderContact(profile),
+          renderManager(profile.manager),
+        ]),
+        div(".col.s5", [
+          renderPicture(profile.photo),
+          renderAdminIcons(profile.id),
+        ]),
+      ]),
+      renderDetailsWhen(isDetailed),
+    ]),
+  ]);
+}

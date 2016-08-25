@@ -4,6 +4,8 @@ import PersonList from "./PersonList";
 
 import { SerializedForm, makeFormSubmitDriver } from "./drivers/FormSubmit";
 
+import { mergeSinks } from "./utils";
+
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { makeHTTPDriver } from "@cycle/http";
@@ -12,7 +14,7 @@ import { run } from "@cycle/xstream-run";
 import { makeRouterDriver } from "cyclic-router";
 import { RouterSource } from "cyclic-router/lib/RouterSource";
 import { createHistory } from "history";
-import { complement, curry, isNil, lensProp, prop, set } from "ramda";
+import { lensProp, set } from "ramda";
 import { Stream } from "xstream";
 
 interface ISources {
@@ -31,43 +33,25 @@ interface ISinks {
 
 const apiUrl = "http://localhost:3001/api/peoples";
 
-// A stream containing the hyperscript representation of the navigation.
-const navVTree$ = Stream.of(
-  nav(".bg-color-primary", [
-    div(".nav-wrapper", [
-      a({ "attrs": { "href": "/" } }, [
-        img(
-          ".logo",
-          {
-            "attrs": {
-              "src": "/src/images/logo-people.svg",
-              "className": "logo",
-            },
-          }
-        ),
-      ]),
-      ul(".right.hide-on-med-and-down", [
-        li([
-          a({ "attrs": { "href": "/" } }, [`Peoples`]),
-        ]),
+const navVTree = nav(".bg-color-primary", [
+  div(".nav-wrapper", [
+    a({ "attrs": { "href": "/" } }, [
+      img(".logo", { "attrs": { "src": "/src/images/logo-people.svg" } }),
+    ]),
+    ul(".right.hide-on-med-and-down", [
+      li([
+        a({ "attrs": { "href": "/" } }, [`Peoples`])
       ]),
     ]),
-  ])
-);
-
-const mergeSinks = curry((stream$: Stream<{}>, sinkName: string): any =>
-  stream$.map(prop(sinkName))
-    // Reject undefined values = streams that don't return given sinkName
-    .filter(complement(isNil))
-    .flatten()
-);
+  ]),
+]);
 
 // Our main application logic.
 // Takes observables input sources from drivers.
 // Does some pure dataflow operations = the app logic.
 // Returns observables output sinks to the drivers.
 function main(sources: ISources): ISinks {
-  // Define routes here.
+  // Define routes.
   const match$ = sources.router.define({
     "/": parsedSources => PersonList({
       DOM: parsedSources.DOM,
@@ -98,11 +82,7 @@ function main(sources: ISources): ISinks {
   const mergePageSinks = mergeSinks(page$);
 
   return {
-    // Combine all views into a single container to render within #app.
-    DOM: Stream.combine(
-      navVTree$,
-      mergePageSinks("DOM")
-    ).map(div),
+    DOM: Stream.combine(Stream.of(navVTree), mergePageSinks("DOM")).map(div),
     HTTP: mergePageSinks("HTTP"),
     formSubmit: mergePageSinks("formSubmit"),
     router: mergePageSinks("router"),
