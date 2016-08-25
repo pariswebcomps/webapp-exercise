@@ -24,13 +24,6 @@ interface ISinks {
   HTTP: Stream<RequestInput>;
 }
 
-// A simple function that will output VTree of the # of persons block
-const renderNumberOfPersons = ifElse(
-  (n) => n > 1,
-  (n) => span(".col.s6", `You have ${n} contacts`),
-  (n) => span(".col.s6", `You have ${n} contact`)
-);
-
 export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   // Instantiate a search input element to filter list.
   const searchInput = SearchInput({ DOM });
@@ -60,26 +53,31 @@ export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   // Pluck DOM outputs from every Person of the Collection into a single stream.
   const personsVTrees$ = Collection.pluck(persons$, prop("DOM"));
 
-  // Build the whole VTree to render the list.
-  const containerVTree$ = Stream.combine(searchInput.DOM, personsVTrees$)
-    .map(([searchInputVTree, personsVTrees]) =>
-      div(".container", [
-        div(".header.row", [
-          renderNumberOfPersons(length(personsVTrees)),
-        ]),
-        div(".row", [searchInputVTree]),
-        div(".row", personsVTrees),
-      ])
-    );
-
-  // Fetch the API for all persons.
-  const personsRequest$ = props.map(({ apiUrl }) =>
-    ({ category: "person-list", url: apiUrl }));
-
   return {
-    DOM: containerVTree$,
-    HTTP: personsRequest$,
+    DOM: Stream.combine(searchInput.search, personsVTrees$).map(renderDOM),
+    HTTP: props.map(parseHTTPRequest),
   };
+}
+
+// A simple function that will output VTree of the # of persons block
+const renderNumberOfPersons = ifElse(
+  (n) => n > 1,
+  (n) => span(".col.s6", `You have ${n} contacts`),
+  (n) => span(".col.s6", `You have ${n} contact`)
+);
+
+function parseHTTPRequest({apiUrl}: IProps): RequestInput {
+  return { category: "person-list", url: apiUrl };
+}
+
+function renderDOM([searchInputVTree, personsVTrees]: [VNode, VNode[]]): VNode {
+  return div(".container", [
+    div(".header.row", [
+      renderNumberOfPersons(length(personsVTrees)),
+    ]),
+    div(".row", [searchInputVTree]),
+    div(".row", personsVTrees),
+  ]);
 }
 
 function parseToSearchablePerson(search: string) {

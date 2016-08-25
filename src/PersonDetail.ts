@@ -29,24 +29,23 @@ export default function PersonDetail({HTTP, props}: ISources): ISinks {
     props: Stream.of({ className: ".col.s6.offset-s3", isDetailed: true }),
   });
 
-  const containerVTree$ = Stream.combine(props, person$.DOM)
-    .map(([{id}, personVTree]) =>
-      div(".container", [
-        div(".row", [personVTree]),
-        div(".fixed-action-btn.horizontal.edit-btn", [
-          a(".btn-floating.btn-large.red", { "attrs": { "href": `/edit/${id}` } }, [
-            i(".large.material-icons", "mode_edit"),
-          ]),
-        ]),
-      ])
-    );
-
-  // Fetch the API for person profile.
-  const personsRequest$ = props.map(({apiUrl, id}) =>
-    ({ category: "person-detail", url: `${apiUrl}/${id}` }));
-
   return {
-    DOM: containerVTree$,
-    HTTP: personsRequest$,
+    DOM: Stream.combine(props, person$.DOM).map(renderDOM),
+    HTTP: props.map(parseHTTPRequest),
   };
+}
+
+function renderDOM([{id}, personVTree]: [IProps, VNode]): VNode {
+  return div(".container", [
+    div(".row", [personVTree]),
+    div(".fixed-action-btn.horizontal.edit-btn", [
+      a(".btn-floating.btn-large.red", { "attrs": { "href": `/edit/${id}` } }, [
+        i(".large.material-icons", "mode_edit"),
+      ]),
+    ]),
+  ]);
+}
+
+function parseHTTPRequest({apiUrl, id}: IProps): RequestInput {
+  return { category: "person-detail", url: `${apiUrl}/${id}` };
 }

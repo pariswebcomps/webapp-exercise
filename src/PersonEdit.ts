@@ -26,21 +26,56 @@ interface ISinks {
   router: any;
 }
 
-const renderCardAction = () =>
-  div(".card-action", [
-    a(
-      ".cancel.btn.waves-effect.waves-light.deep-orange.m-right",
-      "Cancel"
-    ),
-    button(
-      ".btn.waves-effect.waves-light",
-      { "attrs": { "type": "submit", "name": "action" } },
-      "Submit"
-    ),
-  ]);
+export default function PersonEdit({DOM, HTTP, props, formSubmit}: ISources): ISinks {
+  const profile$ = HTTP.select("person-edit").flatten().map(prop("body"));
+  const update$ = HTTP.select("person-edit-update").flatten().map(prop("body"));
+  const cancelClick$ = DOM.select(".cancel").events("click");
+  const formSubmit$ = DOM.select(".form").events("submit");
 
-const renderCardContent = ({firstname, lastname, email, phone}) =>
-  div(".card-content", [
+  // Fetch the API for person profile.
+  const personsRequest$ = props.map(({apiUrl, id}) =>
+    ({ category: "person-edit", url: `${apiUrl}/${id}` }));
+
+  // Update person data on form submission.
+  const submitFormRequest$ = Stream.combine(props, formSubmit)
+    .map(([{apiUrl, id}, data]) =>
+      ({
+        category: "person-edit-update",
+        method: "PUT",
+        send: data,
+        type: "application/json",
+        url: `${apiUrl}/${id}`,
+      })
+    );
+
+  // Go to detail view after person update.
+  const goToDetailView$ = update$.map(({id}) => `/detail/${id}`);
+
+  // Go back to previous page when we click on cancel.
+  const goBack$ = cancelClick$.mapTo(({ type: "goBack" }));
+
+  return {
+    DOM: profile$.map(renderForm),
+    HTTP: Stream.merge(personsRequest$, submitFormRequest$),
+    formSubmit: formSubmit$,
+    router: Stream.merge(goToDetailView$, goBack$),
+  };
+}
+
+const renderCardActionVTree = div(".card-action", [
+  a(
+    ".cancel.btn.waves-effect.waves-light.deep-orange.m-right",
+    "Cancel"
+  ),
+  button(
+    ".btn.waves-effect.waves-light",
+    { "attrs": { "type": "submit", "name": "action" } },
+    "Submit"
+  ),
+]);
+
+function renderCardContent({firstname, lastname, email, phone}: IProfile): VNode {
+  return div(".card-content", [
     span(".card-title", "Contact information"),
     div(".row", [
       div(".input-field.col.s12", [
@@ -92,58 +127,19 @@ const renderCardContent = ({firstname, lastname, email, phone}) =>
       ]),
     ]),
   ]);
-
-function renderForm(
-  profile$: Stream<IProfile>
-): Stream<VNode> {
-  return profile$.map((profile) =>
-    div(".container", [
-      div(".row.movieCardForm", [
-        form(
-          ".form.card.col.s12.z-depth-3",
-          { "attrs": { "action": `/api/peoples/${profile.id}` } },
-          [
-            renderCardContent(profile),
-            renderCardAction(),
-          ]
-        ),
-      ]),
-    ])
-  );
 }
 
-export default function PersonEdit({DOM, HTTP, props, formSubmit}: ISources): ISinks {
-  const profile$ = HTTP.select("person-edit").flatten().map(prop("body"));
-  const update$ = HTTP.select("person-edit-update").flatten().map(prop("body"));
-  const cancelClick$ = DOM.select(".cancel").events("click");
-  const formSubmit$ = DOM.select(".form").events("submit");
-
-  // Fetch the API for person profile.
-  const personsRequest$ = props.map(({apiUrl, id}) =>
-    ({ category: "person-edit", url: `${apiUrl}/${id}` }));
-
-  // Update person data on form submission.
-  const submitFormRequest$ = Stream.combine(props, formSubmit)
-    .map(([{apiUrl, id}, data]) =>
-      ({
-        category: "person-edit-update",
-        method: "PUT",
-        send: data,
-        type: "application/json",
-        url: `${apiUrl}/${id}`,
-      })
-    );
-
-  // Go to detail view after person update.
-  const goToDetailView$ = update$.map(({id}) => `/detail/${id}`);
-
-  // Go back to previous page when we click on cancel.
-  const goBack$ = cancelClick$.mapTo(({ type: "goBack" }));
-
-  return {
-    DOM: renderForm(profile$),
-    HTTP: Stream.merge(personsRequest$, submitFormRequest$),
-    formSubmit: formSubmit$,
-    router: Stream.merge(goToDetailView$, goBack$),
-  };
+function renderForm(profile: IProfile): VNode {
+  return div(".container", [
+    div(".row.movieCardForm", [
+      form(
+        ".form.card.col.s12.z-depth-3",
+        { "attrs": { "action": `/api/peoples/${profile.id}` } },
+        [
+          renderCardContent(profile),
+          renderCardActionVTree,
+        ]
+      ),
+    ]),
+  ]);
 }
