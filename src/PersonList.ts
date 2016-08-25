@@ -6,7 +6,7 @@ import Collection from "@cycle/collection";
 import { VNode, div, span } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
-import { filter, length, map, pipe, prop, toLower } from "ramda";
+import { filter, ifElse, length, map, pipe, prop, toLower } from "ramda";
 import { Stream } from "xstream";
 
 interface IProps {
@@ -25,8 +25,11 @@ interface ISinks {
 }
 
 // A simple function that will output VTree of the # of persons block
-const renderNumberOfPersons = (n) =>
-  span(".col.s6", `You have ${n} contacts`);
+const renderNumberOfPersons = ifElse(
+  (n) => n > 1,
+  (n) => span(".col.s6", `You have ${n} contacts`),
+  (n) => span(".col.s6", `You have ${n} contact`)
+);
 
 export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   // Instantiate a search input element to filter list.
