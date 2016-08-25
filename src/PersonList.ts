@@ -1,11 +1,12 @@
 import Person from "./Person";
 import SearchInput from "./SearchInput";
+import { IProfile, ISearchablePerson } from "./interfaces";
 
 import Collection from "@cycle/collection";
 import { VNode, div, span } from "@cycle/dom";
 import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
-import { length, map, pipe, prop } from "ramda";
+import { filter, length, map, pipe, prop, toLower } from "ramda";
 import { Stream } from "xstream";
 
 interface IProps {
@@ -31,22 +32,26 @@ export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   // Instantiate a search input element to filter list.
   const searchInput = SearchInput({ DOM });
 
+  // Retrieve data from server.
   const personsResponse$ = HTTP.select("person-list").flatten();
 
-  // Create a parser function that will turn HTTP response into appropriate
-  // params to instantiate Persons.
-  const parseResponseToPersons = pipe(
-    prop("body"),
-    map((profile) => ({ profile: Stream.of(profile) }))
-  );
+  // Filter the HTTP stream (= all data) with latest value of the search input one.
+  const searchedPersons$ = Stream.combine(personsResponse$, searchInput.search)
+    .map(([response, search]) =>
+      pipe(
+        prop("body"),
+        parseToSearchablePerson(search),
+        filterSearchedPersons(search)
+      )(response)
+    );
 
   // Create a stream representing a Collection of Persons.
-  // It is bound to the HTTP response stream.
   // Additional params for Person instantiate are configured here (= props).
-  const persons$ = Collection(
+  // It will be updated with latest data from searchedPersons$.
+  const persons$ = Collection.gather(
     Person,
     { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
-    personsResponse$.map(parseResponseToPersons)
+    searchedPersons$
   );
 
   // Pluck DOM outputs from every Person of the Collection into a single stream.
@@ -72,4 +77,22 @@ export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
     DOM: containerVTree$,
     HTTP: personsRequest$,
   };
+}
+
+function parseToSearchablePerson(search: string) {
+  return map((profile: IProfile) =>
+    ({
+      // `filterKey` will be matched against search term to filter inputs.
+      filterKey: `${profile.firstname} ${profile.lastname}`,
+      // Build an ID based on profile.id and search term so Collection is flushed anytime the
+      // search term is changed => keep the Collection ordered (reset with filtered data).
+      id: profile.id + search,
+      profile,
+    })
+  );
+}
+
+function filterSearchedPersons(search: string) {
+  return filter((person: ISearchablePerson) =>
+    toLower(person.filterKey).indexOf(toLower(search)) > -1);
 }
