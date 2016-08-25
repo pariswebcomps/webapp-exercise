@@ -1,9 +1,6 @@
-import PersonDetail from "./PersonDetail";
-import PersonEdit from "./PersonEdit";
-import PersonList from "./PersonList";
-
 import { SerializedForm, makeFormSubmitDriver } from "./drivers/FormSubmit";
 
+import { routes } from "./router";
 import { mergeSinks } from "./utils";
 
 import { VNode, a, div, img, li, makeDOMDriver, nav, ul } from "@cycle/dom";
@@ -31,8 +28,6 @@ interface ISinks {
   router: any;
 }
 
-const apiUrl = "http://localhost:3001/api/peoples";
-
 const navVTree = nav(".bg-color-primary", [
   div(".nav-wrapper", [
     a({ "attrs": { "href": "/" } }, [
@@ -51,32 +46,13 @@ const navVTree = nav(".bg-color-primary", [
 // Does some pure dataflow operations = the app logic.
 // Returns observables output sinks to the drivers.
 function main(sources: ISources): ISinks {
-  // Define routes.
-  const match$ = sources.router.define({
-    "/": parsedSources => PersonList({
-      DOM: parsedSources.DOM,
-      HTTP: parsedSources.HTTP,
-      props: Stream.of({ apiUrl }),
-    }),
-    "/detail/:id": id => parsedSources => PersonDetail({
-      HTTP: parsedSources.HTTP,
-      props: Stream.of({ id, apiUrl }),
-    }),
-    "/edit/:id": id => parsedSources => PersonEdit({
-      DOM: parsedSources.DOM,
-      HTTP: parsedSources.HTTP,
-      formSubmit: parsedSources.formSubmit,
-      props: Stream.of({ id, apiUrl }),
-    }),
-  });
-
-  // For each route, init bound component (= value) with sources.
-  const page$ = match$.map(({path, value}) => {
-    return value(
+  // Configure routing.
+  const page$ = sources.router.define(routes)
+    // For each route, init bound component (= value) with sources.
+    .map(({path, value}) => value(
       // Router source is resolved from the path to enable history.
       set(lensProp("router"), sources.router.path(path), sources)
-    );
-  });
+    ));
 
   // Build a higher-order function that will merge sinks of given name, from all pages.
   const mergePageSinks = mergeSinks(page$);

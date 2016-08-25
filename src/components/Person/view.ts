@@ -1,28 +1,12 @@
-import { IProfile } from "./interfaces";
+import { IProfile, IProps } from "./interfaces";
 
 import { VNode, a, div, h3, i, img, span } from "@cycle/dom";
 import { always, identity, map, mapObjIndexed, pipe, values, when } from "ramda";
 import { Stream } from "xstream";
 
-interface IProps {
-  isDetailed: boolean;
-  className: string;
+export default function view(person$: Stream<[IProfile, IProps]>): Stream<VNode> {
+  return person$.map(renderPerson);
 }
-
-interface ISources {
-  profile: Stream<IProfile>;
-  props: Stream<IProps>;
-}
-
-interface ISinks {
-  DOM: Stream<VNode>;
-}
-
-export default function Person({profile, props}: ISources): ISinks {
-  return {
-    DOM: Stream.combine(profile, props).map(renderPerson),
-  };
-};
 
 const renderLargeBtns = map((text) => a(".btn-large", text));
 
@@ -34,7 +18,7 @@ const renderLinks = pipe(
   values
 );
 
-function renderUsername({id, firstname, lastname}: IProfile): VNode {
+function renderUsername({id, firstname, lastname}: IProfile): VNode {
   return a(
     ".username",
     { "attrs": { "href": `/detail/${id}` } },
