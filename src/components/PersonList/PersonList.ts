@@ -35,7 +35,7 @@ export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   const requestList$ = props.map(parseHTTPRequest);
 
   return {
-    DOM: view(Stream.combine(searchInput.search, personsVTrees$)),
+    DOM: view(Stream.combine(searchInput.DOM, personsVTrees$)),
     HTTP: requestList$,
   };
 }
@@ -44,7 +44,7 @@ function parseHTTPRequest({apiUrl}: IProps): RequestInput {
   return { category: "person-list", url: apiUrl };
 }
 
-function getSearchedPersons([response, search]: [{body: IProfile[]}, string]): ISearchablePerson[] {
+function getSearchedPersons([response, search]: [{ body: IProfile[] }, string]): ISearchablePerson[] {
   return pipe(
     prop("body"),
     parseToSearchablePerson(search),

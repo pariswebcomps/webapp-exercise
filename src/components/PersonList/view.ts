@@ -2,7 +2,7 @@ import { VNode, div, span } from "@cycle/dom";
 import { ifElse, length } from "ramda";
 import { Stream } from "xstream";
 
-export default function view(state$): Stream<VNode> {
+export default function view(state$: Stream<[VNode, VNode[]]>): Stream<VNode> {
   return state$.map(renderDOM);
 }
 
