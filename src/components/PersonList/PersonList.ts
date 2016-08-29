@@ -1,12 +1,13 @@
-import { IProfile, IProps, ISearchablePerson, ISinks, ISources } from "./interfaces";
+import { IPersonSinks, IProps, ISinks, ISources } from "./interfaces";
 import view from "./view";
 
+import { isSearchInString } from "../../utils";
 import Person from "../Person/Person";
 import SearchInput from "../SearchInput/SearchInput";
 
 import Collection from "@cycle/collection";
 import { RequestInput } from "@cycle/http/src/interfaces";
-import { filter, map, pipe, prop, toLower } from "ramda";
+import { assoc, map, pipe, prop } from "ramda";
 import { Stream } from "xstream";
 
 export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
@@ -17,19 +18,26 @@ export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   const personsResponse$ = HTTP.select("person-list").flatten();
 
   // Filter the HTTP stream (= all data) with latest value of the search input one.
-  const searchedPersons$ = Stream.combine(personsResponse$, searchInput.search).map(getSearchedPersons);
+  const parseResponseToPersons = pipe(
+    prop("body"),
+    map((profile) => ({ profile: Stream.of(profile) }))
+  );
 
   // Create a stream representing a Collection of Persons.
   // Additional params for Person instantiate are configured here (= props).
-  // It will be updated with latest data from searchedPersons$.
-  const persons$ = Collection.gather(
+  const persons$ = Collection(
     Person,
     { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
-    searchedPersons$
+    personsResponse$.map(parseResponseToPersons)
   );
 
   // Pluck DOM outputs from every Person of the Collection into a single stream.
-  const personsVTrees$ = Collection.pluck(persons$, prop("DOM"));
+  const personsVTrees$ = Collection.pluck(
+    persons$,
+    // Filter VTree output stream regarding the search input.
+    (person: IPersonSinks) => Stream.combine(person.DOM, person.name, searchInput.search)
+      .map(parsePersonVTree)
+  );
 
   // Request list of person to HTTP driver.
   const requestList$ = props.map(parseHTTPRequest);
@@ -44,28 +52,13 @@ function parseHTTPRequest({apiUrl}: IProps): RequestInput {
   return { category: "person-list", url: apiUrl };
 }
 
-function getSearchedPersons([response, search]: [{ body: IProfile[] }, string]): ISearchablePerson[] {
-  return pipe(
-    prop("body"),
-    parseToSearchablePerson(search),
-    filterPersonsFrom(search)
-  )(response);
-}
+// Return appropriate VTree regarding if search string matches person name.
+function parsePersonVTree([VTree, name, search]) {
+  if (isSearchInString(name, search)) {
+    return VTree;
+  }
 
-function parseToSearchablePerson(search: string): (profile: IProfile[]) => ISearchablePerson[] {
-  return map((profile: IProfile) =>
-    ({
-      // `filterKey` will be matched against search term to filter inputs.
-      filterKey: `${profile.firstname} ${profile.lastname}`,
-      // Build an ID based on profile.id and search term so Collection is flushed anytime the
-      // search term is changed => keep the Collection ordered (reset with filtered data).
-      id: profile.id + search,
-      profile,
-    })
-  );
-}
+  const hiddenVTreeData = assoc("style", { display: "none" }, VTree.data);
 
-function filterPersonsFrom(search: string): (person: ISearchablePerson[]) => ISearchablePerson[] {
-  return filter((person: ISearchablePerson) =>
-    toLower(person.filterKey).indexOf(toLower(search)) > -1);
+  return assoc("data", hiddenVTreeData, VTree);
 }

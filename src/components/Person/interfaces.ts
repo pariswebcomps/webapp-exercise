@@ -16,4 +16,5 @@ export interface ISources {
 
 export interface ISinks {
   DOM: Stream<VNode>;
+  name: Stream<string>;
 }
