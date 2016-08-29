@@ -9,9 +9,3 @@ export interface IProfile {
   photo: string;
   skills: string[];
 }
-
-export interface ISearchablePerson {
-  filterKey: string;
-  id: string;
-  profile: IProfile;
-}

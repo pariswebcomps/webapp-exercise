@@ -3,7 +3,7 @@ import { DOMSource } from "@cycle/dom/xstream-typings";
 import { HTTPSource, RequestInput } from "@cycle/http/src/interfaces";
 import { Stream } from "xstream";
 
-export { IProfile, ISearchablePerson } from "../../interfaces";
+export { ISinks as IPersonSinks } from "../Person/interfaces";
 
 export interface IProps {
   apiUrl: string;
