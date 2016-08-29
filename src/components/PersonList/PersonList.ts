@@ -1,7 +1,7 @@
 import { IPersonSinks, IProps, ISinks, ISources } from "./interfaces";
 import view from "./view";
 
-import { isSearchInString } from "../../utils";
+import { isInString } from "../../utils";
 import Person from "../Person/Person";
 import SearchInput from "../SearchInput/SearchInput";
 
@@ -10,6 +10,12 @@ import { RequestInput } from "@cycle/http/src/interfaces";
 import { assoc, map, pipe, prop } from "ramda";
 import { Stream } from "xstream";
 
+// A simple function to parse HTTP response into params for Person Collection.
+const parseResponseToPersons = pipe(
+  prop("body"),
+  map((profile) => ({ profile: Stream.of(profile) }))
+);
+
 export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   // Instantiate a search input element to filter list.
   const searchInput = SearchInput({ DOM });
@@ -17,14 +23,7 @@ export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
   // Retrieve data from server.
   const personsResponse$ = HTTP.select("person-list").flatten();
 
-  // Filter the HTTP stream (= all data) with latest value of the search input one.
-  const parseResponseToPersons = pipe(
-    prop("body"),
-    map((profile) => ({ profile: Stream.of(profile) }))
-  );
-
   // Create a stream representing a Collection of Persons.
-  // Additional params for Person instantiate are configured here (= props).
   const persons$ = Collection(
     Person,
     { props: Stream.of({ className: ".col.s6", isDetailed: false }) },
@@ -39,7 +38,7 @@ export default function PersonList({DOM, HTTP, props}: ISources): ISinks {
       .map(parsePersonVTree)
   );
 
-  // Request list of person to HTTP driver.
+  // Request list of persons to HTTP driver.
   const requestList$ = props.map(parseHTTPRequest);
 
   return {
@@ -54,7 +53,7 @@ function parseHTTPRequest({apiUrl}: IProps): RequestInput {
 
 // Return appropriate VTree regarding if search string matches person name.
 function parsePersonVTree([VTree, name, search]) {
-  if (isSearchInString(name, search)) {
+  if (isInString(name, search)) {
     return VTree;
   }
 

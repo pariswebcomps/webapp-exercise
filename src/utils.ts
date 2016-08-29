@@ -8,8 +8,8 @@ export const mergeSinks = curry((stream$: Stream<{}>, sinkName: string): any =>
     .flatten()
 );
 
-export function isSearchInString(str: string, search: string): boolean {
-  return toLower(str).indexOf(toLower(search)) > -1;
+export function isInString(str: string, searchedStr: string): boolean {
+  return toLower(str).indexOf(toLower(searchedStr)) > -1;
 }
 
 export const numberOfVisibleVTrees = pipe(
