@@ -4,10 +4,12 @@ import Profile from './Profile.vue'
 
 export const routes = [
   {
+    name: 'list',
     path: '/',
     component: List
   },
   {
+    name: 'profile',
     path: '/profile/:id',
     component: Profile
   },

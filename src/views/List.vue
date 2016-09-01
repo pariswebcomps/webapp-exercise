@@ -11,8 +11,8 @@
 
         <div class="col s12">
 
-          <div class="col s6" v-for="people in peoples">
-            <CardPanel></CardPanel>
+          <div class="col s6" v-for="person in peoples">
+            <CardPanel :person="person"></CardPanel>
           </div>
 
         </div>
