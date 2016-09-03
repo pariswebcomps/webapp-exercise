@@ -21,10 +21,10 @@ export default {
       person: null
     }
   },
-  beforeMount () {
-    peoples(this.$route.params.id)
+  beforeRouteEnter (route, redirect, next) {
+    peoples(route.params.id)
       .get()
-      .then(person => this.person = person)
+      .then(person => next(vm => vm.person = person))
       .catch(console.log.bind(console))
   },
   components: { CardPanel }

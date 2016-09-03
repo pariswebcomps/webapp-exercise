@@ -33,8 +33,8 @@
       <div class="col s5">
         <img class="picture" :src="person.photo">
         <img class="icon" src="~images/md-map.svg">
-        <a href="edit.html"><i class="icon material-icons">mode_edit</i></a>
-        <a href="list.html"><i class="icon material-icons">delete</i></a>
+        <router-link :to="editProfileLink"><i class="icon material-icons">mode_edit</i></router-link>
+        <router-link :to="editProfileLink"><i class="icon material-icons">delete</i></router-link>
       </div>
     </div>
 
@@ -66,6 +66,14 @@ export default {
     }
   },
   computed: {
+    editProfileLink () {
+      return {
+        name: 'profile-edit',
+        params: {
+          id: this.person.id
+        }
+      }
+    },
     profileLink () {
       return {
         name: 'profile',
