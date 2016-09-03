@@ -12,7 +12,8 @@
         <div class="col s12">
 
           <div class="col s6" v-for="person in peopleFiltered">
-            <CardPanel :person="person"></CardPanel>
+            {{person.score}}
+            <CardPanel :person="person.item || person"></CardPanel>
           </div>
 
         </div>
@@ -30,6 +31,7 @@
 </template>
 
 <script>
+import Fuse from 'fuse.js'
 import CardPanel from 'components/CardPanel.vue'
 import Search from 'components/Search.vue'
 
@@ -44,15 +46,33 @@ export default {
     }
   },
   computed: {
+    peopleFuse () {
+      return new Fuse(this.peoples, {
+        shouldSort: true,
+        include: ['score'],
+        keys: [
+          {
+            name: 'firstname',
+            weight: 0.35
+          },
+          {
+            name: 'lastname',
+            weight: 0.35
+          },
+          {
+            name: 'entity',
+            weight: 0.1
+          },
+          {
+            name: 'email',
+            weight: 0.1
+          }
+        ]
+      })
+    },
     peopleFiltered () {
       if (!this.query) return this.peoples
-      const query = this.query.toLowerCase()
-      return this.peoples.filter((person) => {
-        return Object.values(person).some(property => {
-          return typeof property === 'string' &&
-                 property.toLowerCase().indexOf(query) > -1
-        })
-      })
+      return this.peopleFuse.search(this.query)
     }
   },
   components: { CardPanel, Search },
