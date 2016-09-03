@@ -13,22 +13,25 @@
               >Firstname</ValidatorInput>
             </div>
             <div class="row">
-              <div class="input-field col s12">
-                <input id="last_name" type="text" v-model="person.lastname" class="invalid">
-                <label data-error="wrong" data-success="right" for="last_name">Lastname</label>
-              </div>
+              <ValidatorInput class="col s12"
+                              id="last_name"
+                              v-model="person.lastname"
+                              :validator="validateNonEmpty"
+              >Lastname</ValidatorInput>
             </div>
             <div class="row">
-              <div class="input-field col s12">
-                <input id="email" type="text" class="validate" v-model="person.email">
-                <label for="email">Email</label>
-              </div>
+              <ValidatorInput class="col s12"
+                              id="email"
+                              v-model="person.email"
+                              :validator="validateEmail"
+              >Email</ValidatorInput>
             </div>
             <div class="row">
-              <div class="input-field col s12">
-                <input id="phone" type="text" class="validate" v-model="person.phone">
-                <label for="phone">Phone number</label>
-              </div>
+              <ValidatorInput class="col s12"
+                              id="phone"
+                              v-model="person.phone"
+                              :validator="validateNonEmpty"
+              >Phone number</ValidatorInput>
             </div>
           </form>
         </div>
@@ -45,6 +48,7 @@
 <script>
 import ValidatorInput from 'components/ValidatorInput'
 import { peoples } from '../resources'
+import isEmail from 'validator/lib/isEmail'
 
 export default {
   data () {
@@ -63,8 +67,11 @@ export default {
     }
   },
   methods: {
+    validateEmail (str) {
+      return isEmail(str) || 'Please, provide a valide email"'
+    },
     validateNonEmpty (str) {
-      return str && str.length
+      return str && str.length > 0 || 'This field cannot be empty'
     },
     updateProfile () {
       peoples(this.person.id)

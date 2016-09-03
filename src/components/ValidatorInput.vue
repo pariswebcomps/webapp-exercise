@@ -2,7 +2,8 @@
   <div class="input-field">
     <input type="text"
            :id="id"
-           :class="this.invalid ? 'invalid' : ''"
+           class="validate"
+           :class="inputClasses"
            @input="onInput"
            v-model="model">
     <label :for="id"
@@ -15,19 +16,26 @@
 <script>
 export default {
   props: {
-    errorMessage: String,
     value: String,
     id: String,
     validator: Function
   },
   computed: {
     model () { return this.value },
-    invalid () {
-      return !this.validator(this.value)
+    inputClasses () {
+      return {
+        invalid: this.valid !== true
+      }
+    },
+    valid () {
+      return this.validator(this.value)
+    },
+    errorMessage () {
+      return this.valid.length && this.valid
     },
     labelClasses () {
       return {
-        active: this.value
+        active: this.value || this.errorMessage
       }
     }
   },
@@ -38,3 +46,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.input-field label {
+  width: 100%;
+}
+</style>
