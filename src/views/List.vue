@@ -40,7 +40,6 @@ import { peoples } from '../resources'
 export default {
   data () {
     return {
-      ready: false,
       query: '',
       peoples: []
     }
@@ -58,13 +57,10 @@ export default {
     }
   },
   components: { CardPanel, Search },
-  beforeMount () {
+  beforeRouteEnter (route, redirect, next) {
     peoples
       .get()
-      .then((list) => {
-        this.ready = true
-        this.peoples = list
-      })
+      .then(peoples => next(vm => vm.peoples = peoples))
       .catch(console.log.bind(console))
   }
 }
