@@ -6,10 +6,11 @@
           <span class="card-title">Contact informations</span>
           <form @submit="updateProfile">
             <div class="row">
-              <div class="input-field col s12">
-                <input id="title" type="text" v-model="person.firstname">
-                <label for="title">Firsname</label>
-              </div>
+              <ValidatorInput class="col s12"
+                              id="title"
+                              v-model="person.firstname"
+                              :validator="validateNonEmpty"
+              >Firstname</ValidatorInput>
             </div>
             <div class="row">
               <div class="input-field col s12">
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import ValidatorInput from 'components/ValidatorInput'
 import { peoples } from '../resources'
 
 export default {
@@ -61,6 +63,9 @@ export default {
     }
   },
   methods: {
+    validateNonEmpty (str) {
+      return str && str.length
+    },
     updateProfile () {
       peoples(this.person.id)
       .put(this.person)
@@ -75,6 +80,7 @@ export default {
       .get()
       .then(person => next(vm => vm.person = person))
       .catch(console.log.bind(console))
-  }
+  },
+  components: { ValidatorInput }
 }
 </script>
