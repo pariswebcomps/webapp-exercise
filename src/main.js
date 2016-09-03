@@ -16,3 +16,10 @@ new Vue({
   router,
   render: h => h(App)
 })
+
+// Object.values polyfill
+window.Object.values = window.Object.values || function (object) {
+  return Object.keys(object)
+    .filter(key => object.hasOwnProperty(key))
+    .map(key => object[key])
+}

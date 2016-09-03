@@ -11,7 +11,7 @@
 
         <div class="col s12">
 
-          <div class="col s6" v-for="person in peoples">
+          <div class="col s6" v-for="person in peopleFiltered">
             <CardPanel :person="person"></CardPanel>
           </div>
 
@@ -41,6 +41,18 @@ export default {
       ready: false,
       query: '',
       peoples: []
+    }
+  },
+  computed: {
+    peopleFiltered () {
+      if (!this.query) return this.peoples
+      const query = this.query.toLowerCase()
+      return this.peoples.filter((person) => {
+        return Object.values(person).some(property => {
+          return typeof property === 'string' &&
+                 property.toLowerCase().indexOf(query) > -1
+        })
+      })
     }
   },
   components: { CardPanel, Search },
