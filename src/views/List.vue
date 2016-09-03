@@ -13,7 +13,7 @@
 
           <div class="col s6" v-for="person in peopleFiltered">
             {{person.score}}
-            <CardPanel :person="person.item || person"></CardPanel>
+            <CardPanel :person="person"></CardPanel>
           </div>
 
         </div>
@@ -49,25 +49,7 @@ export default {
     peopleFuse () {
       return new Fuse(this.peoples, {
         shouldSort: true,
-        include: ['score'],
-        keys: [
-          {
-            name: 'firstname',
-            weight: 0.35
-          },
-          {
-            name: 'lastname',
-            weight: 0.35
-          },
-          {
-            name: 'entity',
-            weight: 0.1
-          },
-          {
-            name: 'email',
-            weight: 0.1
-          }
-        ]
+        keys: [ 'firstname', 'lastname', 'entity', 'email' ]
       })
     },
     peopleFiltered () {
