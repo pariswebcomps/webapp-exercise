@@ -1,3 +1,7 @@
 <template>
-  <h1>${message}</h1>
+  <h1>${contact.firstname}</h1>
+
+  <input type="text" value.bind="contact.firstname">
+  
+  <button click.trigger="save()">Save</button>
 </template>
