@@ -47,7 +47,7 @@
     "ora": "^0.3.0",
     "shelljs": "^0.7.4",
     "url-loader": "^0.5.7",
-    "validator": "^5.7.0",
+    "vee-validate": "^2.0.0-beta.11",
     "vue": "^2.0.0-rc.6",
     "vue-hot-reload-api": "^2.0.6",
     "vue-html-loader": "^1.2.3",
