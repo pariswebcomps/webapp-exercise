@@ -4,7 +4,7 @@
       <div class="input-field">
         <i class="material-icons prefix">search</i>
         <input id="search"
-               v-model="value"
+               v-model="query"
                @input="onInput"
                type="text">
         <label class="active" for="search">Search</label>
@@ -18,10 +18,16 @@ export default {
   props: {
     value: String
   },
+  computed: {
+    query () { return this.value }
+  },
   methods: {
     onInput (event) {
       this.$emit('input', event.target.value)
     }
+  },
+  mounted () {
+    window.Materialize.updateTextFields()
   }
 }
 </script>

@@ -6,49 +6,87 @@
           <span class="card-title">Contact informations</span>
           <form @submit="updateProfile">
             <div class="row">
-              <ValidatorInput class="col s12"
-                              id="title"
-                              v-model="person.firstname"
-                              :validator="validateNonEmpty"
-              >Firstname</ValidatorInput>
+              <div class="input-field">
+                <input type="text"
+                       id="firstname"
+                       name="firstname"
+                       class="validate"
+                       :class="{invalid: errors.has('firstname')}"
+                       v-validate
+                       data-rules="required"
+                       v-model="person.firstname">
+                <label for="firstname"
+                       :class="{active: person.firstname || errors.has('firstname')}"
+                       :data-error="errors.first('firstname')"
+                >Firstname</label>
+              </div>
             </div>
             <div class="row">
-              <ValidatorInput class="col s12"
-                              id="last_name"
-                              v-model="person.lastname"
-                              :validator="validateNonEmpty"
-              >Lastname</ValidatorInput>
+              <div class="input-field">
+                <input type="text"
+                       id="lastname"
+                       name="lastname"
+                       class="validate"
+                       :class="{invalid: errors.has('lastname')}"
+                       v-validate
+                       data-rules="required"
+                       v-model="person.lastname">
+                <label for="lastname"
+                       :class="{active: person.lastname || errors.has('lastname')}"
+                       :data-error="errors.first('lastname')"
+                >Lastname</label>
+              </div>
             </div>
             <div class="row">
-              <ValidatorInput class="col s12"
-                              id="email"
-                              v-model="person.email"
-                              :validator="validateEmail"
-              >Email</ValidatorInput>
+              <div class="input-field">
+                <input type="text"
+                       id="email"
+                       name="email"
+                       class="validate"
+                       :class="{invalid: errors.has('email')}"
+                       v-validate
+                       data-rules="required|email"
+                       v-model="person.email">
+                <label for="email"
+                       :class="{active: person.email || errors.has('email')}"
+                       :data-error="errors.first('email')"
+                >Email</label>
+              </div>
             </div>
             <div class="row">
-              <ValidatorInput class="col s12"
-                              id="phone"
-                              v-model="person.phone"
-                              :validator="validateNonEmpty"
-              >Phone number</ValidatorInput>
+              <div class="input-field">
+                <input type="text"
+                       id="phone"
+                       name="phone"
+                       class="validate"
+                       :class="{invalid: errors.has('phone')}"
+                       v-validate
+                       data-rules="required"
+                       v-model="person.phone">
+                <label for="phone"
+                       :class="{active: person.phone || errors.has('phone')}"
+                       :data-error="errors.first('phone')"
+                >Phone Number</label>
+              </div>
             </div>
           </form>
         </div>
+
         <div class="card-action">
           <router-link :to="profileLink">Cancel</router-link>
-          <a href="#" role="button" @click="updateProfile">Submit</a>
+          <a href="#"
+             class="btn-flat"
+             role="button"
+             :class="{disabled: errors.any()}"
+             @click.prevent="updateProfile">Submit</a>
         </div>
       </div>
-
     </div>
 </div>
 </template>
 
 <script>
-import ValidatorInput from 'components/ValidatorInput'
 import { peoples } from '../resources'
-import isEmail from 'validator/lib/isEmail'
 
 export default {
   data () {
@@ -67,13 +105,8 @@ export default {
     }
   },
   methods: {
-    validateEmail (str) {
-      return isEmail(str) || 'Please, provide a valide email"'
-    },
-    validateNonEmpty (str) {
-      return str && str.length > 0 || 'This field cannot be empty'
-    },
     updateProfile () {
+      if (this.errors.any()) return
       peoples(this.person.id)
       .put(this.person)
       .then(() => {
@@ -87,7 +120,6 @@ export default {
       .get()
       .then(person => next(vm => vm.person = person))
       .catch(console.log.bind(console))
-  },
-  components: { ValidatorInput }
+  }
 }
 </script>
