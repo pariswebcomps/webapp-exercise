@@ -89,6 +89,7 @@
 import { peoples } from '../resources'
 
 export default {
+  name: 'ProfileEdit',
   data () {
     return {
       person: null

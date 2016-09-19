@@ -38,6 +38,7 @@ import Search from 'components/Search.vue'
 import { peoples } from '../resources'
 
 export default {
+  name: 'List',
   data () {
     return {
       query: '',

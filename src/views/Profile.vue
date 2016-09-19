@@ -16,6 +16,7 @@ import CardPanel from 'components/CardPanel.vue'
 import { peoples } from '../resources'
 
 export default {
+  name: 'Profile',
   data () {
     return {
       person: null
