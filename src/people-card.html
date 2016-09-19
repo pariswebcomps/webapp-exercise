@@ -1,0 +1,158 @@
+<!--
+@license MIT
+Copyright (c) 2016 Horacio "LostInBrittany" Gonzalez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<dom-module is="people-card">
+
+  <template>
+    <style include="people-styles">
+      :host {
+        display: block;
+        margin: 10px 20px !important;
+      }
+      paper-card {
+        width: 450px;
+        background-color: white;
+        --paper-card-content: {
+          padding: 10px;
+          height: 100%;
+        };
+      }
+      .card-content {
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+      }
+      .info {
+        @apply(--layout-vertical);
+      }
+      .contact {
+        @apply(--layout-vertical);
+        padding-top: 30px;
+      }
+      .name {
+        color: #337ab7;
+        font-size: 24px;
+        font-weight: 400;
+      }
+      .item {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+      .item iron-image {
+        margin-right: 5px;
+      }
+      .item a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .photo iron-image {
+        box-sizing: border-box;
+        width: 137px;
+        height: 137px;
+        border: 10px solid #F1F1F1;
+        border-radius: 2px;
+      }
+      .actions {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-around-justified);
+
+      }
+      .actions > * {
+        cursor: pointer;
+        width: 24px;
+        height: 24px;
+      }
+      .actions > *:not(:last-child) {
+      }
+      @media only screen and (max-width: 460px) {
+        paper-card {
+          width: 300px;
+        }
+        .name {
+          font-size: 20px;
+        }
+        .card-content {
+          @apply(--layout-vertical-reverse);
+          @apply(--layout-justified);
+        }
+      }
+    </style>
+
+    <paper-card class="person">
+      <div class="card-content">
+        <div class="info">
+          <div class="name">
+            {{person.firstname}} {{_uppercasedLastname}}
+          </div>
+          <div class="contact">
+            <div class="item">
+              <iron-image src="../images/md-email.svg"></iron-image>
+              <a href$="mailto:{{person.email}}">{{person.email}}</a>
+            </div>
+            <div class="item">
+              <iron-image src="../images/md-phone.svg"></iron-image>
+              <a href$="tel:{{person.phone}}">{{person.phone}}</a>
+            </div>
+            <div class="item">              
+              Manager: {{person.manager}}
+            </div>
+            <div class="item">
+              Location: {{person.entity}}
+            </div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="photo">
+            <iron-image placeholder="../images/profile.svg" src="{{person.photo}}"></iron-image>
+          </div>
+
+          <div class="actions">
+            <iron-image sizing="contain" src="../images/md-map.svg"></iron-image>
+            <iron-icon icon="create" on-click="_editPerson"></iron-icon>
+            <iron-icon icon="delete"></iron-icon>
+          </div>
+        </div>        
+      </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is:"people-card",
+      properties: {
+        person: {
+          type: Object,
+          value: function() {
+            return {};
+          }
+        },
+        _uppercasedLastname: {
+          type: String,
+          computed: "_uppercaseLastname(person.lastname)"
+        },
+      },
+      _uppercaseLastname: function() {
+        if (this.person && this.person.lastname) {
+          return this.person.lastname.toUpperCase();
+        }
+      },
+      _editPerson: function(evt) {
+        this.fire("edit-person", person);
+      }
+    });
+  </script>
+</dom-module>

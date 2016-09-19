@@ -1,0 +1,135 @@
+<!--
+@license MIT
+Copyright (c) 2016 Horacio "LostInBrittany" Gonzalez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="people-app">
+  <template>
+    <style>
+      :host {
+        --app-primary-color: #0168AB;
+        --app-secondary-color: black;
+
+        display: block;
+      }
+
+      app-header {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }      
+      app-header a {
+        color: #fff;
+        text-decoration: none;
+      }
+      app-header .logo {    
+        height: 100%;
+      }
+      app-header .logo img {
+        margin-left: 10px;
+        height: 100%;
+      }
+
+
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <!-- Main content -->
+    <app-header-layout>
+
+      <app-header condenses fixed effects="waterfall">
+        <app-toolbar>
+          <div class="logo">
+            <a href="/">
+              <img src="../images/logo-people.svg"  aria-label="people" alt="People">
+            </a>
+            </div>
+          <div main-title></div>
+          <div>
+            <a href="/list">
+              <span>People</span>
+            </a>
+          </div>
+        </app-toolbar>
+      </app-header>
+
+      <iron-pages
+          selected="[[page]]"
+          attr-for-selected="name"
+          fallback-selection="view404" 
+          role="main">
+        <people-list
+          name="list" 
+          selected="[[page]]"></people-list>
+        <people-detail 
+          name="detail" 
+          selected="[[page]]"></people-detail>
+        <people-edit 
+          name="edit" 
+          selected="[[page]]"></people-edit>
+        <people-view404 
+          name="view404" 
+          selected="[[page]]"></people-view404>
+      </iron-pages>
+    </app-header-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'people-app',
+
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        }
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      _routePageChanged: function(page) {
+        this.page = page || 'list';
+      },
+
+      _pageChanged: function(page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl('people-' + page + '.html');
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      _showPage404: function() {
+        this.page = 'view404';
+      }
+    });
+  </script>
+</dom-module>
