@@ -80,7 +80,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .header {
   margin-top: 20px;
   font-size: 24px;
