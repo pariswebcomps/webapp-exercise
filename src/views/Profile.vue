@@ -2,7 +2,10 @@
   <div class="container">
     <div class="row">
       <div class="col s6 offset-s3">
-        <CardPanel :person="person" full="full"></CardPanel>
+        <CardPanel v-if="person" :person="person" full="true"></CardPanel>
+        <p v-else>
+          Loading
+        </p>
       </div>
     </div>
   </div>
