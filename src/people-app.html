@@ -87,7 +87,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           role="main">
         <people-list
           name="list" 
-          selected="[[page]]"></people-list>
+          selected="[[page]]" 
+          on-edit-person="_editPerson"></people-list>
         <people-detail 
           name="detail" 
           selected="[[page]]"></people-detail>
@@ -129,7 +130,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
       _showPage404: function() {
         this.page = 'view404';
-      }
+      },
+
+      _editPerson: function(evt, person) {
+        var location="/edit/"+person.id;
+        window.history.pushState({}, null, location);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      },
     });
   </script>
 </dom-module>
