@@ -25,9 +25,6 @@ export default {
     onInput (event) {
       this.$emit('input', event.target.value)
     }
-  },
-  mounted () {
-    window.Materialize.updateTextFields()
   }
 }
 </script>

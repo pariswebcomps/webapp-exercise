@@ -62,6 +62,20 @@ export default {
       .get()
       .then(peoples => next(vm => vm.peoples = peoples))
       .catch(console.log.bind(console))
+  },
+  watch: {
+    query (query) {
+      this.$router.replace({
+        path: this.$route.path,
+        query: {query}
+      })
+    }
+  },
+  mounted () {
+    this.query = this.$route.query.query || ''
+    this.$nextTick(() => {
+      window.Materialize.updateTextFields()
+    })
   }
 }
 </script>
