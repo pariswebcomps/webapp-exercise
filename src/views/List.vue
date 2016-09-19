@@ -7,7 +7,7 @@
 
       <div class="row">
 
-        <Search v-model="query"></Search>
+        <Search v-model="query" @change.native="updateRouteQuery"></Search>
 
         <div class="col s12">
 
@@ -63,11 +63,12 @@ export default {
       .then(peoples => next(vm => vm.peoples = peoples))
       .catch(console.log.bind(console))
   },
-  watch: {
-    query (query) {
+  methods: {
+    updateRouteQuery () {
+      console.log('hello')
       this.$router.replace({
         path: this.$route.path,
-        query: {query}
+        query: {query: this.query}
       })
     }
   },

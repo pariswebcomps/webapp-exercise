@@ -1,6 +1,6 @@
 <template>
   <div class="col s12">
-    <form class="col s12">
+    <form class="col s12" @submit.prevent>
       <div class="input-field">
         <i class="material-icons prefix">search</i>
         <input id="search"
