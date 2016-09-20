@@ -69,6 +69,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       }
       .additional-content.links {
         @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+      }
+      .additional-content.links img {
+        padding: 0 5px;
       }
       @media only screen and (max-width: 460px) {
         paper-card {
@@ -186,6 +190,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         </template>
         <template is="dom-if" if="{{showLinks}}">
           <div class="additional-content links">
+            <a href="{{person.links.twitter}}" target="_blank">
+              <img  src="/images/md-twitter.svg">
+            </a>
+            <a href="{{person.links.slack}}" target="_blank">
+              <img  src="/images/md-slack.svg">
+            </a>
+            <a href="{{person.links.github}}" target="_blank">
+              <img  src="/images/md-github.svg">
+            </a>
+            <a href="{{person.links.linkedin}}" target="_blank">
+              <img  src="/images/md-linkedin.svg">
+            </a>
           </div>  
         </template>
       </div>
