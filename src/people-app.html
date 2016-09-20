@@ -9,6 +9,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -17,8 +18,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <dom-module id="people-app">
@@ -52,6 +55,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         --paper-icon-button-ink-color: white;
       }
 
+      @media only screen and (max-width: 460px) {
+        app-header .logo {    
+          width: 200px;
+        }
+        app-header .logo img {  
+          width: 200px;
+        }
+      }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -60,6 +71,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
+    <app-route
+        route="{{subroute}}"
+        pattern="/:id"
+        data="{{subrouteData}}"
+        tail="{{subsubroute}}"></app-route>
 
     <!-- Main content -->
     <app-header-layout>
@@ -88,10 +104,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <people-list
           name="list" 
           selected="[[page]]" 
+          on-detail-person="_detailPerson" 
           on-edit-person="_editPerson"></people-list>
         <people-detail 
           name="detail" 
-          selected="[[page]]"></people-detail>
+          selected="[[page]]",
+          id="[[subrouteData.id]]"></people-detail>
         <people-edit 
           name="edit" 
           selected="[[page]]"></people-edit>
@@ -133,7 +151,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       },
 
       _editPerson: function(evt, person) {
+        console.debug("[people-app] _editPerson", person);
         var location="/edit/"+person.id;
+        window.history.pushState({}, null, location);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      },
+      _detailPerson: function(evt, person) {
+        console.debug("[people-app] _detailPerson", person);
+        var location="/detail/"+person.id;
         window.history.pushState({}, null, location);
         window.dispatchEvent(new CustomEvent('location-changed'));
       },

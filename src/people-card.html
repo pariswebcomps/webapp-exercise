@@ -14,7 +14,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<link rel="import" href="./people-styles.html">
 
 <dom-module is="people-card">
 
@@ -25,7 +28,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         margin: 10px 20px !important;
       }
       paper-card {
-        width: 450px;
+        display: block;
         background-color: white;
         --paper-card-content: {
           padding: 10px;
@@ -33,11 +36,61 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         };
       }
       .card-content {
+        @apply(--layout-vertical);
+      }
+      .main-content {
+        display: block;
         @apply(--layout-horizontal);
         @apply(--layout-justified);
       }
+      .additional-content {
+        padding: 10px;
+        display: block;
+      }
+      .additional-content.skills {
+        @apply(--layout-vertical);
+        background-color: #FAFAFA;
+        margin-top: 20px;
+      }
+      .additional-content.skills .label{
+        font-size: 24px;
+        font-weight: 400;
+      }
+      .additional-content.skills .skill_list {
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+      }
+      .additional-content.skills .skill_list paper-button {
+        background-color: white;
+        margin: 5px;        
+        height: 54px;
+        line-height: 54px;
+        padding: 0 2rem;
+      }
+      .additional-content.links {
+        @apply(--layout-horizontal);
+      }
+      @media only screen and (max-width: 460px) {
+        paper-card {
+        }
+        .main-content {
+          @apply(--layout-vertical-reverse);
+          @apply(--layout-justified);
+          @apply(--layout-center);
+        }
+        .additional-content {
+          @apply(--layout-center);
+        }
+        .additional-content.skills .skill_list {
+          @apply(--layout-center-justified);
+        }
+        .photoinfo {
+          margin-bottom: 15px;
+        }
+      }
       .info {
         @apply(--layout-vertical);
+        font-size: 14px;
       }
       .contact {
         @apply(--layout-vertical);
@@ -47,12 +100,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         color: #337ab7;
         font-size: 24px;
         font-weight: 400;
+        cursor: pointer;
       }
       .item {
         @apply(--layout-horizontal);
         @apply(--layout-center);
       }
       .item iron-image {
+        width: 24px;
+        height: 24px;
         margin-right: 5px;
       }
       .item a {
@@ -67,6 +123,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         border-radius: 2px;
       }
       .actions {
+        width: 137px;
         @apply(--layout-horizontal);
         @apply(--layout-center);
         @apply(--layout-around-justified);
@@ -78,55 +135,59 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         height: 24px;
       }
       .actions > *:not(:last-child) {
-      }
-      @media only screen and (max-width: 460px) {
-        paper-card {
-          width: 300px;
-        }
-        .name {
-          font-size: 20px;
-        }
-        .card-content {
-          @apply(--layout-vertical-reverse);
-          @apply(--layout-justified);
-        }
-      }
+      }     
     </style>
 
     <paper-card class="person">
       <div class="card-content">
-        <div class="info">
-          <div class="name">
-            {{person.firstname}} {{_uppercasedLastname}}
+        <div class="main-content">
+          <div class="info textinfo">
+            <div class="name" on-tap="_detailPerson">
+              {{person.firstname}} {{_uppercasedLastname}}
+            </div>
+            <div class="contact">
+              <div class="item">
+                <iron-image sizing="contain" src="../images/md-email.svg"></iron-image>
+                <a href$="mailto:{{person.email}}">{{person.email}}</a>
+              </div>
+              <div class="item">
+                <iron-image sizing="contain" src="../images/md-phone.svg"></iron-image>
+                <a href$="tel:{{person.phone}}">{{person.phone}}</a>
+              </div>
+              <div class="item">              
+                Manager: {{person.manager}}
+              </div>
+              <div class="item">
+                Location: {{person.entity}}
+              </div>
+            </div>
           </div>
-          <div class="contact">
-            <div class="item">
-              <iron-image src="../images/md-email.svg"></iron-image>
-              <a href$="mailto:{{person.email}}">{{person.email}}</a>
+          <div class="info photoinfo">
+            <div class="photo">
+              <iron-image sizing="contain" placeholder="../images/profile.svg" src="{{person.photo}}"></iron-image>
             </div>
-            <div class="item">
-              <iron-image src="../images/md-phone.svg"></iron-image>
-              <a href$="tel:{{person.phone}}">{{person.phone}}</a>
-            </div>
-            <div class="item">              
-              Manager: {{person.manager}}
-            </div>
-            <div class="item">
-              Location: {{person.entity}}
+
+            <div class="actions">
+              <iron-image sizing="contain" src="../images/md-map.svg"></iron-image>
+              <iron-icon icon="create" on-click="_editPerson"></iron-icon>
+              <iron-icon icon="delete"></iron-icon>
             </div>
           </div>
         </div>
-        <div class="info">
-          <div class="photo">
-            <iron-image placeholder="../images/profile.svg" src="{{person.photo}}"></iron-image>
-          </div>
-
-          <div class="actions">
-            <iron-image sizing="contain" src="../images/md-map.svg"></iron-image>
-            <iron-icon icon="create" on-click="_editPerson"></iron-icon>
-            <iron-icon icon="delete"></iron-icon>
-          </div>
-        </div>        
+        <template is="dom-if" if="{{showSkills}}">
+          <div class="additional-content skills">
+            <div class="label">Skills</div>
+            <div class="skill_list">
+              <template is="dom-repeat" items="{{person.skills}}" as="skill">
+                <paper-button raised>{{skill}}</paper-button>
+              </template>
+            </div>
+          </div>  
+        </template>
+        <template is="dom-if" if="{{showLinks}}">
+          <div class="additional-content links">
+          </div>  
+        </template>
       </div>
     </paper-card>
   </template>
@@ -140,6 +201,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             return {};
           }
         },
+        showSkills: {
+          type: Boolean,
+          value: false
+        },
+        showLinks: {
+          type: Boolean,
+          value: false
+        },
         _uppercasedLastname: {
           type: String,
           computed: "_uppercaseLastname(person.lastname)"
@@ -152,7 +221,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       },
       _editPerson: function(evt) {
         this.fire("edit-person", this.person);
-      }
+      },
+      _detailPerson: function(evt) {
+        this.fire("detail-person", this.person)
+      },        
     });
   </script>
 </dom-module>

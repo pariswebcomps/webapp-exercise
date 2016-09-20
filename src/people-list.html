@@ -12,6 +12,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
 <link rel="import" href="./people-card.html">
 <link rel="import" href="./people-service.html">
 <link rel="import" href="./people-styles.html">
@@ -21,24 +23,62 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <style include="people-styles">
       :host {
         display: block;
-          margin: 0 auto;
-          max-width: 1280px;
-          width: 90%;
+        margin: 0 auto;
+        max-width: 1280px;
+        width: 100%;
       }
-      @media only screen and (min-width: 601px) {
+      people-card {
+        width: calc(100% - 40px);
+      }
+      @media only screen and (min-width: 512px) {
         :host {
-            width: 85%;
+          width: 90%;
+        }
+        people-card {
+          width: calc(100% - 40px);
         }
       }
-      @media only screen and (min-width: 993px) {
+      @media only screen and (min-width: 640px) {
         :host {
-            width: 80%;
+          width: 85%;
+        }
+        people-card {
+          width: calc(100% - 40px);
+        }
+      }
+      @media only screen and (min-width: 1080px) {
+        :host {
+          width: 85%;
+        }
+        people-card {
+          width: calc(50% - 40px);
+        }
+      }
+      @media only screen and (min-width: 1280px) {
+        :host {
+          width: 80%;
+        }
+        people-card {
+          width: calc(50% - 40px);
         }
       }
       .header {
         margin-top: 20px;
         font-size: 24px;
         margin-bottom: 20px;
+      }
+      .row {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+      .search_icon {
+        --iron-icon-height: 32px;
+        --iron-icon-width: 32px;
+      }
+      .search {
+        @apply(--layout-flex);
       }
       .list {
         @apply(--layout-horizontal);
@@ -53,11 +93,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
       <div class="header">
-        You have {{people.length}} contacts
+        <div class="row">
+          You have {{people.length}} contacts
+        </div>
+        <div class="row">
+          <iron-icon class="search_icon" icon="search"></iron-icon>
+          <paper-input class="search" value="{{filter}}" label="Search" always-float-label></paper-input>
+        </div>  
       </div>
 
       <div class="list">
-        <template id="peopleRepeat" is="dom-repeat" items="{{people}}" as="person">
+        <template id="peopleRepeat" is="dom-repeat" items="{{people}}" as="person" filter="_nameInSearch">
           <people-card person="{{person}}"></people-card>
         </template>
       </div>
@@ -77,8 +123,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           observer: "_selectedChanged"
         },
         people: {
-          type: Array,
-          observer: '_peopleChanged'
+          type: Array
         },
         filter:{
           type:String,
@@ -91,6 +136,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         if (this.selected == this.name) {
           this.$.peopleService.getPeople();
         }
+      },
+      _filterChanged: function() {
+          this.$.peopleRepeat.render();
+      },
+      _nameInSearch: function(item) {
+        var filter=this.filter.toLowerCase();
+        return (item.firstname.toLowerCase().indexOf(filter) >= 0 
+          || item.lastname.toLowerCase().indexOf(filter) >= 0);
       },
     });
   </script>

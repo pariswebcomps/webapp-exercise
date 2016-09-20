@@ -59,8 +59,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         this.$.getPeople.generateRequest();
       },
       getPersonById: function (personId) {
-        this.$.getPeopleById.url=this.apiUrl+"/"+personId;
-        this.$.getPeopleById.generateRequest();
+        this.$.getPersonById.url=this.apiUrl+"/"+personId;
+        this.$.getPersonById.generateRequest();
       },
       updatePerson: function (person) {
         this.$.updatePerson.url=this.apiUrl+"/"+person.id;
