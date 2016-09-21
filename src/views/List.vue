@@ -7,13 +7,13 @@
 
       <div class="row">
 
-        <Search v-model="query" @change.native="updateRouteQuery"></Search>
+        <Search v-model="query" @change.native="updateRouteQuery"/>
 
         <div class="col s12">
 
           <div class="col s6" v-for="person in peopleFiltered">
             {{person.score}}
-            <CardPanel :person="person"></CardPanel>
+            <CardPanel :person="person"/>
           </div>
 
         </div>
