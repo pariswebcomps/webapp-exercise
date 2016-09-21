@@ -10,7 +10,6 @@
 // TODO:
 // - It should work for apps that have more than 1 form
 
-
 import * as $ from "jquery";
 import { fromPairs, map, pipe, values } from "ramda";
 import { Stream } from "xstream";
