@@ -4,6 +4,7 @@
   },
   "globalDependencies": {
     "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
-    "jquery": "registry:dt/jquery#1.10.0+20160704162008"
+    "jquery": "registry:dt/jquery#1.10.0+20160704162008",
+    "tape": "registry:dt/tape#4.2.2+20160317120654"
   }
 }
