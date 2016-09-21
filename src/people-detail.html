@@ -30,7 +30,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       }
 
       people-card {
-        width: calc(100% - 40px);
+        width: calc(100% - 20px);
       }
     </style>
 
@@ -58,13 +58,23 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             return {};
           }
         },
+        name: {
+          type: String,
+          value: "edit"
+        },
+        selected: {
+          type: String,
+          observer: "_onSelectedChanged"
+        },
       },
+      observers: [
+        "_paramsChanged(id, selected)"
+      ],
       // Observers
-      _onIdChange: function() {
-        if (!this.id) {
-          return;
+      _paramsChanged: function() {
+        if (this.name == this.selected  && !!this.id) {
+          this.$.peopleService.getPersonById(this.id);
         }
-        this.$.peopleService.getPersonById(this.id);
       },
     });
   </script>

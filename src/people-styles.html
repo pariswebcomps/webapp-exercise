@@ -16,6 +16,28 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <style>
       :host {
         font-size: 15px;
+        max-width: 1280px;
+        width: 100%;
+      }
+      @media only screen and (min-width: 512px) {
+        :host {
+          width: 90%;
+        }
+      }
+      @media only screen and (min-width: 640px) {
+        :host {
+          width: 85%;
+        }
+      }
+      @media only screen and (min-width: 1080px) {
+        :host {
+          width: 85%;
+        }
+      }
+      @media only screen and (min-width: 1280px) {
+        :host {
+          width: 80%;
+        }
       }
     </style>
   </template>

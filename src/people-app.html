@@ -109,10 +109,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <people-detail 
           name="detail" 
           selected="[[page]]",
-          id="[[subrouteData.id]]"></people-detail>
+          id="[[subrouteData.id]]"
+          on-edit-person="_editPerson"></people-detail>
         <people-edit 
           name="edit" 
-          selected="[[page]]"></people-edit>
+          selected="[[page]]"
+          id="[[subrouteData.id]]"
+          on-detail-person="_detailPerson" ></people-edit>
         <people-view404 
           name="view404" 
           selected="[[page]]"></people-view404>
