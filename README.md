@@ -16,7 +16,7 @@ The application is developed in [TypeScript](https://www.typescriptlang.org/) as
 
 Install dependencies with:
 
-   npm i
+    npm i
 
 ## Start the server
 
