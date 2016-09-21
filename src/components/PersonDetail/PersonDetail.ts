@@ -25,6 +25,6 @@ export default function PersonDetail({HTTP, props}: ISources): ISinks {
   };
 }
 
-function parseHTTPRequest({apiUrl, id}: IProps): RequestInput {
+export function parseHTTPRequest({apiUrl, id}: IProps): RequestInput {
   return { category: "person-detail", url: `${apiUrl}/${id}` };
 }

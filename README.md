@@ -31,3 +31,9 @@ Method | Route              | Result
 GET    | `/api/peoples`     | List all peoples
 GET    | `/api/peoples/:id` | Get details about `:id`
 PUT    | `/api/peoples/:id` | Update `:id`
+
+## Run tests
+
+To run unit tests with a nicely formatted report:
+
+    npm run unit-test-diff --silent
