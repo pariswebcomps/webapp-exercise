@@ -60,26 +60,30 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
           <paper-input 
               id="firstname"  name="firstname" label="Firstname*"
               error-message="The firstname is required" required
-              value="{{person.firstname}}"></paper-input>
+              value="{{person.firstname}}"
+              auto-validate></paper-input>
         </div>
         <div class="row">
           <paper-input 
               id="lastname" name="lastname" label="Lastname*"
               error-message="The lastname is required" required
-              value="{{person.lastname}}"></paper-input>
+              value="{{person.lastname}}"
+              auto-validate></paper-input>
         </div>
         <div class="row">
           <paper-input 
               type="email" id="accountEmail" name="accountEmail" label="Email*"
               error-message="The email is required" required
-              value="{{person.email}}"></paper-input>
+              value="{{person.email}}"
+              auto-validate></paper-input>
         </div>
         <div class="row">
           <paper-input 
               type="phone" id="accountPhone" name="accountPhone" label="Phone Number*"
               error-message="The phone number should have 10 digits"
-              pattern="\d{10}"
-              value="{{person.phone}}"></paper-input>
+              pattern="\d{10}" 
+              value="{{person.phone}}"
+              auto-validate></paper-input>
         </div>  
       </div>
       <div class="card-actions">
