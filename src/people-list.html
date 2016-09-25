@@ -5,7 +5,9 @@
 
   <ul>
     <li repeat.for="contact of people">
-      <a href="#/people/${contact.email}">${contact.firstname}</a>
+      <a route-href="route: people-show; params.bind: {id: contact.id}">
+        ${contact.firstname}
+      </a>
     </li>
   </ul>
 

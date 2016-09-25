@@ -1,5 +1,7 @@
 <template>
   <h1>${contact.firstname}</h1>
 
-  <a href="#people/${contact.email}/edit">Edit</a>
+  <a route-href="route: people-edit; params.bind: {id: contact.id}">
+    Edit
+  </a>
 </template>
