@@ -1,7 +1,13 @@
 <template>
-  <h1>${contact.firstname}</h1>
+  <h1>${initialConcact.firstname}</h1>
 
-  <input type="text" value.bind="contact.firstname">
-  
-  <button click.trigger="save()">Save</button>
+  <form>
+    <input type="text" value.bind="dirtyContact.firstname">
+    <input type="text" value.bind="dirtyContact.lastname">
+    <input type="email" value.bind="dirtyContact.email">
+    <input type="tel" value.bind="dirtyContact.phone">
+
+    <input type="reset" click.trigger="cancel()" value="Cancel">
+    <input type="submit" click.trigger="save()" value="Save" disabled.bind="controller.errors.length">
+  </form>
 </template>
