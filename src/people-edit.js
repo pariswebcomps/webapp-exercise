@@ -1,21 +1,43 @@
 import environment from './environment';
-import {LogManager, inject} from 'aurelia-framework';
+import {
+  inject,
+  LogManager
+} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
+import {PeopleService} from 'services/people';
 
 let logger = LogManager.getLogger('people-edit');
 
-@inject(Router)
+@inject(
+  PeopleService,
+  Router
+)
 export class PeopleEdit {
-  constructor(router) {
+  constructor(peopleService, router) {
+    this.peopleService = peopleService;
     this.router = router;
   }
-  contact = {"id": "5763cd4d9d2a4f259b53c901", "photo": "https://randomuser.me/portraits/women/59.jpg", "firstname": "Leanne", "lastname": "Woodard", "entity": "BIOSPAN", "email": "Leanne.Woodard@BIOSPAN.com", "skills": ["pariatur", "ipsum", "laboris", "nostrud", "elit"], "phone": "0784112248", "links": { "twitter": "https://twitter.com/laboris", "slack": "https://slack.com/fugiat", "github": "https://github.com/velit", "linkedin": "https://www.linkedin.com/in/voluptate"}, "isManager": false, "manager": "Erika", "managerId": "5763cd4d3b57c672861bfa1f"};
+
+  initialConcact = {};
+  dirtyContact = {};
 
   activate(params, routeConfig, navigationInstruction) {
     if (environment.debug) logger.info(`edit contact ${params.id}`);
+
+    return this.peopleService.get(params.id)
+      .then(contact => {
+        this.initialConcact = contact;
+        this.dirtyContact = contact;
+      });
   }
 
   save() {
-    this.router.navigateToRoute('people-show', { id: this.contact.id })
+    return this.peopleService.update(this.dirtyContact).then(contact => {
+      this.router.navigateToRoute('people-show', {id: this.dirtyContact.id});
+    });
+  }
+
+  cancel() {
+    this.router.navigateToRoute('people-show', {id: this.initialConcact.id});
   }
 }
