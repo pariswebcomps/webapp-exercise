@@ -1,7 +1,8 @@
 <template>
-  <h1>${contact.firstname}</h1>
+  <require from="peopleResources/elements/people-card.html"></require>
 
-  <a route-href="route: people-edit; params.bind: {id: contact.id}">
-    Edit
-  </a>
+  <people-card contact.bind="contact">
+    <skill-tags skills.bind="contact.skills" slot="skills-tags"></skill-tags>
+    <social-links links.bind="contact.links" slot="social-links"></social-links>
+  </people-card>
 </template>

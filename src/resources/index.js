@@ -1,3 +1,6 @@
 export function configure(config) {
-  //config.globalResources([]);
+  config.globalResources([
+    './elements/skill-tags.html',
+    './elements/social-links.html'
+  ]);
 }

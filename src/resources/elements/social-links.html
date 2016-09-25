@@ -1,0 +1,22 @@
+<template bindable="links">
+  <template if.bind="links.twitter">
+    <a href="${links.twitter}" target="_blank">
+      twitter
+    </a>
+  </template>
+  <template if.bind="links.slack">
+    <a href="${links.slack}" target="_blank">
+      slack
+    </a>
+  </template>
+  <template if.bind="links.github">
+    <a href="${links.github}" target="_blank">
+      github
+    </a>
+  </template>
+  <template if.bind="links.linkedIn">
+    <a href="${links.linkedIn}" target="_blank">
+      linkedIn
+    </a>
+  </template>
+</template>
