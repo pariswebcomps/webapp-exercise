@@ -1,9 +1,11 @@
 <template>
   <require from="peopleResources/elements/people-card.html"></require>
-  <h1>People List</h1>
+  <h1>You have ${filteredPeople.length} contacts</h1>
+
+  <input type="search" name="search" value.bind="searchQuery"/>
 
   <ul>
-    <li repeat.for="contact of people">
+    <li repeat.for="contact of filteredPeople">
       <people-card contact.bind="contact"></people-card>
     </li>
   </ul>
