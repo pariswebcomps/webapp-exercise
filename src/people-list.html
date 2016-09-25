@@ -2,12 +2,9 @@
   <require from="peopleResources/elements/people-card.html"></require>
   <h1>People List</h1>
 
-  <a href="#people/new">New</a>
-
   <ul>
     <li repeat.for="contact of people">
       <people-card contact.bind="contact"></people-card>
     </li>
   </ul>
-
 </template>
