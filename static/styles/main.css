@@ -6,3 +6,22 @@ nav {
   margin-left: 10px;
   height: 100%;
 }
+
+.card-title {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.info__icon {
+  padding-right: 5px;
+}
+
+.info__label {
+  padding-right: 5px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.info__value {
+  vertical-align: top;
+}
