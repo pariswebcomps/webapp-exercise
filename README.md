@@ -1,46 +1,31 @@
-# Meetup Paris WebComponents - WebApp Exercise
+# ParisWebComponentAngular2
 
-Specs and scaffold of a webapp to develop to compare frameworks implementation.
+This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.16.
 
-## Expected result
+## Development server
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-The `static/` directory contains HTML files of the different screen that you should implement.
+## Code scaffolding
 
-These files are static. You need to implement features (filtering the list, validating the form…) in your webapp.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class`.
 
-## About your talk at Paris WebComponents
+## Build
 
-It should last 20 minutes + 5 minutes of questions.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-What will be expected during your talk at Paris WebComponents:
+## Running unit tests
 
-- present the ecosystem of your framework (eg., do you have DevTools? which task runner do you use?…)
-- present the `detail.html` and `list.html` parts explaining how you achieved re-usability of your components
-- present how routing (= navigation) works
-- present how you handle form validation with the `edit.html` part
-- explain the philosophy and specificities of your framework all along
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-You'll be awesome!
+## Running end-to-end tests
 
-## Set up
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/). 
+Before running the tests make sure you are serving the app via `ng serve`.
 
-After cloning the repo, run:
+## Deploying to Github Pages
 
-    npm install
-    bower install
+Run `ng github-pages:deploy` to deploy to Github Pages.
 
-This will install required packages for the server to run (npm) and the static examples to work (bower).
+## Further help
 
-You are free to drop bower if you wish when implementing your solution. Correct versions of Materialize & jQuery are included in the `package.json` so you can just use npm if that's your thing.
-
-## Start the server
-
-So far, `npm start` serves the REST data at `http://localhost:3001`:
-
-This provides you following routes:
-
-Method | Route              | Result
------- | ------------------ | ------
-GET    | `/api/peoples`     | List all peoples
-GET    | `/api/peoples/:id` | Get details about `:id`
-PUT    | `/api/peoples/:id` | Update `:id`
+To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
