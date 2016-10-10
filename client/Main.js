@@ -3,18 +3,18 @@
 import React from "react";
 import { render } from "react-dom";
 
-import Nav from "./nav/Nav.js";
-import UserList from "./user/UserList.js";
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <Nav />
-        <UserList />
-      </div>
-    );
-  }
-}
+import App from "./components/App.js";
+import UserList from "./components/user/UserList.js";
 
-render(<App />, document.getElementById('app'));
+
+const router = (
+  <Router history={browserHistory} >
+    <Route path="/" component={App} >
+      <IndexRoute component={UserList} />
+    </Route>
+  </Router>
+);
+
+render(router, document.getElementById('app'));
