@@ -128,7 +128,7 @@ const INITIAL_STATE = [];
 function usersUpdate (state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'GET_USERS':
-      return USERS;
+      return action.users;
     default:
       return state;
   }

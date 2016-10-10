@@ -5,7 +5,8 @@ import { render } from "react-dom";
 
 import { Router, Route, IndexRoute, browserHistory } from "react-router";
 
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { syncHistoryWithStore, routerReducer } from "react-router-redux";
 
@@ -17,7 +18,8 @@ import UserList from "./components/user/UserList.js";
 const store = createStore(
   combineReducers(Object.assign({}, reducers, {
     routing: routerReducer
-  }))
+  })),
+  applyMiddleware(thunk)
 );
 
 const history = syncHistoryWithStore(browserHistory, store);

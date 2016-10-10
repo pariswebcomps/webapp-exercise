@@ -22,6 +22,8 @@ class UserList extends React.Component {
   }
 
   renderUsers() {
+    console.log(this.props.users);
+
     const users = this.props.users || [];
 
     return users.map(user => this.renderUser(user));

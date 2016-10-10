@@ -6,8 +6,7 @@ import UserInfo from "./UserInfo";
 
 class UserCard extends React.Component {
   render() {
-    const { firstname, lastname, photo, manager, contactInfoPro } = this.props;
-    const { mail, fixedPhone, city } = contactInfoPro;
+    const { firstname, lastname, photo, manager, contactInfoPro, email, phone } = this.props;
 
     return (
       <div className="card">
@@ -16,10 +15,9 @@ class UserCard extends React.Component {
           <span className="card-title">{`${firstname} ${lastname}`}</span>
         </div>
         <div className="card-content">
-          <UserInfo icon="md-email" value={mail} />
-          <UserInfo icon="md-phone" value={fixedPhone} />
+          <UserInfo icon="md-email" value={email} />
+          <UserInfo icon="md-phone" value={phone} />
           <UserInfo label="Manager" value={manager} />
-          <UserInfo label="Location" value={city} />
         </div>
       </div>
     );

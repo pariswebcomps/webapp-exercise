@@ -1,9 +1,16 @@
 "use strict";
 
+import { fetchUsers } from "../api/users.js";
+
 function getUsers () {
-  return {
-    type: "GET_USERS"
-  };
+  return (dispatch) => {
+    fetchUsers().then(users => {
+      dispatch({
+        type: "GET_USERS",
+        users
+      });
+    });
+  }
 }
 
 export { getUsers };

@@ -30,6 +30,11 @@ module.exports = {
     stats: {
       colors: true
     },
+    proxy: {
+      "/api": {
+        target: 'http://localhost:3001'
+      }
+    },
     hot: true
   }
 }
