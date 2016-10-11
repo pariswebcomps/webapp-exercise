@@ -15,6 +15,10 @@ exports.peoples = [
       "nostrud",
       "elit"
     ],
+    "geo": {
+      "lat": 48.854107964410616,
+      "lng": 2.2486534555789013
+    },
     "phone": "0784112248",
     "links": {
       "twitter": "https://twitter.com/laboris",
@@ -40,6 +44,10 @@ exports.peoples = [
       "ad",
       "adipisicing"
     ],
+    "geo": {
+      "lat": 48.845544343608054,
+      "lng": 2.399797357715456
+    },
     "phone": "0145652522",
     "links": {
       "twitter": "https://twitter.com/velit",
@@ -65,6 +73,10 @@ exports.peoples = [
       "adipisicing",
       "Lorem"
     ],
+    "geo": {
+      "lat": 48.843615611100034,
+      "lng": 2.3131976417042717
+    },
     "phone": "0685230125",
     "links": {
       "twitter": "https://twitter.com/non",
@@ -90,6 +102,10 @@ exports.peoples = [
       "aute",
       "et"
     ],
+    "geo": {
+      "lat": 48.852765798186375,
+      "lng": 2.3216256189826345
+    },
     "phone": "0678412587",
     "links": {
       "twitter": "https://twitter.com/nisi",
@@ -115,6 +131,10 @@ exports.peoples = [
       "eiusmod",
       "labore"
     ],
+    "geo": {
+      "lat": 48.846017690212236,
+      "lng": 2.381289161182463
+    },
     "phone": "0662589632",
     "links": {
       "twitter": "https://twitter.com/qui",
@@ -140,6 +160,10 @@ exports.peoples = [
       "sit",
       "aute"
     ],
+    "geo": {
+      "lat": 48.85466031451406,
+      "lng": 2.28371412891228
+    },
     "phone": "0125878522",
     "links": {
       "twitter": "https://twitter.com/eiusmod",
@@ -165,6 +189,10 @@ exports.peoples = [
       "ex",
       "in"
     ],
+    "geo": {
+      "lat": 48.855495309829195,
+      "lng": 2.4590747454636652
+    },
     "phone": "0456987425",
     "links": {
       "twitter": "https://twitter.com/eu",
@@ -190,6 +218,10 @@ exports.peoples = [
       "consequat",
       "officia"
     ],
+    "geo": {
+      "lat": 48.848942410578736,
+      "lng": 2.4026880720467796
+    },
     "phone": "0662259988",
     "links": {
       "twitter": "https://twitter.com/velit",
@@ -215,6 +247,10 @@ exports.peoples = [
       "consectetur",
       "occaecat"
     ],
+    "geo": {
+      "lat": 48.854107964410616,
+      "lng": 2.2486534555789013
+    },
     "phone": "0755669551",
     "links": {
       "twitter": "https://twitter.com/non",
@@ -240,6 +276,10 @@ exports.peoples = [
       "ex",
       "in"
     ],
+    "geo": {
+      "lat": 48.854107964410616,
+      "lng": 2.2486534555789013
+    },
     "phone": "0266334856",
     "links": {
       "twitter": "https://twitter.com/mollit",

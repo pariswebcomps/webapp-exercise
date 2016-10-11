@@ -4,13 +4,13 @@ var _ = require('underscore');
 var PEOPLES = require('./data/persons').peoples;
 
 
-exports.listAll = function (req, res) {
+exports.listAll = function(req, res) {
   console.log('List all PEOPLES');
   return res.status(200).json(PEOPLES);
 };
 
 
-exports.get = function (req, res) {
+exports.get = function(req, res) {
   var id = getId(req);
   console.log('Get person : id=' + id);
 
@@ -24,13 +24,13 @@ exports.get = function (req, res) {
 };
 
 
-exports.update = function (req, res) {
+exports.update = function(req, res) {
   var id = getId(req);
   console.log('Update person : id=' + id);
 
   var person = req.body;
 
-  var index = _.findIndex(PEOPLES, function (p) {
+  var index = _.findIndex(PEOPLES, function(p) {
     return p.id === id;
   });
 
@@ -41,6 +41,23 @@ exports.update = function (req, res) {
   _.assign(PEOPLES[index], person);
 
   return res.status(200).json(PEOPLES[index]);
+};
+
+exports.delete = function(req, res) {
+  var id = getId(req);
+  console.log('Delete person : id=' + id);
+
+  var index = _.findIndex(PEOPLES, function(p) {
+    return p.id === id;
+  });
+
+  if (index === -1) {
+    return res.status(404).json({error: 'La personne avec l\'id "' + id + '" n\'existe pas.'});
+  }
+
+  PEOPLES.splice(index, 1);
+
+  return res.status(200).json(PEOPLES);
 };
 
 

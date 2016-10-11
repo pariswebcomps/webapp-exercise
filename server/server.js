@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "PUT");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'PUT,DELETE');
   next();
 });
 
@@ -23,8 +23,9 @@ app.use(function(req, res, next) {
 app.get('/api/peoples', api.listAll);
 app.get('/api/peoples/:id', api.get);
 app.put('/api/peoples/:id', api.update);
+app.delete('/api/peoples/:id', api.delete);
 
 
-app.listen(app.get('port'), function () {
+app.listen(app.get('port'), function() {
   console.log('✔ Express server listening on http://localhost:%d/', app.get('port'));
 });

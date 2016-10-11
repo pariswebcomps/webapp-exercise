@@ -1,0 +1,8 @@
+<md-card>
+
+  <google-map [latitude]="person.geo?.lat" [longitude]="person.geo?.lng" fit-to-markers>
+    <google-map-marker [latitude]="person.geo?.lat" [longitude]="person.geo?.lng"
+    draggable="true" animation="DROP" title="{{ person.firstname }} {{ person.lastname }}"></google-map-marker>
+  </google-map>
+
+</md-card>

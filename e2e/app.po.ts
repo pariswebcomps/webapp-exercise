@@ -6,6 +6,6 @@ export class ParisWebComponentAngular2Page {
   }
 
   getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+    return element(by.css('pwc-root h1')).getText();
   }
 }

@@ -1,0 +1,9 @@
+<pwc-card
+  *ngFor="let person of people"
+  [person]="person"
+  detailUrl="/people/detail/"
+  mapUrl="/people/detail/"
+  editUrl="/people/edit/"
+  mapUrl="/people/map/"
+  (delete)="onDeletePerson($event)"
+></pwc-card>

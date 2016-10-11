@@ -1,0 +1,44 @@
+<md-card class="md-whiteframe-2dp">
+
+  <md-card-title>
+    <span>Update: {{ person?.firstname }} {{ person?.lastname }}</span>
+  </md-card-title>
+
+  <md-card-content>
+    <form novalidate [formGroup]="form">
+
+      <table style="width: 100%" cellspacing="0">
+        <tr>
+          <td>
+            <md-input placeholder="First name *" name="firstname" formControlName="firstname"></md-input>
+            <md-input placeholder="Last Name *" name="lastname" formControlName="lastname"></md-input>
+          </td>
+          <td class="align-right">
+            <img width="100" [src]="form.controls.photo.value"/>
+            <input type="hidden" name="photo" formControlName="photo">
+          </td>
+        </tr>
+      </table>
+
+      <p>
+        <md-input placeholder="Email *" style="width:100%" name="email" formControlName="email"></md-input>
+      </p>
+
+      <p [ngClass]="{'md-warn': form.controls.phone.dirty && form.controls.phone.invalid}">
+        <md-input
+          placeholder="Phone * (ex: 0612345678)"
+          style="width:100%"
+          name="phone"
+          formControlName="phone"></md-input>
+      </p>
+
+    </form>
+  </md-card-content>
+
+
+  <md-card-actions align="end">
+    <button md-button (click)="cancel()" type="button">Cancel</button>
+    <button md-button [disabled]="form.invalid" color="primary" type="submit" (click)="submit()">Save</button>
+  </md-card-actions>
+
+</md-card>
