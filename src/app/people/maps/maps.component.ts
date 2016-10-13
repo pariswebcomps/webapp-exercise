@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/mergeMap';
 
-import { PeopleService } from '../people.service';
+import { PeopleService } from '../service/people.service';
 
 @Component({
   selector: 'pwc-maps',

@@ -1,5 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import 'https://fonts.googleapis.com/css?family=Roboto:300';
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
 body {
   font-family: 'Roboto', sans-serif;
+}
+
+button[md-fab] {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }

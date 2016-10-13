@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PeopleService } from '../people.service';
+import { PeopleService } from '../service/people.service';
 
 @Component({
   selector: 'pwc-list',
@@ -24,6 +24,10 @@ export class ListComponent implements OnInit {
     this.service.delete(person.id).subscribe(
       people => this.people = people
     );
+  }
+
+  onReset() {
+    this.service.resetDatabase();
   }
 
 }

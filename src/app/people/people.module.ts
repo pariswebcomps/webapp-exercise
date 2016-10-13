@@ -5,7 +5,8 @@ import { PeopleComponent } from './people.component';
 import { DetailComponent } from './detail/detail.component';
 import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
-import { PeopleService } from './people.service';
+import { PeopleService } from './service/people.service';
+import { FirebaseService } from './service/firebase.service';
 
 import { SharedModule } from '../shared/';
 
@@ -26,7 +27,8 @@ import { MapsComponent } from './maps/maps.component';
     PeopleRoutes
   ],
   providers: [
-    PeopleService
+    // {provide: PeopleService, useClass: PeopleService},
+    {provide: PeopleService, useClass: FirebaseService}
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -8,7 +8,7 @@
   background-repeat: repeat-y;
   height: 360px;
   width: 360px;
-  animation: animate-bg 20s linear infinite;
+  animation: animate-bg 30s linear infinite;
 }
 
 @keyframes animate-bg {

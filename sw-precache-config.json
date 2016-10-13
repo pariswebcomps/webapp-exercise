@@ -2,7 +2,7 @@
   "swFile": "dist/service-worker.js",
   "cacheId": "static",
   "staticFileGlobs": [
-    "dist/**/*.{js,html,css,map,png,svg,gz,webapp,json}"
+    "dist/**/*.{js,html,css,map,png,svg,gz,webapp,json,ico}"
   ],
   "stripPrefix": "dist/"
 }

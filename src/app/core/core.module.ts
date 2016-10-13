@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { MdModule } from './md.module';
+import { FirebaseModule } from './firebase.module';
 
 @NgModule({
   providers: [],
@@ -13,7 +14,8 @@ import { MdModule } from './md.module';
     ReactiveFormsModule,
     HttpModule,
     RouterModule,
-    MdModule
+    MdModule,
+    FirebaseModule
   ]
 })
 export class CoreModule { }
