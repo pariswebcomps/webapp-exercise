@@ -31,6 +31,7 @@ const router = (
       <Route path="/" component={App} >
         <IndexRoute component={Users} />
         <Route path="user/edit/:userId" component={UserForm} />
+        <Route path="user/new" component={UserForm} />
       </Route>
     </Router>
   </Provider>
