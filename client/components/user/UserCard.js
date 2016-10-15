@@ -19,6 +19,11 @@ class UserCard extends React.Component {
           <UserInfo icon="md-phone" value={phone} />
           <UserInfo label="Manager" value={manager} />
         </div>
+        <div className="card-action">
+          <button className="btn-flat"><i className="material-icons">zoom_in</i></button>
+          <button className="btn-flat"><i className="material-icons">mode_edit</i></button>
+          <button className="btn-flat"><i className="material-icons">delete</i></button>
+        </div>
       </div>
     );
   }
