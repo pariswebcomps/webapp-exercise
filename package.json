@@ -4,6 +4,7 @@
     "axios": "^0.14.0",
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
+    "formsy-react": "^0.18.1",
     "jquery": "3.1.0",
     "materialize-css": "0.97.6",
     "react": "^15.3.2",
