@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchUsers, fetchDetailUser } from "../api/users.js";
+import { fetchUsers, fetchDetailUser, putUserModifications } from "../api/users.js";
 
 function getUsers () {
   return (dispatch) => {
@@ -18,6 +18,17 @@ function getUserDetail (userId) {
     fetchDetailUser(userId).then(user => {
       dispatch({
         type: "GET_USER_DETAIL",
+        user
+      });
+    });
+  }
+}
+
+function modifyUser (user) {
+  return (dispatch) => {
+    putUserModifications(user).then(() => {
+      dispatch({
+        type: "MODIFY_USER",
         user
       });
     });
@@ -42,4 +53,4 @@ function deleteUser (userId) {
   }
 }
 
-export { getUsers, filterUsers, deleteUser, getUserDetail };
+export { getUsers, filterUsers, deleteUser, getUserDetail, modifyUser };

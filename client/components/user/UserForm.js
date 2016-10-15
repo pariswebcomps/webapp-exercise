@@ -7,7 +7,7 @@ import Input from "../form/Input.js";
 
 import { connect } from "react-redux";
 
-import { getUserDetail } from "../../actions/users.js";
+import { getUserDetail, modifyUser } from "../../actions/users.js";
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -79,7 +79,11 @@ class UserForm extends React.Component {
   }
 
   submit(model) {
-    console.log(model);
+    const { userDetail, modifyUser, history } = this.props;
+
+    modifyUser(Object.assign({}, userDetail, model));
+
+    history.push("/");
   }
 
   enableButton() {
@@ -99,4 +103,4 @@ UserForm.defaultProps = {
   userDetail: {}
 };
 
-export default connect(state => state.users, { getUserDetail })(UserForm);
+export default connect(state => state.users, { getUserDetail, modifyUser })(UserForm);

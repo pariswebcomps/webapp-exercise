@@ -10,4 +10,8 @@ function fetchDetailUser (userId) {
   return axios.get(`/api/peoples/${userId}`).then(response => response.data);
 }
 
-export { fetchUsers, fetchDetailUser };
+function putUserModifications (user) {
+  return axios.put(`/api/peoples/${user.id}`, user);
+}
+
+export { fetchUsers, fetchDetailUser, putUserModifications };
