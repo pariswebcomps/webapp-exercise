@@ -5,6 +5,10 @@ import Formsy from "formsy-react";
 
 import Input from "../form/Input.js";
 
+import { connect } from "react-redux";
+
+import { getUserDetail } from "../../actions/users.js";
+
 class UserForm extends React.Component {
   constructor(props) {
     super(props);
@@ -14,28 +18,39 @@ class UserForm extends React.Component {
     };
   }
 
+  componentWillMount() {
+    const { params, getUserDetail } = this.props;
+
+    if (params.userId) {
+      getUserDetail(params.userId);
+    }
+  }
+
   render() {
     const requiredErrorMessage = "Please fill this field";
     const { canSubmit } = this.state;
     const isSubmitDisabled = !canSubmit;
     const classSubmitBtn = isSubmitDisabled ? "btn disabled" : "btn";
+    const { userDetail } = this.props;
 
     return (
       <div className="container userForm row">
               <div className="col s12 card z-depth-3">
-                <Formsy.Form onValidSubmit={this.submit} onValid={() => this.enableButton()} onInvalid={() => this.disableButton()}>
+                <Formsy.Form onValidSubmit={(model) => this.submit(model)} onValid={() => this.enableButton()} onInvalid={() => this.disableButton()}>
 
                   <div className="card-content">
                       <span className="card-title">Contact informations</span>
                         <Input
                           name="firstname"
                           placeholder="First name"
+                          value={userDetail.firstname}
                           required
                           validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
 
                         <Input
                           name="lastname"
                           placeholder="Last name"
+                          value={userDetail.lastname}
                           required
                           validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
 
@@ -43,12 +58,14 @@ class UserForm extends React.Component {
                         <Input
                           name="email"
                           placeholder="email"
+                          value={userDetail.email}
                           required
                           validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
 
                         <Input
                           name="phone"
                           placeholder="phone"
+                          value={userDetail.phone}
                           required
                           validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
                   </div>
@@ -78,4 +95,8 @@ class UserForm extends React.Component {
   }
 }
 
-export default UserForm;
+UserForm.defaultProps = {
+  userDetail: {}
+};
+
+export default connect(state => state.users, { getUserDetail })(UserForm);

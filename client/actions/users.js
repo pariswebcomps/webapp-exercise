@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchUsers } from "../api/users.js";
+import { fetchUsers, fetchDetailUser } from "../api/users.js";
 
 function getUsers () {
   return (dispatch) => {
@@ -8,6 +8,17 @@ function getUsers () {
       dispatch({
         type: "GET_USERS",
         users
+      });
+    });
+  }
+}
+
+function getUserDetail (userId) {
+  return (dispatch) => {
+    fetchDetailUser(userId).then(user => {
+      dispatch({
+        type: "GET_USER_DETAIL",
+        user
       });
     });
   }
@@ -31,4 +42,4 @@ function deleteUser (userId) {
   }
 }
 
-export { getUsers, filterUsers, deleteUser };
+export { getUsers, filterUsers, deleteUser, getUserDetail };
