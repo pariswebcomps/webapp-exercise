@@ -3,10 +3,11 @@
 import React from "react";
 
 import UserInfo from "./UserInfo";
+import { Link } from "react-router";
 
 class UserCard extends React.Component {
   render() {
-    const { firstname, lastname, photo, manager, contactInfoPro, email, phone } = this.props;
+    const { id, firstname, lastname, photo, manager, contactInfoPro, email, phone } = this.props;
 
     return (
       <div className="card">
@@ -21,7 +22,7 @@ class UserCard extends React.Component {
         </div>
         <div className="card-action">
           <button className="btn-flat"><i className="material-icons">zoom_in</i></button>
-          <button className="btn-flat"><i className="material-icons">mode_edit</i></button>
+          <Link to={`/user/edit/${id}`} className="btn-flat"><i className="material-icons">mode_edit</i></Link>
           <button className="btn-flat" onClick={() => this.onDelete()}><i className="material-icons">delete</i></button>
         </div>
       </div>
