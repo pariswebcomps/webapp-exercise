@@ -2,21 +2,19 @@
 
 import React from "react";
 
+import { connect } from "react-redux";
+
+import { filterUsers } from "../../actions/users.js";
+
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      searchKey: ""
-    };
   }
 
   onSearch(event) {
     const { value } = event.target;
 
-    this.setState({
-      searchKey: value
-    });
+    this.props.filterUsers(value);
   }
 
   render() {
@@ -28,7 +26,7 @@ class SearchBar extends React.Component {
             id="search"
             type="text"
             placeholder="Search some user"
-            value={this.state.searchKey}
+            value={this.props.searchKey}
             onChange={(event) => this.onSearch(event)} />
         </div>
       </form>
@@ -36,4 +34,8 @@ class SearchBar extends React.Component {
   }
 }
 
-export default SearchBar;
+SearchBar.defaultProps = {
+  filterUsers: () => {}
+};
+
+export default connect(state => state.users, { filterUsers })(SearchBar);

@@ -21,14 +21,6 @@ class UserList extends React.Component {
     this.props.getUsers();
   }
 
-  renderUsers() {
-    console.log(this.props.users);
-
-    const users = this.props.users || [];
-
-    return users.map(user => this.renderUser(user));
-  }
-
   render() {
     return (
       <div className="row">
@@ -36,6 +28,17 @@ class UserList extends React.Component {
       </div>
     );
   }
+
+  filterUsers(searchKey, users) {
+    return users.filter(user => user.firstname.toLowerCase().match(searchKey.toLowerCase()));
+  }
+
+  renderUsers() {
+    const { users, searchKey } = this.props;
+    const displayedUsers = this.filterUsers(searchKey, users);
+
+    return displayedUsers.map(user => this.renderUser(user));
+  }
 }
 
-export default connect(state => state, { getUsers })(UserList);
+export default connect(state => state.users, { getUsers })(UserList);

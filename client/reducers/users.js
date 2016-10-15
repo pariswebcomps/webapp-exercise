@@ -123,12 +123,17 @@ const USERS = [
   }
 ];
 
-const INITIAL_STATE = [];
+const INITIAL_STATE = {
+  users: [],
+  searchKey: ""
+};
 
 function usersUpdate (state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'GET_USERS':
-      return action.users;
+      return Object.assign({}, state, {users: action.users});
+    case 'FILTER_USERS':
+      return Object.assign({}, state, {searchKey: action.searchKey});
     default:
       return state;
   }

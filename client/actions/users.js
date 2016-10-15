@@ -13,4 +13,13 @@ function getUsers () {
   }
 }
 
-export { getUsers };
+function filterUsers (searchKey) {
+  return (dispatch) => {
+    dispatch({
+      type: "FILTER_USERS",
+      searchKey
+    });
+  };
+}
+
+export { getUsers, filterUsers };
