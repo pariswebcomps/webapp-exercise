@@ -22,4 +22,13 @@ function filterUsers (searchKey) {
   };
 }
 
-export { getUsers, filterUsers };
+function deleteUser (userId) {
+  return (dispatch) => {
+    dispatch({
+      type: "DELETE_USER",
+      userId
+    });
+  }
+}
+
+export { getUsers, filterUsers, deleteUser };

@@ -22,10 +22,16 @@ class UserCard extends React.Component {
         <div className="card-action">
           <button className="btn-flat"><i className="material-icons">zoom_in</i></button>
           <button className="btn-flat"><i className="material-icons">mode_edit</i></button>
-          <button className="btn-flat"><i className="material-icons">delete</i></button>
+          <button className="btn-flat" onClick={() => this.onDelete()}><i className="material-icons">delete</i></button>
         </div>
       </div>
     );
+  }
+
+  onDelete() {
+    const { id, onDelete } = this.props;
+
+    onDelete(id);
   }
 }
 

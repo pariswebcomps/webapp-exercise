@@ -128,12 +128,18 @@ const INITIAL_STATE = {
   searchKey: ""
 };
 
+function deleteUser(userId, users) {
+  return users.filter(user => user.id !== userId);
+}
+
 function usersUpdate (state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'GET_USERS':
       return Object.assign({}, state, {users: action.users});
     case 'FILTER_USERS':
       return Object.assign({}, state, {searchKey: action.searchKey});
+    case 'DELETE_USER':
+      return Object.assign({}, state, {users: deleteUser(action.userId, state.users)})
     default:
       return state;
   }

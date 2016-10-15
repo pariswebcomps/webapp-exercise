@@ -6,13 +6,13 @@ import UserCard from "./UserCard.js";
 
 import { connect } from "react-redux";
 
-import { getUsers } from "../../actions/users.js";
+import { getUsers, deleteUser } from "../../actions/users.js";
 
 class UserList extends React.Component {
   renderUser(user) {
     return (
       <div className="col s12 m3" key={user.id}>
-        <UserCard {...user} />
+        <UserCard {...user} onDelete={(userId) => this.deleteUser(userId)}/>
       </div>
     );
   }
@@ -29,6 +29,10 @@ class UserList extends React.Component {
     );
   }
 
+  deleteUser(userId) {
+    this.props.deleteUser(userId);
+  }
+
   filterUsers(searchKey, users) {
     return users.filter(user => user.firstname.toLowerCase().match(searchKey.toLowerCase()));
   }
@@ -41,4 +45,4 @@ class UserList extends React.Component {
   }
 }
 
-export default connect(state => state.users, { getUsers })(UserList);
+export default connect(state => state.users, { getUsers, deleteUser })(UserList);
