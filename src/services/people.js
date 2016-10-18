@@ -2,7 +2,7 @@ import {HttpClient, json} from 'aurelia-fetch-client';
 
 let httpClient = new HttpClient();
 httpClient.configure(config => {
-  config.withBaseUrl('http://localhost:3001/api/')
+  config.withBaseUrl('http://localhost:3001/api/');
 });
 
 export class PeopleService {
@@ -18,11 +18,11 @@ export class PeopleService {
       .then(response => response.json());
   }
 
-  update(data) {
+  update(dirtyData) {
     return httpClient
-      .fetch(`peoples/${data.id}`, {
+      .fetch(`peoples/${dirtyData.id}`, {
         method: 'put',
-        body: json(data)
+        body: json(dirtyData)
       })
       .then(response => response.json())
       .then(data => {

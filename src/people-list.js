@@ -1,17 +1,14 @@
-import {
-  inject,
-  computedFrom
-} from 'aurelia-framework';
+import {inject, computedFrom} from 'aurelia-framework';
 import {PeopleService} from 'services/people';
 
 @inject(PeopleService)
 export class PeopleList {
+  searchQuery = '';
+  people = [];
+
   constructor(peopleService) {
     this.peopleService = peopleService;
   }
-
-  searchQuery = '';
-  people = [];
 
   @computedFrom('people', 'searchQuery')
   get filteredPeople() {

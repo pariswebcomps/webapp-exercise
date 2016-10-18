@@ -3,11 +3,11 @@ import {PeopleService} from 'services/people';
 
 @inject(PeopleService)
 export class PeopleShow {
+  contact = {};
+
   constructor(peopleService) {
     this.peopleService = peopleService;
   }
-
-  contact = {};
 
   activate(params, routeConfig, navigationInstruction) {
     return this.peopleService.get(params.id)
