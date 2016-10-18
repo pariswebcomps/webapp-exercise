@@ -1,4 +1,10 @@
 <template>
-  <a route-href="route: people-list">people</a>
+  <require from="materialize-css/css/materialize.css"></require>
+  <require from="resources/elements/nav-bar.html"></require>
+
+  <md-colors md-primary-color="#0168AB" md-accent-color="#039be5"></md-colors>
+
+  <nav-bar router.bind="router"></nav-bar>
+
   <router-view></router-view>
 </template>

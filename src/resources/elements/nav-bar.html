@@ -1,0 +1,13 @@
+<template bindable="router">
+  <md-navbar fixed="true">
+    <a class="brand-logo left" route-href="route: people-list">
+      <img class="logo" src="img/logo-people.svg" height="100%" width="100%">
+    </a>
+
+    <ul class="right hide-on-med-and-down">
+      <li md-waves repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
+        <a href.bind="row.href">${row.title}</a>
+      </li>
+    </ul>
+  </md-navbar>
+</template>
