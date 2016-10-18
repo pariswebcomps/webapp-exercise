@@ -26,12 +26,10 @@ You'll be awesome!
 
 After cloning the repo, run:
 
-    npm install
-    bower install
+    npm install -g aurelia-cli
+    au run
 
-This will install required packages for the server to run (npm) and the static examples to work (bower).
-
-You are free to drop bower if you wish when implementing your solution. Correct versions of Materialize & jQuery are included in the `package.json` so you can just use npm if that's your thing.
+This will install required packages for the server to run (npm) and the front done by Aurelia.
 
 ## Start the server
 
