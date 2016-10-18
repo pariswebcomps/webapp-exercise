@@ -1,17 +1,17 @@
 <template bindable="contact">
-  <div>
-    <div>
-      <h1><a route-href="route: people-show; params.bind: {id: contact.id}">${contact.firstname} ${contact.lastname}</a></h1>
-      <p><i>email</i> <span>${contact.email}</span></p>
-      <p><i>phone</i> <span>${contact.phone}</span></p>
+  <div class="row">
+    <div class="col">
+      <h4><a route-href="route: people-show; params.bind: {id: contact.id}">${contact.firstname | capitalize} ${contact.lastname | uppercase}</a></h4>
+      <p class="valign-wrapper"><i class="material-icons">email</i>&nbsp;<span class="valign">${contact.email}</span></p>
+      <p class="valign-wrapper"><i class="material-icons">phone</i>&nbsp;<span class="valign">${contact.phone}</span></p>
       <p>Manager: ${contact.manager}</p>
     </div>
-    <div>
+    <div class="right">
       <img src.bind="contact.photo"/>
-      <p>
-        <i>map</i>
-        <a route-href="route: people-edit; params.bind: {id: contact.id}"><i>edit</i></a>
-        <a route-href="route: people-edit; params.bind: {id: contact.id}"><i>delete</i></a>
+      <p class="right-align">
+        <i class="material-icons">map</i>
+        <a route-href="route: people-edit; params.bind: {id: contact.id}"><i class="material-icons">edit</i></a>
+        <a route-href="route: people-edit; params.bind: {id: contact.id}"><i class="material-icons">delete</i></a>
       </p>
     </div>
   </div>

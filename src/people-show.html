@@ -1,8 +1,10 @@
 <template>
   <require from="peopleResources/elements/people-card.html"></require>
 
-  <people-card contact.bind="contact">
-    <skill-tags skills.bind="contact.skills" slot="skills-tags"></skill-tags>
-    <social-links links.bind="contact.links" slot="social-links"></social-links>
-  </people-card>
+  <md-card class="container">
+    <people-card contact.bind="contact">
+      <skill-tags class="row" skills.bind="contact.skills" slot="skills-tags"></skill-tags>
+      <social-links class="row" links.bind="contact.links" slot="social-links"></social-links>
+    </people-card>
+  </md-card>
 </template>
