@@ -12,7 +12,7 @@
     "aurelia-bootstrapper": "^1.0.0",
     "aurelia-fetch-client": "^1.0.0",
     "aurelia-materialize-bridge": "^0.17.0",
-    "aurelia-validation": "^0.12.5",
+    "aurelia-validation": "0.12.0",
     "bluebird": "^3.4.1",
     "express": "^4.13.3"
   },
