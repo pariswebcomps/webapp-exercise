@@ -27,13 +27,12 @@ export class PeopleEdit {
       });
   }
 
-  save() {
-    return this.peopleService.update(this.dirtyContact).then(contact => {
-      this.router.navigateToRoute('people-show', {id: this.dirtyContact.id});
-    });
+  submit() {
+    this.peopleService.update(this.dirtyContact)
+      .then(() => this.navigateContact());
   }
 
-  cancel() {
-    this.router.navigateToRoute('people-show', {id: this.initialConcact.id});
+  navigateContact() {
+    this.router.navigateToRoute('people-show', {id: this.dirtyContact.id});
   }
 }
