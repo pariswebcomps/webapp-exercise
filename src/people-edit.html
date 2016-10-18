@@ -1,13 +1,18 @@
 <template>
-  <h1>${initialConcact.firstname}</h1>
+  <require from="resources/elements/md-input" as="custom-md-input"></require>
 
-  <form>
-    <input type="text" value.bind="dirtyContact.firstname">
-    <input type="text" value.bind="dirtyContact.lastname">
-    <input type="email" value.bind="dirtyContact.email">
-    <input type="tel" value.bind="dirtyContact.phone">
+  <md-card class="container">
+    <h4>Contact information</h4>
 
-    <input type="reset" click.trigger="cancel()" value="Cancel">
-    <input type="submit" click.trigger="save()" value="Save" disabled.bind="controller.errors.length">
-  </form>
+    <form submit.delegate="submit()" with.bind="dirtyContact">
+      <custom-md-input value.bind="firstname & validate" label="First Name" name="firstname"></custom-md-input>
+      <md-input md-value.bind="lastname & validate" md-label="Last Name"></md-input>
+      <md-input md-value.bind="email & validate" md-label="Email" md-type="email"></md-input>
+      <md-input md-value.bind="phone & validate" md-label="Phone"></md-input>
+
+      <input type="reset" value="Cancel" md-button click.trigger="navigateContact()">
+      <input type="submit" value="Save" md-button disabled.bind="validationController.errors.length">
+    </form>
+    
+  </md-card>
 </template>
