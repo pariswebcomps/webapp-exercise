@@ -11,13 +11,15 @@ export function configure(aurelia) {
     .standardConfiguration()
     .feature('resources');
 
-  if (environment.debug) {
-    aurelia.use.developmentLogging();
-  }
+  // Add logs
+  aurelia.use.developmentLogging();
 
-  if (environment.testing) {
-    aurelia.use.plugin('aurelia-testing');
-  }
+  // Use MaterializeCSS controls
+  aurelia.use.plugin('aurelia-materialize-bridge', bridge => bridge.useAll());
 
+  // Use Aurelia validation plugin
+  aurelia.use.plugin('aurelia-validation');
+
+  // Start app from app.js (root by default)
   aurelia.start().then(() => aurelia.setRoot());
 }
