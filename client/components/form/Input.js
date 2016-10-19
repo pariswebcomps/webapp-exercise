@@ -8,15 +8,22 @@ const Input = React.createClass({
 
   render() {
     const { placeholder } = this.props;
+    const isValid = !this.getErrorMessage();
+    const inputValidClass = isValid ? "valid" : "invalid";
 
     return (
       <div className="row">
           <div className="input-field col s12">
               <input
+                className={inputValidClass}
                 type="text"
                 placeholder={placeholder}
                 onChange={this.changeValue}
                 value={this.getValue()} />
+
+                <div className="input-field__error">
+                  { this.getErrorMessage() }
+                </div>
           </div>
       </div>
     );

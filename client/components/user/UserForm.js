@@ -45,14 +45,14 @@ class UserForm extends React.Component {
                           placeholder="First name"
                           value={userDetail.firstname}
                           required
-                          validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
+                          validationErrors={{isDefaultRequiredValue: requiredErrorMessage}} />
 
                         <Input
                           name="lastname"
                           placeholder="Last name"
                           value={userDetail.lastname}
                           required
-                          validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
+                          validationErrors={{isDefaultRequiredValue: requiredErrorMessage}} />
 
 
                         <Input
@@ -60,14 +60,15 @@ class UserForm extends React.Component {
                           placeholder="email"
                           value={userDetail.email}
                           required
-                          validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
+                          validations="isEmail"
+                          validationErrors={{isDefaultRequiredValue: requiredErrorMessage, isEmail: "Please type a correct email"}} />
 
                         <Input
                           name="phone"
                           placeholder="phone"
                           value={userDetail.phone}
                           required
-                          validationError={{isDefaultRequiredValue: requiredErrorMessage}} />
+                          validationErrors={{isDefaultRequiredValue: requiredErrorMessage}} />
                   </div>
                   <div className="card-action">
                       <button type="submit" className={classSubmitBtn} disabled={isSubmitDisabled}>Submit</button>

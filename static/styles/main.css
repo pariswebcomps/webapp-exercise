@@ -16,6 +16,10 @@ nav {
   background: transparent;
 }
 
+.input-field__error {
+  color: #f44336;
+}
+
 .info__icon {
   padding-right: 5px;
 }
