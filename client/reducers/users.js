@@ -24,7 +24,9 @@ function usersUpdate (state = INITIAL_STATE, action) {
     case 'FILTER_USERS':
       return Object.assign({}, state, {searchKey: action.searchKey});
     case 'DELETE_USER':
-      return Object.assign({}, state, {users: deleteUser(action.userId, state.users)})
+      return Object.assign({}, state, {users: deleteUser(action.userId, state.users)});
+    case 'CREATE_USER':
+      return Object.assign({}, state, {users: state.users.concat([action.createdUser])});
     default:
       return state;
   }

@@ -14,4 +14,8 @@ function putUserModifications (user) {
   return axios.put(`/api/peoples/${user.id}`, user);
 }
 
-export { fetchUsers, fetchDetailUser, putUserModifications };
+function postNewUser (user) {
+  return axios.post('/api/peoples', user).then(response => response.data);
+}
+
+export { fetchUsers, fetchDetailUser, putUserModifications, postNewUser };
