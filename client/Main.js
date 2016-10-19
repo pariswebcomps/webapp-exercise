@@ -14,6 +14,7 @@ import reducers from "./reducers/reducers.js";
 
 import App from "./components/App.js";
 import Users from "./pages/Users.js";
+import UserDetail from "./pages/UserDetail.js";
 import UserForm from "./components/user/UserForm.js";
 
 const store = createStore(
@@ -32,6 +33,7 @@ const router = (
         <IndexRoute component={Users} />
         <Route path="user/edit/:userId" component={UserForm} />
         <Route path="user/new" component={UserForm} />
+        <Route path="user/detail/:userId" component={UserDetail} />
       </Route>
     </Router>
   </Provider>

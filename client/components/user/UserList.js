@@ -12,7 +12,7 @@ class UserList extends React.Component {
   renderUser(user) {
     return (
       <div className="col s12 m3" key={user.id}>
-        <UserCard {...user} onDelete={(userId) => this.deleteUser(userId)}/>
+        <UserCard {...user} onDelete={(userId) => this.deleteUser(userId)} enableActions={true} />
       </div>
     );
   }

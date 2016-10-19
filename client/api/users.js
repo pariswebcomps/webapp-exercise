@@ -7,7 +7,9 @@ function fetchUsers () {
 }
 
 function fetchDetailUser (userId) {
-  return axios.get(`/api/peoples/${userId}`).then(response => response.data);
+  return axios.get(`/api/peoples/${userId}`).then(response => {
+    return response.data;
+  });
 }
 
 function putUserModifications (user) {

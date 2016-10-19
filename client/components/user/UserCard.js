@@ -20,13 +20,26 @@ class UserCard extends React.Component {
           <UserInfo icon="md-phone" value={phone} />
           <UserInfo label="Manager" value={manager} />
         </div>
+        { this.renderActions() }
+      </div>
+    );
+  }
+
+  renderActions() {
+    const { enableActions, id } = this.props;
+
+    if (enableActions) {
+      return (
         <div className="card-action">
-          <button className="btn-flat"><i className="material-icons">zoom_in</i></button>
+          {/* <button className="btn-flat"><i className="material-icons">zoom_in</i></button> */}
+          <Link to={`/user/detail/${id}`} className="btn-flat"><i className="material-icons">zoom_in</i></Link>
           <Link to={`/user/edit/${id}`} className="btn-flat"><i className="material-icons">mode_edit</i></Link>
           <button className="btn-flat" onClick={() => this.onDelete()}><i className="material-icons">delete</i></button>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return;
+    }
   }
 
   onDelete() {
