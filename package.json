@@ -14,7 +14,8 @@
     "react-router-redux": "^4.0.6",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "uuid": "^2.0.3"
   },
   "scripts": {
     "start": "npm-run-all -p start:*",

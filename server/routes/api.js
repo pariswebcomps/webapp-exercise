@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('underscore');
+var uuid = require('uuid');
 var PEOPLES = require('./data/persons').peoples;
 
 
@@ -43,6 +44,15 @@ exports.update = function (req, res) {
   return res.status(200).json(person);
 };
 
+exports.create = function (req, res) {
+  var id = uuid.v1();
+
+  var person = Object.assign({}, req.body, {id: id});
+
+  PEOPLES.push(person);
+
+  return res.status(200).json(person);
+}
 
 function getParam(req, param) {
   return req.params[param];

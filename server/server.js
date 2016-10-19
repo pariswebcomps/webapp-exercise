@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
 app.get('/api/peoples', api.listAll);
 app.get('/api/peoples/:id', api.get);
 app.put('/api/peoples/:id', api.update);
-
+app.post('/api/peoples', api.create);
 
 app.listen(app.get('port'), function () {
   console.log('✔ Express server listening on http://localhost:%d/', app.get('port'));
