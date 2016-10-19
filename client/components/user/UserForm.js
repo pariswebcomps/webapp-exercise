@@ -31,7 +31,8 @@ class UserForm extends React.Component {
     const { canSubmit } = this.state;
     const isSubmitDisabled = !canSubmit;
     const classSubmitBtn = isSubmitDisabled ? "btn disabled" : "btn";
-    const { userDetail } = this.props;
+    const { userDetail, params } = this.props;
+    const userData = params.userId ? userDetail : {};
 
     return (
       <div className="container userForm row">
@@ -43,14 +44,14 @@ class UserForm extends React.Component {
                         <Input
                           name="firstname"
                           placeholder="First name"
-                          value={userDetail.firstname}
+                          value={userData.firstname}
                           required
                           validationErrors={{isDefaultRequiredValue: requiredErrorMessage}} />
 
                         <Input
                           name="lastname"
                           placeholder="Last name"
-                          value={userDetail.lastname}
+                          value={userData.lastname}
                           required
                           validationErrors={{isDefaultRequiredValue: requiredErrorMessage}} />
 
@@ -58,7 +59,7 @@ class UserForm extends React.Component {
                         <Input
                           name="email"
                           placeholder="email"
-                          value={userDetail.email}
+                          value={userData.email}
                           required
                           validations="isEmail"
                           validationErrors={{isDefaultRequiredValue: requiredErrorMessage, isEmail: "Please type a correct email"}} />
@@ -66,7 +67,7 @@ class UserForm extends React.Component {
                         <Input
                           name="phone"
                           placeholder="phone"
-                          value={userDetail.phone}
+                          value={userData.phone}
                           required
                           validationErrors={{isDefaultRequiredValue: requiredErrorMessage}} />
                   </div>
