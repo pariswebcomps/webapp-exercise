@@ -36,4 +36,8 @@ class UserCard extends React.Component {
   }
 }
 
+UserCard.defaultProps = {
+  photo: "static/images/profile.svg"
+};
+
 export default UserCard;
