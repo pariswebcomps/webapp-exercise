@@ -1,8 +1,5 @@
 "use strict";
 
-
-"use strict";
-
 import { createStore } from "redux";
 
 const INITIAL_STATE = {
