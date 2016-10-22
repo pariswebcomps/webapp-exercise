@@ -17,6 +17,22 @@ main =
 
 type alias Model = Int
 
+type alias Person =
+  { firstname : String
+  , lastname : String
+  , email : String
+  , phone : String
+  , manager : String
+  , location : String
+  , picture : String
+  }
+
+julie : Person
+julie = Person "Julie" "Law" "lol@soc.com" "0156610094" "Erika" "Paris" "https://randomuser.me/portraits/women/49.jpg"
+
+bob : Person
+bob = Person "Bob" "Dylan" "bobo@soc.com" "0949494994" "Paul" "Paris" "https://randomuser.me/portraits/men/39.jpg"
+
 
 -- UPDATE
 
@@ -59,49 +75,48 @@ view model =
         ]
       , div [ class "row" ]
         [ div [ class "col s12" ]
-        -- TODO: add Person type to refactor this code
-          [ renderPerson "Julie" "Law" "lol@soc.com" "0156610094" "Erika" "Paris" "https://randomuser.me/portraits/women/59.jpg"
-          , renderPerson "Bob" "Dylan" "bobo@soc.com" "0949494994" "Paul" "Paris" "https://randomuser.me/portraits/men/59.jpg"
+          [ renderPerson julie
+          , renderPerson bob
           ]
         ]
       ]
     ]
 
-renderPerson : String -> String -> String -> String -> String -> String -> String -> Html a
-renderPerson firstname lastname email phone manager location picture = div [ class "col s6" ]
+renderPerson : Person -> Html a
+renderPerson person = div [ class "col s6" ]
   [ div [ class "card-panel" ]
     [ div [ class "row" ]
       [ div [ class "col s7" ]
         [ div [ class "people-header layout vertical flex" ]
           [ a [ class "username", href "detail.html" ]
-            [ span [] [ text firstname ]
+            [ span [] [ text person.firstname ]
             , text " "
-            , span [ class "lastname" ] [ text lastname ]
+            , span [ class "lastname" ] [ text person.lastname ]
             ]
           ]
         , div [ class "people-data" ]
           [ div []
             [ img [ src "images/md-email.svg" ] []
-            , span [] [ text email ]
+            , span [] [ text person.email ]
             ]
           , div []
             [ img [ src "images/md-phone.svg" ] []
-            , span [] [ text phone ]
+            , span [] [ text person.phone ]
             ]
           , div []
             [ div []
               [ span [ class "label" ] [ text "Manager: " ]
-              , span [] [ text manager ]
+              , span [] [ text person.manager ]
               ]
             , div []
               [ span [ class "label" ] [ text "Location: " ]
-              , span [] [ text location ]
+              , span [] [ text person.location ]
               ]
             ]
           ]
         ]
       , div [ class "col s5" ]
-        [ img [ class "picture", src picture ] []
+        [ img [ class "picture", src person.picture ] []
         , img [ class "icon", src "images/md-map.svg" ] []
         , a [ href "edit.html" ]
           [ i [ class "icon material-icons" ] [ text "mode_edit" ] ]
@@ -111,6 +126,7 @@ renderPerson firstname lastname email phone manager location picture = div [ cla
       ]
     ]
   ]
+
 
 -- SUBSCRIPTIONS
 
