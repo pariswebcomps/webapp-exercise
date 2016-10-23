@@ -27,11 +27,11 @@ type alias Person =
   , picture : String
   }
 
-julie : Person
-julie = Person "Julie" "Law" "lol@soc.com" "0156610094" "Erika" "Paris" "https://randomuser.me/portraits/women/49.jpg"
-
-bob : Person
-bob = Person "Bob" "Dylan" "bobo@soc.com" "0949494994" "Paul" "Paris" "https://randomuser.me/portraits/men/39.jpg"
+-- TODO: get these data from the server
+persons : List Person
+persons = [ Person "Julie" "Law" "lol@soc.com" "0156610094" "Erika" "Paris" "https://randomuser.me/portraits/women/49.jpg"
+          , Person "Bob" "Dylan" "bobo@soc.com" "0949494994" "Paul" "Paris" "https://randomuser.me/portraits/men/39.jpg"
+          ]
 
 
 -- UPDATE
@@ -74,11 +74,7 @@ view model =
           ]
         ]
       , div [ class "row" ]
-        [ div [ class "col s12" ]
-          [ renderPerson julie
-          , renderPerson bob
-          ]
-        ]
+        [ div [ class "col s12" ] (List.map renderPerson persons) ]
       ]
     ]
 
