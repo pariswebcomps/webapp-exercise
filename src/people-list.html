@@ -1,0 +1,19 @@
+<template>
+  <require from="peopleResources/elements/people-card.html"></require>
+
+  <div class="container">
+    <h4>You have ${filteredPeople.length} contacts</h4>
+
+    <md-input md-label="Search" md-value.bind="searchQuery">
+      <i md-prefix class="material-icons">search</i>
+    </md-input>
+  </div>
+
+  <ul class="row">
+    <li class="col s12 m6 l6" repeat.for="contact of filteredPeople">
+      <md-card>
+        <people-card contact.bind="contact"></people-card>
+      </md-card>
+    </li>
+  </ul>
+</template>
