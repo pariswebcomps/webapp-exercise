@@ -79,7 +79,7 @@ view persons =
       ]
     , div [ class "container" ]
       [ div [ class "header row" ]
-        [ span [ class "col s6" ] [ text "You have 2 contacts" ] ]
+        [ renderNumberOfContacts (List.length persons) ]
       , div [ class "row" ]
         [ div [ class "col s12" ]
           [ Html.form [ class "col s12" ]
@@ -95,6 +95,15 @@ view persons =
         [ div [ class "col s12" ] (List.map renderPerson persons) ]
       ]
     ]
+
+renderNumberOfContacts : Int -> Html a
+renderNumberOfContacts number =
+  let
+    pluralized = if number > 1 then "s" else ""
+  in
+    span [ class "col s6" ]
+      [ text ("You have " ++ toString number ++ " contact" ++ pluralized) ]
+
 
 renderPerson : Person -> Html a
 renderPerson person = div [ class "col s6" ]
