@@ -1,0 +1,75 @@
+<!--
+@license MIT
+Copyright (c) 2016 Horacio "LostInBrittany" Gonzalez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="people-service">
+  <template>
+    <iron-ajax
+      id="getPeople"
+      url="{{apiUrl}}"
+      handle-as="json"
+      last-response="{{people}}"></iron-ajax>
+    <iron-ajax
+      id="getPersonById"
+      handle-as="json"
+      last-response="{{currentPerson}}"></iron-ajax>
+    <iron-ajax
+      id="updatePerson"
+      content-type="application/json"
+      method="PUT"
+      handle-as="json"
+      on-response="onUpdate"></iron-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'people-service',
+      properties: {
+        apiUrl:{
+          type:String,
+          value:"http://localhost:3001/api/peoples"
+        },
+        people: {
+          type: Array,
+          value: function() {
+            return [];
+          },
+          notify: true
+        },
+        currentPerson: {
+          type: Object,
+          value: function() {
+            return {};
+          },
+          notify: true
+        }
+      },
+
+      getPeople: function () {
+        this.$.getPeople.generateRequest();
+      },
+      getPersonById: function (personId) {
+        this.$.getPersonById.url=this.apiUrl+"/"+personId;
+        this.$.getPersonById.generateRequest();
+      },
+      updatePerson: function (person) {
+        this.$.updatePerson.url=this.apiUrl+"/"+person.id;
+        this.$.updatePerson.body=JSON.stringify(person);
+        this.$.updatePerson.generateRequest();
+      },
+      onUpdate: function (event, ironRequest) {
+        this.fire('updated-person',ironRequest.response);
+      },        
+    });
+  </script>
+</dom-module>

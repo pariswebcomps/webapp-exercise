@@ -1,0 +1,18 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/people-app.html",
+  "fragments": [
+    "src/people-list.html",
+    "src/people-detail.html",
+    "src/people-edit.html"
+  ],
+  "sourceGlobs": [
+   "src/**/*",
+   "images/**/*",
+   "bower.json"
+  ],
+  "includeDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}
