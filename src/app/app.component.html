@@ -1,0 +1,12 @@
+<md-toolbar color="accent">
+  <md-icon [routerLink]="['/home']" svgSrc="assets/images/md-home.svg"></md-icon>
+  <span>People</span>
+  <span class="flex"></span>
+  <span>
+
+    <md-icon [routerLink]="['/people']" svgSrc="assets/images/md-list.svg"></md-icon>
+  </span>
+</md-toolbar>
+<section>
+  <router-outlet></router-outlet>
+</section>

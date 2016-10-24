@@ -1,0 +1,25 @@
+:host md-card {
+  text-align: center;
+}
+
+:host md-card-content {
+  background-image: url('assets/images/bg.png');
+  background-position: center center;
+  background-repeat: repeat-y;
+  height: 360px;
+  width: 360px;
+  animation: animate-bg 30s linear infinite;
+}
+
+@keyframes animate-bg {
+  from { background-position: 0 0; }
+	to { background-position: 100% 0; }
+}
+
+:host span {
+  font-size: 10px;
+  text-align: center;
+  width: 100%;
+  display: inline-block;
+  color: gray;
+}

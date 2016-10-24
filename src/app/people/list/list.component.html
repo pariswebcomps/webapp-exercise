@@ -1,0 +1,13 @@
+<pwc-card
+  *ngFor="let person of people"
+  [person]="person"
+  detailUrl="/people/detail/"
+  mapUrl="/people/detail/"
+  editUrl="/people/edit/"
+  mapUrl="/people/map/"
+  (delete)="onDeletePerson($event)"
+></pwc-card>
+
+<button md-fab (click)="onReset()">
+  <md-icon class="material-icons md-24">cloud_upload</md-icon>
+</button>

@@ -1,0 +1,10 @@
+:host {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+:host pwc-card {
+  width: 412px;
+}

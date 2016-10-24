@@ -1,0 +1,10 @@
+<p>
+  <ng-content *ngIf="!videoStream" ></ng-content>
+
+  <button md-button name="button">Launch</button>
+
+  <video src="{{ videoStream }}" autoplay poster="##">
+
+  </video>
+
+</p>

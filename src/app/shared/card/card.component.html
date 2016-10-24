@@ -1,0 +1,80 @@
+<md-card class="md-whiteframe-2dp">
+   <md-card-title-group>
+      <img md-card-md-image src="{{ person.photo }}">
+      <md-card-title>
+
+        <!--  show <a> if 'detailUrl' is set -->
+        <a  [hidden]="!detailUrl" [routerLink]="[ detailUrl , person.id]">
+          <span>{{ person.firstname }} {{ person.lastname }}</span>
+        </a>
+
+        <!--  show <span> if 'detailUrl' is NOT set -->
+        <span [hidden]="!!detailUrl">{{ person.firstname }} {{ person.lastname }}</span>
+
+			</md-card-title>
+      <md-card-subtitle class="contact-info">
+        <md-icon svgSrc="assets/images/md-email.svg"></md-icon>
+        <a href="mailto:{{ person.firstname }} {{ person.lastname }}&lt;{{ person.email }}&gt;" title="Send an email to {{ person.firstname }} {{ person.lastname }}" class="truncate">{{ person.email }}</a>
+      </md-card-subtitle>
+      <md-card-subtitle class="contact-info">
+        <md-icon svgSrc="assets/images/md-phone.svg"></md-icon>
+        <a href="tel:{{ person.phone }}" title="Call {{ person.firstname }}">{{ person.phone }}</a>
+      </md-card-subtitle>
+
+   </md-card-title-group>
+	 <md-card-content>
+
+     <div class="flex__rows">
+       <div>
+         <p>
+           Manager&nbsp;:&nbsp;
+           <a *ngIf="person.managerId" [routerLink]="[ detailUrl , person.managerId || '']">{{ person.manager }}</a>
+           <span *ngIf="!person.managerId">N/A</span>
+         </p>
+         <p>
+           Location&nbsp;:&nbsp;<span>{{ person.entity }}</span>
+         </p>
+       </div>
+
+       <div class="action-buttons" >
+         <a md-button title="Locate" [routerLink]="[ mapUrl , person.id || '']">
+           <md-icon svgSrc="assets/images/md-map.svg"></md-icon>
+         </a>
+
+         <a *ngIf="!!editUrl" md-button title="Edit" [routerLink]="[ editUrl , person.id || '']">
+           <md-icon svgSrc="assets/images/md-edit.svg"></md-icon>
+         </a>
+
+         <button *ngIf="!expand" md-button title="Delete" (click)="onDelete(person)">
+            <md-icon svgSrc="assets/images/md-delete.svg"></md-icon>
+         </button>
+       </div>
+     </div>
+
+     <div *ngIf="expand">
+       <h3>Skills</h3>
+       <p class="flex__rows flex__start">
+         <button class="button__skill" md-raised-button *ngFor="let skill of person.skills" >
+           {{ skill }}
+         </button>
+       </p>
+     </div>
+
+	 </md-card-content>
+
+   <md-card-actions class="flex__rows flex__center" *ngIf="expand">
+     <a href="{{ person.links?.twitter }} ">
+        <md-icon svgSrc="assets/images/md-twitter.svg"></md-icon>
+      </a>
+     <a href="{{ person.links?.slack }} ">
+        <md-icon svgSrc="assets/images/md-slack.svg"></md-icon>
+      </a>
+     <a href="{{ person.links?.github }} ">
+        <md-icon svgSrc="assets/images/md-github.svg"></md-icon>
+      </a>
+     <a href="{{ person.links?.linkedin }} ">
+        <md-icon svgSrc="assets/images/md-linkedin.svg"></md-icon>
+      </a>
+   </md-card-actions>
+
+</md-card>

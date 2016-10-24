@@ -1,0 +1,20 @@
+:host section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+:host md-toolbar md-icon {
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+:host md-toolbar {
+  background: #E84F0E;
+}
+
+.flex {
+  flex: 1 1 auto;
+}

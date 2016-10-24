@@ -1,8 +1,20 @@
 {
-  "name": "webapp-exercise",
-  "dependencies": {},
-  "devDependencies": {
-    "jquery": "3.1.0",
-    "materialize": "0.97.6"
+  "name": "paris-web-component-angular2",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Wassim CHEGHAM <github@wassimchegham.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/manekinekko/webapp-exercise",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "google-map": "GoogleWebComponents/google-map#^1.1.13"
   }
 }
