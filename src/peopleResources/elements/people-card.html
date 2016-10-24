@@ -1,0 +1,20 @@
+<template bindable="contact">
+  <div class="row">
+    <div class="col">
+      <h4><a route-href="route: people-show; params.bind: {id: contact.id}">${contact.firstname | capitalize} ${contact.lastname | uppercase}</a></h4>
+      <p class="valign-wrapper"><i class="material-icons">email</i>&nbsp;<span class="valign">${contact.email}</span></p>
+      <p class="valign-wrapper"><i class="material-icons">phone</i>&nbsp;<span class="valign">${contact.phone}</span></p>
+      <p>Manager: ${contact.manager}</p>
+    </div>
+    <div class="right">
+      <img src.bind="contact.photo"/>
+      <p class="right-align">
+        <i class="material-icons">map</i>
+        <a route-href="route: people-edit; params.bind: {id: contact.id}"><i class="material-icons">edit</i></a>
+        <a route-href="route: people-edit; params.bind: {id: contact.id}"><i class="material-icons">delete</i></a>
+      </p>
+    </div>
+  </div>
+  <slot name="skills-tags"></slot>
+  <slot name="social-links"></slot>
+</template>
