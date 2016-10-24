@@ -1,41 +1,28 @@
 # Meetup Paris WebComponents - WebApp Exercise
 
-Specs and scaffold of a webapp to develop to compare frameworks implementation.
+This is the Cycle.js implementation of the [webapp exercise](https://github.com/pariswebcomps/webapp-exercise).
 
-## Expected result
+The selected stack for this implementation:
 
-The `static/` directory contains HTML files of the different screen that you should implement.
+- [Cycle.js](https://github.com/cyclejs/cyclejs) running with [xstream](http://staltz.com/xstream/).
+- [Ramda](http://ramdajs.com/) as a utils library
+- [Tape](https://github.com/substack/tape) for unit testing
+- [TSLint](http://palantir.github.io/tslint/) for code linting
+- [Webpack](https://webpack.github.io/docs/) as a runner
 
-These files are static. You need to implement features (filtering the list, validating the form…) in your webapp.
+The application is developed in [TypeScript](https://www.typescriptlang.org/) as Cycle.js strongly encourages it.
 
-## About your talk at Paris WebComponents
+## Setup
 
-It should last 20 minutes + 5 minutes of questions.
+Install dependencies with:
 
-What will be expected during your talk at Paris WebComponents:
-
-- present the ecosystem of your framework (eg., do you have DevTools? which task runner do you use?…)
-- present the `detail.html` and `list.html` parts explaining how you achieved re-usability of your components
-- present how routing (= navigation) works
-- present how you handle form validation with the `edit.html` part
-- explain the philosophy and specificities of your framework all along
-
-You'll be awesome!
-
-## Set up
-
-After cloning the repo, run:
-
-    npm install
-    bower install
-
-This will install required packages for the server to run (npm) and the static examples to work (bower).
-
-You are free to drop bower if you wish when implementing your solution. Correct versions of Materialize & jQuery are included in the `package.json` so you can just use npm if that's your thing.
+    npm i
 
 ## Start the server
 
-So far, `npm start` serves the REST data at `http://localhost:3001`:
+This command serves the REST data at `http://localhost:3001`:
+
+    npm start
 
 This provides you following routes:
 
@@ -44,3 +31,9 @@ Method | Route              | Result
 GET    | `/api/peoples`     | List all peoples
 GET    | `/api/peoples/:id` | Get details about `:id`
 PUT    | `/api/peoples/:id` | Update `:id`
+
+## Run tests
+
+To run unit tests with a nicely formatted report:
+
+    npm run unit-test-diff --silent
