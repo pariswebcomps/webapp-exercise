@@ -1,6 +1,9 @@
 import Html exposing (..)
 import Html.App as App
 import Html.Attributes exposing (..)
+import Http
+import Task
+import Json.Decode as Json
 
 
 main : Program Never
@@ -15,40 +18,55 @@ main =
 
 -- MODEL
 
-type alias Model = Int
-
 type alias Person =
   { firstname : String
   , lastname : String
   , email : String
   , phone : String
   , manager : String
-  , location : String
-  , picture : String
+  , photo : String
   }
 
--- TODO: get these data from the server
-persons : List Person
-persons = [ Person "Julie" "Law" "lol@soc.com" "0156610094" "Erika" "Paris" "https://randomuser.me/portraits/women/49.jpg"
-          , Person "Bob" "Dylan" "bobo@soc.com" "0949494994" "Paul" "Paris" "https://randomuser.me/portraits/men/39.jpg"
-          ]
-
+type alias Persons = List Person
 
 -- UPDATE
 
-type Msg = Nope
+type Msg = FetchSucceed Persons | FetchFailed Http.Error
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+update : Msg -> Persons -> (Persons, Cmd Msg)
+update msg persons =
   case msg of
-    Nope ->
-      (0, Cmd.none)
+    FetchSucceed newPersons ->
+      (newPersons, Cmd.none)
+
+    FetchFailed _ ->
+      (persons, Cmd.none)
+
+
+fetchPersons : Cmd Msg
+fetchPersons =
+  let
+    url = "http://localhost:3001/api/peoples"
+  in
+    Task.perform FetchFailed FetchSucceed (Http.get decodePeoplesUrl url)
+
+decodePeoplesUrl : Json.Decoder Persons
+decodePeoplesUrl =
+  Json.list
+    (Json.object6 Person
+      (Json.at ["firstname"] Json.string)
+      (Json.at ["lastname"] Json.string)
+      (Json.at ["email"] Json.string)
+      (Json.at ["phone"] Json.string)
+      (Json.at ["manager"] Json.string)
+      (Json.at ["photo"] Json.string)
+    )
 
 
 -- VIEW
 
-view : Model -> Html Msg
-view model =
+view : Persons -> Html Msg
+view persons =
   div []
     [ nav []
       [ div [ class "nav-wrapper" ]
@@ -104,15 +122,11 @@ renderPerson person = div [ class "col s6" ]
               [ span [ class "label" ] [ text "Manager: " ]
               , span [] [ text person.manager ]
               ]
-            , div []
-              [ span [ class "label" ] [ text "Location: " ]
-              , span [] [ text person.location ]
-              ]
             ]
           ]
         ]
       , div [ class "col s5" ]
-        [ img [ class "picture", src person.picture ] []
+        [ img [ class "picture", src person.photo ] []
         , img [ class "icon", src "images/md-map.svg" ] []
         , a [ href "edit.html" ]
           [ i [ class "icon material-icons" ] [ text "mode_edit" ] ]
@@ -126,13 +140,13 @@ renderPerson person = div [ class "col s6" ]
 
 -- SUBSCRIPTIONS
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions : Persons -> Sub Msg
+subscriptions persons =
   Sub.none
 
 
 -- INIT
 
-init : (Model, Cmd Msg)
+init : (Persons, Cmd Msg)
 init =
-  (0, Cmd.none)
+  ([], fetchPersons)
