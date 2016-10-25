@@ -1,19 +1,30 @@
 import Html exposing (..)
-import Html.App as App
 import Html.Attributes exposing (..)
 import Http
-import Task
 import Json.Decode as Json
+import Navigation
+import Task
 
 
 main : Program Never
 main =
-  App.program
+  Navigation.program urlParser
     { init = init
     , view = view
     , update = update
+    , urlUpdate = urlUpdate
     , subscriptions = subscriptions
     }
+
+
+-- URL PARSERS
+
+fromUrl : String -> Result String String
+fromUrl url = Ok ""
+
+urlParser : Navigation.Parser (Result String String)
+urlParser =
+  Navigation.makeParser (fromUrl << .hash)
 
 
 -- MODEL
@@ -29,6 +40,7 @@ type alias Person =
 
 type alias Persons = List Person
 
+
 -- UPDATE
 
 type Msg = FetchSucceed Persons | FetchFailed Http.Error
@@ -42,6 +54,14 @@ update msg persons =
     FetchFailed _ ->
       (persons, Cmd.none)
 
+urlUpdate : Result String String -> Persons -> (Persons, Cmd Msg)
+urlUpdate result persons =
+  case result of
+    Ok _ ->
+      (persons, fetchPersons)
+
+    Err _ ->
+      (persons, Navigation.modifyUrl "")
 
 fetchPersons : Cmd Msg
 fetchPersons =
@@ -156,6 +176,6 @@ subscriptions persons =
 
 -- INIT
 
-init : (Persons, Cmd Msg)
-init =
-  ([], fetchPersons)
+init : Result String String -> (Persons, Cmd Msg)
+init result =
+  urlUpdate result []
