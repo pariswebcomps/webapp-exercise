@@ -20,7 +20,7 @@ class UserDetail extends React.Component {
 
     return (
       <div className="row">
-        <div className="col s12 m6 offset-m3">
+        <div className="col s12 m4 offset-m4">
           <UserCard {...userDetail} />
         </div>
       </div>

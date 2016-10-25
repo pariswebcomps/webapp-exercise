@@ -9,7 +9,7 @@ const Input = React.createClass({
   render() {
     const { placeholder } = this.props;
     const isValid = !this.getErrorMessage();
-    const inputValidClass = isValid ? "valid" : "invalid";
+    const inputValidClass = this.isPristine() ? "" : isValid ? "valid" : "invalid";
 
     return (
       <div className="row">
@@ -22,7 +22,7 @@ const Input = React.createClass({
                 value={this.getValue()} />
 
                 <div className="input-field__error">
-                  { this.getErrorMessage() }
+                  { this.isPristine() ? null : this.getErrorMessage() }
                 </div>
           </div>
       </div>
