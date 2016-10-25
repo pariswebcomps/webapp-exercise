@@ -97,24 +97,27 @@ view persons =
           [ li [] [ a [] [ text "Peoples" ] ] ]
         ]
       ]
-    , div [ class "container" ]
-      [ div [ class "header row" ]
-        [ renderNumberOfContacts (List.length persons) ]
-      , div [ class "row" ]
-        [ div [ class "col s12" ]
-          [ Html.form [ class "col s12" ]
-            [ div [ class "input-field" ]
-              [ i [ class "material-icons prefix" ] [ text "search" ]
-              , input [ id "search" ] []
-              , label [ class "active", for "search" ] [ text "Search" ]
-              ]
-            ]
+    , renderPageList persons
+    ]
+
+renderPageList : Persons -> Html a
+renderPageList persons = div [ class "container" ]
+  [ div [ class "header row" ]
+    [ renderNumberOfContacts (List.length persons) ]
+  , div [ class "row" ]
+    [ div [ class "col s12" ]
+      [ Html.form [ class "col s12" ]
+        [ div [ class "input-field" ]
+          [ i [ class "material-icons prefix" ] [ text "search" ]
+          , input [ id "search" ] []
+          , label [ class "active", for "search" ] [ text "Search" ]
           ]
         ]
-      , div [ class "row" ]
-        [ div [ class "col s12" ] (List.map renderPerson persons) ]
       ]
     ]
+  , div [ class "row" ]
+    [ div [ class "col s12" ] (List.map renderPerson persons) ]
+  ]
 
 renderNumberOfContacts : Int -> Html a
 renderNumberOfContacts number =
@@ -123,7 +126,6 @@ renderNumberOfContacts number =
   in
     span [ class "col s6" ]
       [ text ("You have " ++ toString number ++ " contact" ++ pluralized) ]
-
 
 renderPerson : Person -> Html a
 renderPerson person = div [ class "col s6" ]
