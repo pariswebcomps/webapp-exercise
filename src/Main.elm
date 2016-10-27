@@ -1,14 +1,17 @@
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Http
 import Json.Decode as Json
 import Navigation
+import String exposing (..)
 import Task
+import UrlParser exposing (Parser, (</>), format, oneOf, s, string)
 
 
 main : Program Never
 main =
-  Navigation.program urlParser
+  Navigation.program (Navigation.makeParser hashParser)
     { init = init
     , view = view
     , update = update
@@ -19,18 +22,32 @@ main =
 
 -- URL PARSERS
 
-fromUrl : String -> Result String String
-fromUrl url = Ok ""
+toHash : Page -> String
+toHash page =
+  case page of
+    Home ->
+      "#"
 
-urlParser : Navigation.Parser (Result String String)
-urlParser =
-  Navigation.makeParser (fromUrl << .hash)
+    Details id ->
+      "#details/" ++ id
+
+hashParser : Navigation.Location -> Result String Page
+hashParser location =
+  UrlParser.parse identity pageParser (String.dropLeft 1 location.hash)
+
+pageParser : Parser (Page -> a) a
+pageParser =
+  oneOf
+    [ format Home (UrlParser.s "")
+    , format Details (UrlParser.s "details" </> string)
+    ]
 
 
 -- MODEL
 
 type alias Person =
-  { firstname : String
+  { id: String
+  , firstname : String
   , lastname : String
   , email : String
   , phone : String
@@ -40,28 +57,37 @@ type alias Person =
 
 type alias Persons = List Person
 
+type Page = Home | Details String
+
+type alias Model = { page: Page, persons: Persons }
+
 
 -- UPDATE
 
-type Msg = FetchSucceed Persons | FetchFailed Http.Error
+type Msg = FetchSucceed Persons
+         | FetchFailed Http.Error
+         | NavigateTo Page
 
-update : Msg -> Persons -> (Persons, Cmd Msg)
-update msg persons =
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
   case msg of
     FetchSucceed newPersons ->
-      (newPersons, Cmd.none)
+      ({ model | persons = newPersons }, Cmd.none)
 
     FetchFailed _ ->
-      (persons, Cmd.none)
+      (model, Cmd.none)
 
-urlUpdate : Result String String -> Persons -> (Persons, Cmd Msg)
-urlUpdate result persons =
+    NavigateTo page ->
+      (model, Navigation.newUrl (toHash page))
+
+urlUpdate : Result String Page -> Model -> (Model, Cmd Msg)
+urlUpdate result model =
   case result of
-    Ok _ ->
-      (persons, fetchPersons)
+    Ok newPage ->
+      ({ model | page = newPage }, fetchPersons)
 
     Err _ ->
-      (persons, Navigation.modifyUrl "")
+      (model, Cmd.none)
 
 fetchPersons : Cmd Msg
 fetchPersons =
@@ -73,7 +99,8 @@ fetchPersons =
 decodePeoplesUrl : Json.Decoder Persons
 decodePeoplesUrl =
   Json.list
-    (Json.object6 Person
+    (Json.object7 Person
+      (Json.at ["id"] Json.string)
       (Json.at ["firstname"] Json.string)
       (Json.at ["lastname"] Json.string)
       (Json.at ["email"] Json.string)
@@ -85,23 +112,42 @@ decodePeoplesUrl =
 
 -- VIEW
 
-view : Persons -> Html Msg
-view persons =
+-- TODO: handle navigation through links
+view : Model -> Html Msg
+view model =
   div []
     [ nav []
       [ div [ class "nav-wrapper" ]
-        [ a [] [ img [ class "logo", src "images/logo-people.svg" ] [] ]
+        [ a [ onClick (NavigateTo Home) ]
+          [ img [ class "logo", src "images/logo-people.svg" ] [] ]
         , ul
           [ id "nav-mobile"
           , class "right hide-on-med-and-down" ]
-          [ li [] [ a [] [ text "Peoples" ] ] ]
+          [ li [] [ a [ onClick (NavigateTo Home) ] [ text "Peoples" ] ] ]
         ]
       ]
-    , renderPageList persons
+    , renderPage model
     ]
 
-renderPageList : Persons -> Html a
-renderPageList persons = div [ class "container" ]
+renderPage : Model -> Html Msg
+renderPage model =
+  case model.page of
+    Home ->
+      renderHome model.persons
+
+    Details id ->
+      model.persons
+        |> getPersonWithId id
+        |> renderDetails
+
+getPersonWithId : String -> Persons -> Maybe Person
+getPersonWithId id persons =
+  persons
+    |> List.filter (\person -> person.id == id)
+    |> List.head
+
+renderHome : Persons -> Html Msg
+renderHome persons = div [ class "container" ]
   [ div [ class "header row" ]
     [ renderNumberOfContacts (List.length persons) ]
   , div [ class "row" ]
@@ -119,6 +165,15 @@ renderPageList persons = div [ class "container" ]
     [ div [ class "col s12" ] (List.map renderPerson persons) ]
   ]
 
+renderDetails : Maybe Person -> Html a
+renderDetails maybe =
+  case maybe of
+    Just person ->
+      div [ class "container" ] [ text ("Hello " ++ person.firstname) ]
+
+    Nothing ->
+      div [ class "container" ] [ text "Nobody's here…" ]
+
 renderNumberOfContacts : Int -> Html a
 renderNumberOfContacts number =
   let
@@ -127,13 +182,13 @@ renderNumberOfContacts number =
     span [ class "col s6" ]
       [ text ("You have " ++ toString number ++ " contact" ++ pluralized) ]
 
-renderPerson : Person -> Html a
+renderPerson : Person -> Html Msg
 renderPerson person = div [ class "col s6" ]
   [ div [ class "card-panel" ]
     [ div [ class "row" ]
       [ div [ class "col s7" ]
         [ div [ class "people-header layout vertical flex" ]
-          [ a [ class "username", href "detail.html" ]
+          [ a [ class "username", onClick (NavigateTo (Details person.id)) ]
             [ span [] [ text person.firstname ]
             , text " "
             , span [ class "lastname" ] [ text person.lastname ]
@@ -161,8 +216,6 @@ renderPerson person = div [ class "col s6" ]
         , img [ class "icon", src "images/md-map.svg" ] []
         , a [ href "edit.html" ]
           [ i [ class "icon material-icons" ] [ text "mode_edit" ] ]
-        , a [ href "list.html" ]
-          [ i [ class "icon material-icons" ] [ text "delete" ] ]
         ]
       ]
     ]
@@ -171,13 +224,13 @@ renderPerson person = div [ class "col s6" ]
 
 -- SUBSCRIPTIONS
 
-subscriptions : Persons -> Sub Msg
-subscriptions persons =
+subscriptions : Model -> Sub Msg
+subscriptions model =
   Sub.none
 
 
 -- INIT
 
-init : Result String String -> (Persons, Cmd Msg)
+init : Result String Page -> (Model, Cmd Msg)
 init result =
-  urlUpdate result []
+  urlUpdate result (Model Home [])
