@@ -32,6 +32,9 @@ toHash page =
     Details id ->
       "#details/" ++ id
 
+    Edit id ->
+      "#edit/" ++ id
+
 hashParser : Navigation.Location -> Result String Page
 hashParser location =
   UrlParser.parse identity pageParser (String.dropLeft 1 location.hash)
@@ -41,6 +44,7 @@ pageParser =
   oneOf
     [ format Home (UrlParser.s "")
     , format Details (UrlParser.s "details" </> string)
+    , format Edit (UrlParser.s "edit" </> string)
     ]
 
 
@@ -67,7 +71,7 @@ type alias Links =
 
 type alias Persons = List Person
 
-type Page = Home | Details String
+type Page = Home | Details String | Edit String
 
 type alias Model = { page: Page, persons: Persons }
 
@@ -131,7 +135,6 @@ decodeLinks =
 
 -- VIEW
 
--- TODO: handle navigation through links
 view : Model -> Html Msg
 view model =
   div []
@@ -158,6 +161,11 @@ renderPage model =
       model.persons
         |> getPersonWithId id
         |> renderDetails
+
+    Edit id ->
+      model.persons
+        |> getPersonWithId id
+        |> renderEdit
 
 getPersonWithId : String -> Persons -> Maybe Person
 getPersonWithId id persons =
@@ -194,6 +202,43 @@ renderDetails maybe =
 
     Nothing ->
       div [ class "container" ] [ text "Nobody's here…" ]
+
+renderEdit : Maybe Person -> Html Msg
+renderEdit maybe =
+  case maybe of
+    Just person ->
+      div [ class "container" ]
+        [ div [ class "movieCardForm row" ]
+          [ Html.form [ class "form col s12 card z-depth-3" ]
+            [ div [ class "card-content" ]
+              [ span [ class "card-title" ] [ text "Contact information" ]
+              , renderInput "first_name" "Firstname" person.firstname
+              , renderInput "last_name" "Lastname" person.lastname
+              , renderInput "email" "Email" person.email
+              , renderInput "phone" "Phone number" person.phone
+              ]
+            , div [ class "card-action" ]
+              -- TODO: handle Cancel
+              [ a [ class "cancel btn waves-effect waves-light deep-orange m-right", href "#" ]
+                [ text "Cancel" ]
+              -- TODO: handle Submit
+              , a [ class "btn waves-effect waves-light", href "#" ] [ text "Submit" ]
+              ]
+            ]
+          ]
+        ]
+
+    Nothing ->
+      div [ class "container" ] [ text "There is nobody to edit mate!" ]
+
+renderInput : String -> String -> String -> Html a
+renderInput idText labelText valueText =
+  div [ class "row" ] [
+    div [ class "input-field col s12" ]
+      [ input [ id idText, class "validate", value valueText, required True ] []
+      , label [ for idText, class "active" ] [ text labelText ]
+      ]
+  ]
 
 renderNumberOfContacts : Int -> Html a
 renderNumberOfContacts number =
@@ -259,7 +304,7 @@ renderPersonCard person =
     , div [ class "col s5" ]
       [ img [ class "picture", src person.photo ] []
       , img [ class "icon", src "images/md-map.svg" ] []
-      , a [ href "edit.html" ]
+      , a [ onClick (NavigateTo (Edit person.id)) ]
         [ i [ class "icon material-icons" ] [ text "mode_edit" ] ]
       ]
     ]
