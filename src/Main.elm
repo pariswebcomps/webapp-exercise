@@ -71,7 +71,9 @@ type alias Links =
 
 type alias Persons = List Person
 
-type Page = Home | Details String | Edit String
+type Page = Home
+          | Details String
+          | Edit String
 
 type alias Model = { page: Page, persons: Persons }
 
@@ -136,6 +138,7 @@ decodeLinks =
     |> JsonPipeline.required "slack" Json.string
     |> JsonPipeline.required "github" Json.string
     |> JsonPipeline.required "linkedin" Json.string
+
 
 -- VIEW
 
