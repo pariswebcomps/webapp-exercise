@@ -198,7 +198,12 @@ renderDetails maybe =
   case maybe of
     Just person ->
       div [ class "container" ]
-        [ div [ class "row" ] [ renderDetailedPerson person ] ]
+        [ div [ class "row" ] [ renderDetailedPerson person ]
+        , div [ class "fixed-action-btn horizontal edit-btn" ]
+          [ a [ class "btn-floating btn-large red", onClick (NavigateTo (Edit person.id)) ]
+            [ i [ class "large material-icons" ] [ text "mode_edit" ] ]
+          ]
+        ]
 
     Nothing ->
       div [ class "container" ] [ text "Nobody's here…" ]
