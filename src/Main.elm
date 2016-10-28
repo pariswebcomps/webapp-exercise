@@ -216,27 +216,32 @@ renderDetailedPerson person =
       , div [ class "skills" ]
         (h3 [] [ text "Skills" ]
           :: List.map (\skill -> a [ class "btn-large" ] [ text skill ]) person.skills)
-      , div [ class "links row" ]
-        [ a [ href person.links.twitter ] [ img [ src "images/md-twitter.svg" ] [] ]
-        , a [ href person.links.slack ] [ img [ src "images/md-slack.svg" ] [] ]
-        , a [ href person.links.github ] [ img [ src "images/md-github.svg" ] [] ]
-        , a [ href person.links.linkedin ] [ img [ src "images/md-linkedin.svg" ] [] ]
+      , div [ class "row center-align" ]
+        [ renderPersonLink person.links.twitter "twitter"
+        , renderPersonLink person.links.slack "slack"
+        , renderPersonLink person.links.github "github"
+        , renderPersonLink person.links.linkedin "linkedin"
         ]
       ]
     ]
+
+renderPersonLink : String -> String -> Html Msg
+renderPersonLink hrefText imageType =
+  a [ href hrefText ]
+    [ img [ class "pad-horizontal", src ("images/md-" ++ imageType ++ ".svg") ] [] ]
 
 renderPersonCard : Person -> Html Msg
 renderPersonCard person =
   div [ class "row" ]
     [ div [ class "col s7" ]
-      [ div [ class "people-header layout vertical flex" ]
+      [ div [ class "layout vertical flex" ]
         [ a [ class "username", onClick (NavigateTo (Details person.id)) ]
           [ span [] [ text person.firstname ]
           , text " "
-          , span [ class "lastname" ] [ text person.lastname ]
+          , span [ class "uppercase" ] [ text person.lastname ]
           ]
         ]
-      , div [ class "people-data" ]
+      , div [ class "pad-top" ]
         [ div []
           [ img [ src "images/md-email.svg" ] []
           , span [] [ text person.email ]
@@ -245,12 +250,10 @@ renderPersonCard person =
           [ img [ src "images/md-phone.svg" ] []
           , span [] [ text person.phone ]
           ]
-        , div []
-          [ div []
-            [ span [ class "label" ] [ text "Manager: " ]
-            , span [] [ text person.manager ]
-            ]
-          ]
+        ]
+      , div []
+        [ span [ class "label" ] [ text "Manager: " ]
+        , span [] [ text person.manager ]
         ]
       ]
     , div [ class "col s5" ]
