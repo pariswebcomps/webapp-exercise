@@ -81,6 +81,7 @@ type alias Model = { page: Page, persons: Persons }
 type Msg = FetchSucceed Persons
          | FetchFailed Http.Error
          | NavigateTo Page
+         | NavigateBack
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -93,6 +94,9 @@ update msg model =
 
     NavigateTo page ->
       (model, Navigation.newUrl (toHash page))
+
+    NavigateBack ->
+      (model, Navigation.back 1)
 
 urlUpdate : Result String Page -> Model -> (Model, Cmd Msg)
 urlUpdate result model =
@@ -223,8 +227,10 @@ renderEdit maybe =
               , renderInput "phone" "Phone number" person.phone
               ]
             , div [ class "card-action" ]
-              -- TODO: handle Cancel
-              [ a [ class "cancel btn waves-effect waves-light deep-orange m-right", href "#" ]
+              [ a
+                [ class "cancel btn waves-effect waves-light deep-orange m-right"
+                , onClick NavigateBack
+                ]
                 [ text "Cancel" ]
               -- TODO: handle Submit
               , a [ class "btn waves-effect waves-light", href "#" ] [ text "Submit" ]
