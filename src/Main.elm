@@ -147,29 +147,31 @@ getPersonWithId id persons =
     |> List.head
 
 renderHome : Persons -> Html Msg
-renderHome persons = div [ class "container" ]
-  [ div [ class "header row" ]
-    [ renderNumberOfContacts (List.length persons) ]
-  , div [ class "row" ]
-    [ div [ class "col s12" ]
-      [ Html.form [ class "col s12" ]
-        [ div [ class "input-field" ]
-          [ i [ class "material-icons prefix" ] [ text "search" ]
-          , input [ id "search" ] []
-          , label [ class "active", for "search" ] [ text "Search" ]
+renderHome persons =
+  div [ class "container" ]
+    [ div [ class "header row" ]
+      [ renderNumberOfContacts (List.length persons) ]
+    , div [ class "row" ]
+      [ div [ class "col s12" ]
+        [ Html.form [ class "col s12" ]
+          [ div [ class "input-field" ]
+            [ i [ class "material-icons prefix" ] [ text "search" ]
+            , input [ id "search" ] []
+            , label [ class "active", for "search" ] [ text "Search" ]
+            ]
           ]
         ]
       ]
+    , div [ class "row" ]
+      [ div [ class "col s12" ] (List.map renderPerson persons) ]
     ]
-  , div [ class "row" ]
-    [ div [ class "col s12" ] (List.map renderPerson persons) ]
-  ]
 
-renderDetails : Maybe Person -> Html a
+renderDetails : Maybe Person -> Html Msg
 renderDetails maybe =
   case maybe of
     Just person ->
-      div [ class "container" ] [ text ("Hello " ++ person.firstname) ]
+      div [ class "container" ]
+        [ div [ class "row" ] [ renderDetailedPerson person ] ]
 
     Nothing ->
       div [ class "container" ] [ text "Nobody's here…" ]
@@ -183,43 +185,64 @@ renderNumberOfContacts number =
       [ text ("You have " ++ toString number ++ " contact" ++ pluralized) ]
 
 renderPerson : Person -> Html Msg
-renderPerson person = div [ class "col s6" ]
-  [ div [ class "card-panel" ]
-    [ div [ class "row" ]
-      [ div [ class "col s7" ]
-        [ div [ class "people-header layout vertical flex" ]
-          [ a [ class "username", onClick (NavigateTo (Details person.id)) ]
-            [ span [] [ text person.firstname ]
-            , text " "
-            , span [ class "lastname" ] [ text person.lastname ]
-            ]
+renderPerson person =
+  div [ class "col s6" ]
+    [ div [ class "card-panel" ] [ renderPersonCard person ] ]
+
+renderDetailedPerson : Person -> Html Msg
+renderDetailedPerson person =
+  div [ class "col s6 offset-s3" ]
+    [ div [ class "card-panel" ]
+      [ renderPersonCard person
+        , div [ class "skills" ]
+          [ h3 [] [ text "Skills" ]
+          -- TODO: loop through items
+          , a [ class "btn-large" ] [ text "JS" ]
           ]
-        , div [ class "people-data" ]
-          [ div []
-            [ img [ src "images/md-email.svg" ] []
-            , span [] [ text person.email ]
-            ]
-          , div []
-            [ img [ src "images/md-phone.svg" ] []
-            , span [] [ text person.phone ]
-            ]
-          , div []
-            [ div []
-              [ span [ class "label" ] [ text "Manager: " ]
-              , span [] [ text person.manager ]
-              ]
-            ]
+        , div [ class "links row" ]
+          [ a [ href "#" ] [ img [ src "images/md-twitter.svg" ] [] ]
+          , a [ href "#" ] [ img [ src "images/md-slack.svg" ] [] ]
+          , a [ href "#" ] [ img [ src "images/md-github.svg" ] [] ]
+          , a [ href "#" ] [ img [ src "images/md-linkedin.svg" ] [] ]
           ]
-        ]
-      , div [ class "col s5" ]
-        [ img [ class "picture", src person.photo ] []
-        , img [ class "icon", src "images/md-map.svg" ] []
-        , a [ href "edit.html" ]
-          [ i [ class "icon material-icons" ] [ text "mode_edit" ] ]
-        ]
       ]
     ]
-  ]
+
+renderPersonCard : Person -> Html Msg
+renderPersonCard person =
+  div [ class "row" ]
+    [ div [ class "col s7" ]
+      [ div [ class "people-header layout vertical flex" ]
+        [ a [ class "username", onClick (NavigateTo (Details person.id)) ]
+          [ span [] [ text person.firstname ]
+          , text " "
+          , span [ class "lastname" ] [ text person.lastname ]
+          ]
+        ]
+      , div [ class "people-data" ]
+        [ div []
+          [ img [ src "images/md-email.svg" ] []
+          , span [] [ text person.email ]
+          ]
+        , div []
+          [ img [ src "images/md-phone.svg" ] []
+          , span [] [ text person.phone ]
+          ]
+        , div []
+          [ div []
+            [ span [ class "label" ] [ text "Manager: " ]
+            , span [] [ text person.manager ]
+            ]
+          ]
+        ]
+      ]
+    , div [ class "col s5" ]
+      [ img [ class "picture", src person.photo ] []
+      , img [ class "icon", src "images/md-map.svg" ] []
+      , a [ href "edit.html" ]
+        [ i [ class "icon material-icons" ] [ text "mode_edit" ] ]
+      ]
+    ]
 
 
 -- SUBSCRIPTIONS
