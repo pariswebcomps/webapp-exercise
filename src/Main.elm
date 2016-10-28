@@ -3,6 +3,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
 import Json.Decode as Json
+import Json.Decode.Pipeline as JsonPipeline
 import Navigation
 import String exposing (..)
 import Task
@@ -53,6 +54,15 @@ type alias Person =
   , phone : String
   , manager : String
   , photo : String
+  , skills : List String
+  , links : Links
+  }
+
+type alias Links =
+  { twitter : String
+  , slack : String
+  , github : String
+  , linkedin : String
   }
 
 type alias Persons = List Person
@@ -99,16 +109,25 @@ fetchPersons =
 decodePeoplesUrl : Json.Decoder Persons
 decodePeoplesUrl =
   Json.list
-    (Json.object7 Person
-      (Json.at ["id"] Json.string)
-      (Json.at ["firstname"] Json.string)
-      (Json.at ["lastname"] Json.string)
-      (Json.at ["email"] Json.string)
-      (Json.at ["phone"] Json.string)
-      (Json.at ["manager"] Json.string)
-      (Json.at ["photo"] Json.string)
+    (JsonPipeline.decode Person
+      |> JsonPipeline.required "id" Json.string
+      |> JsonPipeline.required "firstname" Json.string
+      |> JsonPipeline.required "lastname" Json.string
+      |> JsonPipeline.required "email" Json.string
+      |> JsonPipeline.required "phone" Json.string
+      |> JsonPipeline.required "manager" Json.string
+      |> JsonPipeline.required "photo" Json.string
+      |> JsonPipeline.required "skills" (Json.list Json.string)
+      |> JsonPipeline.required "links" decodeLinks
     )
 
+decodeLinks : Json.Decoder Links
+decodeLinks =
+  JsonPipeline.decode Links
+    |> JsonPipeline.required "twitter" Json.string
+    |> JsonPipeline.required "slack" Json.string
+    |> JsonPipeline.required "github" Json.string
+    |> JsonPipeline.required "linkedin" Json.string
 
 -- VIEW
 
@@ -194,17 +213,15 @@ renderDetailedPerson person =
   div [ class "col s6 offset-s3" ]
     [ div [ class "card-panel" ]
       [ renderPersonCard person
-        , div [ class "skills" ]
-          [ h3 [] [ text "Skills" ]
-          -- TODO: loop through items
-          , a [ class "btn-large" ] [ text "JS" ]
-          ]
-        , div [ class "links row" ]
-          [ a [ href "#" ] [ img [ src "images/md-twitter.svg" ] [] ]
-          , a [ href "#" ] [ img [ src "images/md-slack.svg" ] [] ]
-          , a [ href "#" ] [ img [ src "images/md-github.svg" ] [] ]
-          , a [ href "#" ] [ img [ src "images/md-linkedin.svg" ] [] ]
-          ]
+      , div [ class "skills" ]
+        (h3 [] [ text "Skills" ]
+          :: List.map (\skill -> a [ class "btn-large" ] [ text skill ]) person.skills)
+      , div [ class "links row" ]
+        [ a [ href person.links.twitter ] [ img [ src "images/md-twitter.svg" ] [] ]
+        , a [ href person.links.slack ] [ img [ src "images/md-slack.svg" ] [] ]
+        , a [ href person.links.github ] [ img [ src "images/md-github.svg" ] [] ]
+        , a [ href person.links.linkedin ] [ img [ src "images/md-linkedin.svg" ] [] ]
+        ]
       ]
     ]
 
