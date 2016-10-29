@@ -17,7 +17,7 @@ main =
     , view = view
     , update = update
     , urlUpdate = urlUpdate
-    , subscriptions = subscriptions
+    , subscriptions = \_ -> Sub.none
     }
 
 
@@ -322,13 +322,6 @@ renderPersonCard person =
         [ i [ class "icon material-icons" ] [ text "mode_edit" ] ]
       ]
     ]
-
-
--- SUBSCRIPTIONS
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-  Sub.none
 
 
 -- INIT
