@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/windows,osx,linux,webstorm,node,polymer
+# Created by https://www.gitignore.io/api/windows,osx,linux,webstorm,node,polymer,elm
 
 ### Windows ###
 # Windows image file caches
@@ -163,3 +163,11 @@ jspm_packages
 #Installed components via bower
 bower_components/
 static/vendors
+
+
+### Elm ###
+# elm-package generated files
+elm-stuff
+main.js
+# elm-repl generated files
+repl-temp-*
