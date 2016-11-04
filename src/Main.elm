@@ -347,13 +347,13 @@ renderEdit maybe =
 
 
 renderInput : String -> String -> String -> Html a
-renderInput idText labelText valueText =
+renderInput id' label' value' =
     div [ class "row" ]
         [ div [ class "input-field col s12" ]
             [ input
-                [ id idText, class "validate", value valueText, required True ]
+                [ id id', class "validate", value value', required True ]
                 []
-            , label [ for idText, class "active" ] [ text labelText ]
+            , label [ for id', class "active" ] [ text label' ]
             ]
         ]
 
