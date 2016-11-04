@@ -4,8 +4,9 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
-import Json.Decode as Json
+import Json.Decode as JsonDecode
 import Json.Decode.Pipeline as JsonPipeline
+import Json.Encode as JsonEncode
 import Navigation
 import String exposing (..)
 import Task
@@ -100,8 +101,11 @@ type alias Model =
 type Msg
     = FetchSucceed Persons
     | FetchFailed Http.Error
+    | PutSucceed Http.Response
+    | PutFailed Http.RawError
     | NavigateTo Page
     | NavigateBack
+    | EditPerson Person
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -113,11 +117,61 @@ update msg model =
         FetchFailed _ ->
             ( model, Cmd.none )
 
+        PutSucceed _ ->
+            ( model, Cmd.none )
+
+        PutFailed _ ->
+            ( model, Cmd.none )
+
         NavigateTo page ->
             ( model, Navigation.newUrl (toHash page) )
 
         NavigateBack ->
             ( model, Navigation.back 1 )
+
+        EditPerson person ->
+            -- TODO: update local model
+            ( model, updatePerson person )
+
+
+updatePerson : Person -> Cmd Msg
+updatePerson person =
+    let
+        settings =
+            Http.defaultSettings
+
+        encodedSkills =
+            JsonEncode.list (List.map JsonEncode.string person.skills)
+
+        encodedLinks =
+            JsonEncode.object
+                [ ( "github", JsonEncode.string person.links.github )
+                , ( "linkedin", JsonEncode.string person.links.linkedin )
+                , ( "slack", JsonEncode.string person.links.slack )
+                , ( "twitter", JsonEncode.string person.links.twitter )
+                ]
+
+        encodedPerson =
+            JsonEncode.object
+                [ ( "id", JsonEncode.string person.id )
+                , ( "firstname", JsonEncode.string person.firstname )
+                , ( "lastname", JsonEncode.string person.lastname )
+                , ( "email", JsonEncode.string person.email )
+                , ( "phone", JsonEncode.string person.phone )
+                , ( "manager", JsonEncode.string person.manager )
+                , ( "photo", JsonEncode.string person.photo )
+                , ( "skills", encodedSkills )
+                , ( "links", encodedLinks )
+                ]
+
+        request =
+            { verb = "PUT"
+            , headers = [ ( "Content-Type", "application/json" ) ]
+            , url = "http://localhost:3001/api/peoples/" ++ person.id
+            , body = Http.string (JsonEncode.encode 0 encodedPerson)
+            }
+    in
+        Task.perform PutFailed PutSucceed (Http.send settings request)
 
 
 urlUpdate : Result String Page -> Model -> ( Model, Cmd Msg )
@@ -139,29 +193,29 @@ fetchPersons =
         Task.perform FetchFailed FetchSucceed (Http.get decodePeoplesUrl url)
 
 
-decodePeoplesUrl : Json.Decoder Persons
+decodePeoplesUrl : JsonDecode.Decoder Persons
 decodePeoplesUrl =
-    Json.list
+    JsonDecode.list
         (JsonPipeline.decode Person
-            |> JsonPipeline.required "id" Json.string
-            |> JsonPipeline.required "firstname" Json.string
-            |> JsonPipeline.required "lastname" Json.string
-            |> JsonPipeline.required "email" Json.string
-            |> JsonPipeline.required "phone" Json.string
-            |> JsonPipeline.required "manager" Json.string
-            |> JsonPipeline.required "photo" Json.string
-            |> JsonPipeline.required "skills" (Json.list Json.string)
+            |> JsonPipeline.required "id" JsonDecode.string
+            |> JsonPipeline.required "firstname" JsonDecode.string
+            |> JsonPipeline.required "lastname" JsonDecode.string
+            |> JsonPipeline.required "email" JsonDecode.string
+            |> JsonPipeline.required "phone" JsonDecode.string
+            |> JsonPipeline.required "manager" JsonDecode.string
+            |> JsonPipeline.required "photo" JsonDecode.string
+            |> JsonPipeline.required "skills" (JsonDecode.list JsonDecode.string)
             |> JsonPipeline.required "links" decodeLinks
         )
 
 
-decodeLinks : Json.Decoder Links
+decodeLinks : JsonDecode.Decoder Links
 decodeLinks =
     JsonPipeline.decode Links
-        |> JsonPipeline.required "twitter" Json.string
-        |> JsonPipeline.required "slack" Json.string
-        |> JsonPipeline.required "github" Json.string
-        |> JsonPipeline.required "linkedin" Json.string
+        |> JsonPipeline.required "twitter" JsonDecode.string
+        |> JsonPipeline.required "slack" JsonDecode.string
+        |> JsonPipeline.required "github" JsonDecode.string
+        |> JsonPipeline.required "linkedin" JsonDecode.string
 
 
 
@@ -278,10 +332,9 @@ renderEdit maybe =
                                 , onClick NavigateBack
                                 ]
                                 [ text "Cancel" ]
-                              -- TODO: handle Submit
                             , a
                                 [ class "btn waves-effect waves-light"
-                                , href "#"
+                                , onClick (EditPerson person)
                                 ]
                                 [ text "Submit" ]
                             ]
