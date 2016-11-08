@@ -8,6 +8,7 @@ import Json.Decode as JsonDecode
 import Json.Decode.Pipeline as JsonPipeline
 import Json.Encode as JsonEncode
 import Navigation
+import Regex exposing (caseInsensitive, contains, regex)
 import String exposing (..)
 import Task
 import UrlParser exposing (Parser, (</>), format, oneOf, s, string)
@@ -91,7 +92,7 @@ type Page
 
 
 type alias Model =
-    { page : Page, persons : Persons }
+    { page : Page, persons : Persons, filteredPersons : Persons }
 
 
 
@@ -107,6 +108,7 @@ type Msg
     | NavigateBack
     | EditField Update String String
     | EditPerson Person
+    | Filter String
 
 
 type Update
@@ -120,7 +122,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         FetchSucceed newPersons ->
-            ( { model | persons = newPersons }, Cmd.none )
+            ( { model | persons = newPersons, filteredPersons = newPersons }
+            , Cmd.none
+            )
 
         FetchFailed _ ->
             ( model, Cmd.none )
@@ -142,6 +146,21 @@ update msg model =
 
         EditPerson person ->
             ( model, updatePerson person )
+
+        Filter query ->
+            ( { model | filteredPersons = filterPersons query model.persons }
+            , Cmd.none
+            )
+
+
+filterPersons : String -> Persons -> Persons
+filterPersons query =
+    List.filter
+        (\person ->
+            Regex.contains
+                (caseInsensitive (regex query))
+                (person.firstname ++ " " ++ person.lastname)
+        )
 
 
 updateField : Update -> String -> String -> Persons -> Persons
@@ -301,7 +320,7 @@ renderPage : Model -> Html Msg
 renderPage model =
     case model.page of
         Home ->
-            renderHome model.persons
+            renderHome model.filteredPersons
 
         Details id ->
             model.persons
@@ -331,7 +350,7 @@ renderHome persons =
                 [ Html.form [ class "col s12" ]
                     [ div [ class "input-field" ]
                         [ i [ class "material-icons prefix" ] [ text "search" ]
-                        , input [ id "search" ] []
+                        , input [ id "search", onInput Filter ] []
                         , label [ class "active", for "search" ]
                             [ text "Search" ]
                         ]
@@ -524,4 +543,4 @@ renderPersonCard person =
 
 init : Result String Page -> ( Model, Cmd Msg )
 init result =
-    urlUpdate result (Model Home [])
+    urlUpdate result (Model Home [] [])
