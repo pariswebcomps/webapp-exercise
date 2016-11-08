@@ -105,7 +105,15 @@ type Msg
     | PutFailed Http.RawError
     | NavigateTo Page
     | NavigateBack
+    | EditField Update String String
     | EditPerson Person
+
+
+type Update
+    = FirstName
+    | LastName
+    | Email
+    | Phone
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -129,9 +137,51 @@ update msg model =
         NavigateBack ->
             ( model, Navigation.back 1 )
 
+        EditField updateType id payload ->
+            ( { model | persons = updateField updateType id payload model.persons }, Cmd.none )
+
         EditPerson person ->
-            -- TODO: update local model
             ( model, updatePerson person )
+
+
+updateField : Update -> String -> String -> Persons -> Persons
+updateField updateType id payload =
+    case updateType of
+        FirstName ->
+            List.map
+                (\person ->
+                    if person.id == id then
+                        { person | firstname = payload }
+                    else
+                        person
+                )
+
+        LastName ->
+            List.map
+                (\person ->
+                    if person.id == id then
+                        { person | lastname = payload }
+                    else
+                        person
+                )
+
+        Email ->
+            List.map
+                (\person ->
+                    if person.id == id then
+                        { person | email = payload }
+                    else
+                        person
+                )
+
+        Phone ->
+            List.map
+                (\person ->
+                    if person.id == id then
+                        { person | phone = payload }
+                    else
+                        person
+                )
 
 
 updatePerson : Person -> Cmd Msg
@@ -321,10 +371,26 @@ renderEdit maybe =
                         [ div [ class "card-content" ]
                             [ span [ class "card-title" ]
                                 [ text "Contact information" ]
-                            , renderInput "first_name" "Firstname" person.firstname
-                            , renderInput "last_name" "Lastname" person.lastname
-                            , renderInput "email" "Email" person.email
-                            , renderInput "phone" "Phone number" person.phone
+                            , renderInput
+                                "first_name"
+                                "Firstname"
+                                person.firstname
+                                (EditField FirstName person.id)
+                            , renderInput
+                                "last_name"
+                                "Lastname"
+                                person.lastname
+                                (EditField LastName person.id)
+                            , renderInput
+                                "email"
+                                "Email"
+                                person.email
+                                (EditField Email person.id)
+                            , renderInput
+                                "phone"
+                                "Phone number"
+                                person.phone
+                                (EditField Phone person.id)
                             ]
                         , div [ class "card-action" ]
                             [ a
@@ -346,12 +412,12 @@ renderEdit maybe =
             div [ class "container" ] [ text "There is nobody to edit mate!" ]
 
 
-renderInput : String -> String -> String -> Html a
-renderInput id' label' value' =
+renderInput : String -> String -> String -> (String -> a) -> Html a
+renderInput id' label' value' onInputMsg =
     div [ class "row" ]
         [ div [ class "input-field col s12" ]
             [ input
-                [ id id', class "validate", value value', required True ]
+                [ id id', class "validate", value value', required True, onInput onInputMsg ]
                 []
             , label [ for id', class "active" ] [ text label' ]
             ]
