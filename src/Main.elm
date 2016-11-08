@@ -101,7 +101,7 @@ type alias Model =
 type Msg
     = FetchSucceed Persons
     | FetchFailed Http.Error
-    | PutSucceed Http.Response
+    | PutSucceed String Http.Response
     | PutFailed Http.RawError
     | NavigateTo Page
     | NavigateBack
@@ -125,8 +125,8 @@ update msg model =
         FetchFailed _ ->
             ( model, Cmd.none )
 
-        PutSucceed _ ->
-            ( model, Cmd.none )
+        PutSucceed id _ ->
+            ( model, Navigation.newUrl <| toHash (Details id) )
 
         PutFailed _ ->
             ( model, Cmd.none )
@@ -221,7 +221,10 @@ updatePerson person =
             , body = Http.string (JsonEncode.encode 0 encodedPerson)
             }
     in
-        Task.perform PutFailed PutSucceed (Http.send settings request)
+        Task.perform
+            PutFailed
+            (PutSucceed person.id)
+            (Http.send settings request)
 
 
 urlUpdate : Result String Page -> Model -> ( Model, Cmd Msg )
