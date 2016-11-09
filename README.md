@@ -1,26 +1,6 @@
-# Meetup Paris WebComponents - WebApp Exercise
+# Meetup Paris WebComponents - WebApp Exercise in Elm
 
 Specs and scaffold of a webapp to develop to compare frameworks implementation.
-
-## Expected result
-
-The `static/` directory contains HTML files of the different screen that you should implement.
-
-These files are static. You need to implement features (filtering the list, validating the form…) in your webapp.
-
-## About your talk at Paris WebComponents
-
-It should last 20 minutes + 5 minutes of questions.
-
-What will be expected during your talk at Paris WebComponents:
-
-- present the ecosystem of your framework (eg., do you have DevTools? which task runner do you use?…)
-- present the `detail.html` and `list.html` parts explaining how you achieved re-usability of your components
-- present how routing (= navigation) works
-- present how you handle form validation with the `edit.html` part
-- explain the philosophy and specificities of your framework all along
-
-You'll be awesome!
 
 ## Set up
 
