@@ -27,15 +27,15 @@ You'll be awesome!
 After cloning the repo, run:
 
     npm install
-    bower install
 
-This will install required packages for the server to run (npm) and the static examples to work (bower).
-
-You are free to drop bower if you wish when implementing your solution. Correct versions of Materialize & jQuery are included in the `package.json` so you can just use npm if that's your thing.
+Install [the "Elm Platform"](http://guide.elm-lang.org/get_started.html) too.
 
 ## Start the server
 
-So far, `npm start` serves the REST data at `http://localhost:3001`:
+Run `npm start` to serve:
+
+- the REST data at `http://localhost:3001`
+- the web app at `http://localhost:3000`
 
 This provides you following routes:
 
