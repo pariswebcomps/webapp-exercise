@@ -5,7 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="shortcut icon" sizes="32x32" href="/images/icons/icon-32x32.png">
+
+  <!-- Materialize -->
+  <link type="text/css" rel="stylesheet" href="/vendors/materialize.min.css"
+          media="screen,projection"/>
 
   <title>Peoples</title>
 
@@ -13,20 +18,21 @@
   <meta name="theme-color" content="#E84F0E">
   <link rel="manifest" href="manifest.json">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', 'Noto', sans-serif;
-      line-height: 1.5;
-      min-height: 100vh;
-      background-color: #FFFFFF;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+
+  <!-- Materialize (& jQuery) -->
+  <script type="text/javascript" src="vendors/jquery.min.js"></script>
+  <script type="text/javascript" src="vendors/materialize.min.js"></script>
 </head>
 
 <body>
 
-  <!-- Mount your #app here =) -->
+  <div id="main"></div>
+  <script src="main.js"></script>
+  <script>
+      var node = document.getElementById('main');
+      var app = Elm.Main.embed(node);
+  </script>
 
 </body>
 </html>

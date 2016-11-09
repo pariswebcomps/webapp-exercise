@@ -1,0 +1,104 @@
+/* Reset */
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Noto', sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+/* Base */
+.bg-color-primary {
+  background-color: #0168AB;
+}
+
+.m-right {
+  margin-right: 5px;
+}
+
+.pad-top {
+  padding-top: 30px;
+}
+
+.pad-horizontal {
+  padding: 0 5px;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+/* Atoms */
+.logo {
+  margin-left: 10px;
+  height: 100%;
+}
+
+.icon {
+  color: #000;
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+}
+
+.icon:hover,
+.icon:focus,
+.icon:active {
+  color: #666;
+}
+
+.picture {
+  border: 10px solid #F1F1F1;
+  max-width: 100%;
+}
+
+.header {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+.edit-btn {
+  bottom: 45px;
+  right: 24px;
+}
+
+/* Molecules */
+.skills {
+  padding: 10px;
+  background-color: #FAFAFA;
+}
+
+.skills h3 {
+  font-size: 24px;
+  font-weight: normal;
+  line-height: 1.1;
+}
+
+.skills a {
+  background-color: #FFFFFF;
+  color: #000;
+  margin: 5px;
+}
+
+.card-panel {
+  padding: 10px;
+  margin: 10px;
+}
+
+.card-panel .username {
+  color: #337AB7;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.card-panel .username:hover,
+.card-panel .username:focus,
+.card-panel .username:active {
+  color: #105894;
+}
+
+/* Organisms */

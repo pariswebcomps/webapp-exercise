@@ -1,5 +1,14 @@
 {
   "private": true,
+  "scripts": {
+    "build": "elm-live src/Main.elm --output=main.js",
+    "front-end": "lite-server",
+    "back-end": "node server/server",
+    "start": "concurrently \"npm run build\" \"npm run front-end\" \"npm run back-end\""
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  },
   "dependencies": {
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
@@ -7,10 +16,10 @@
     "materialize-css": "0.97.6",
     "underscore": "^1.8.3"
   },
-  "scripts": {
-    "start": "node server/server"
-  },
-  "engines": {
-    "node": ">=0.12.0"
+  "devDependencies": {
+    "concurrently": "2.2.0",
+    "elm": "0.17.1",
+    "elm-live": "2.6.0",
+    "lite-server": "2.2.2"
   }
 }
